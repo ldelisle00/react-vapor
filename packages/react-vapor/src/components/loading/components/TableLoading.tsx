@@ -12,10 +12,10 @@ export const TableLoading = ({
         <>
             <table className="table big-table">
                 <tbody>
-                    {_.times(numberOfRow, () => (
-                        <tr className="mod-border-bottom no-hover">
-                            {_.times(numberOfColumn, () => (
-                                <TableRowLoading />
+                    {_.times(numberOfRow, (nColumn: number) => (
+                        <tr key={`table-row-loading-${nColumn}`} className="mod-border-bottom no-hover">
+                            {_.times(numberOfColumn, (nRow: number) => (
+                                <TableRowLoading key={`table-row-loading-${nRow}`} />
                             ))}
                         </tr>
                     ))}

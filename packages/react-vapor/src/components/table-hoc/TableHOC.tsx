@@ -3,6 +3,9 @@ import * as React from 'react';
 
 import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/withServerSideProcessing';
 import {ActionBarConnected} from '../actions/ActionBar';
+import {ActionBarLoading} from '../loading/components/ActionBarLoading';
+import {PaginationLoading} from '../loading/components/PaginationLoading';
+import {TableLoading} from '../loading/components/TableLoading';
 
 /**
  * @deprecated Use WithServerSideProcessingProps directly instead
@@ -32,13 +35,23 @@ export class TableHOC extends React.PureComponent<ITableHOCProps & React.HTMLAtt
         showBorderTop: false,
     };
 
-    render() {
+    static renderLoading() {
         return (
-            <div
-                className={classNames('table-container', this.props.containerClassName, {
-                    'loading-component': this.props.isLoading,
-                })}
-            >
+            <>
+                <ActionBarLoading />
+                <TableLoading />
+                <PaginationLoading />
+            </>
+        );
+    }
+
+    render() {
+        if (this.props.isLoading) {
+            return TableHOC.renderLoading();
+        }
+
+        return (
+            <div className={classNames('table-container', this.props.containerClassName)}>
                 {this.renderActions()}
                 <table className={classNames(this.props.className)}>
                     {this.props.tableHeader}

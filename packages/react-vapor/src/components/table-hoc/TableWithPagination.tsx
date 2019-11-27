@@ -104,7 +104,7 @@ export const tableWithPagination = (supplier: ConfigSupplier<ITableWithPaginatio
                 <Component {...newProps}>
                     <NavigationConnected
                         id={this.props.id}
-                        loadingIds={[this.props.id]}
+                        isLoading={this.props.isLoading}
                         {...config}
                         {..._.pick(this.props, TableWithPaginationProps)}
                     />
