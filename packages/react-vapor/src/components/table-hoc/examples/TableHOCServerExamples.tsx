@@ -145,43 +145,49 @@ const tableDatePickerConfig = {
 };
 
 const mapStateToProps = (state: IReactVaporTestState) => ({
-    isLoading: state.tableHOCExample.isLoading,
+    isLoading: state.tableHOCExample?.isLoading,
     serverData: state.tableHOCExample.data,
 });
 const mapDispatchToProps = (dispatch: IDispatch) => ({
     fetch: _.debounce(() => dispatch(TableHOCServerActions.fetchData()), 400),
 });
 
-const TableExampleDisconnected: React.FunctionComponent<TableHOCServerProps> = (props) => {
-    const onUpdate = () => {
-        props.fetch();
+class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps> {
+    private onUpdate = () => {
+        this.props.fetch();
     };
 
-    const updateUrl = (query: string) => {
-        props.history.push({search: query});
+    private updateUrl = (query: string) => {
+        this.props.history.push({search: query});
     };
 
-    return (
-        <Section title="Server table with numbered rows">
-            <span className="block my2 text-grey-7">
-                Please note that the backend service doesn't support dates but we still make a request for every change
-                in the date range.
-            </span>
-            <ServerTableComposed
-                id={TableHOCServerExampleId}
-                className="table table-numbered mod-collapsible-rows"
-                data={props.serverData}
-                renderBody={generateRows}
-                tableHeader={renderHeader()}
-                onUpdate={onUpdate}
-                onUpdateUrl={updateUrl}
-                isLoading={props.isLoading}
-            >
-                <LastUpdated time={new Date()} />
-            </ServerTableComposed>
-        </Section>
-    );
-};
+    componentDidMount() {
+        this.props.fetch();
+    }
+
+    render() {
+        return (
+            <Section title="Server table with numbered rows">
+                <span className="block my2 text-grey-7">
+                    Please note that the backend service doesn't support dates but we still make a request for every
+                    change in the date range.
+                </span>
+                <ServerTableComposed
+                    id={TableHOCServerExampleId}
+                    className="table table-numbered mod-collapsible-rows"
+                    data={this.props.serverData}
+                    renderBody={generateRows}
+                    tableHeader={renderHeader()}
+                    onUpdate={this.onUpdate}
+                    onUpdateUrl={this.updateUrl}
+                    isLoading={!!this.props.isLoading}
+                >
+                    <LastUpdated time={new Date()} />
+                </ServerTableComposed>
+            </Section>
+        );
+    }
+}
 
 const ServerTableComposed = _.compose(
     withServerSideProcessing,
@@ -196,11 +202,7 @@ const ServerTableComposed = _.compose(
     tableWithActions()
 )(TableHOC);
 
-const TableHOCServer = connect(
-    mapStateToProps,
-
-    mapDispatchToProps
-)(withRouter(TableExampleDisconnected));
+const TableHOCServer = connect(mapStateToProps, mapDispatchToProps)(withRouter(TableExampleDisconnected));
 
 /* ACTIONS */
 
@@ -220,7 +222,7 @@ const setIsLoading = (isLoading: boolean): IReduxAction<ISetExampleIsLoadingPayl
     payload: {isLoading},
 });
 
-const fetchData = (): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
+const fetchData = ({}): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
     const compositeState: ITableHOCCompositeState = TableHOCUtils.getCompositeState(
         TableHOCServerExampleId,
         getState()

@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as _ from 'underscore';
 
 import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/withServerSideProcessing';
 import {ActionBarConnected} from '../actions/ActionBar';
 import {ActionBarLoading} from '../loading/components/ActionBarLoading';
-import {PaginationLoading} from '../loading/components/PaginationLoading';
 import {TableLoading} from '../loading/components/TableLoading';
 
 /**
@@ -27,7 +27,10 @@ export interface ITableHOCOwnProps {
 
 export interface ITableHOCProps extends ITableHOCOwnProps {}
 
-export class TableHOC extends React.PureComponent<ITableHOCProps & React.HTMLAttributes<HTMLTableElement>> {
+export class TableHOC extends React.PureComponent<
+    ITableHOCProps & React.HTMLAttributes<HTMLTableElement>,
+    {isFirstRender: boolean}
+> {
     static defaultProps: Partial<ITableHOCOwnProps> = {
         isLoading: false,
         hasActionButtons: false,
@@ -35,34 +38,31 @@ export class TableHOC extends React.PureComponent<ITableHOCProps & React.HTMLAtt
         showBorderTop: false,
     };
 
-    static renderLoading() {
-        return (
-            <>
-                <ActionBarLoading />
-                <TableLoading />
-                <PaginationLoading />
-            </>
-        );
-    }
-
     render() {
-        if (this.props.isLoading) {
-            return TableHOC.renderLoading();
-        }
-
-        return (
-            <div className={classNames('table-container', this.props.containerClassName)}>
-                {this.renderActions()}
+        const table =
+            this.props.isLoading && _.isEmpty(this.props.data) ? (
+                <TableLoading />
+            ) : (
                 <table className={classNames(this.props.className)}>
                     {this.props.tableHeader}
                     <tbody>{this.props.renderBody(this.props.data || [])}</tbody>
                 </table>
+            );
+
+        return (
+            <div className={classNames('table-container', this.props.containerClassName)}>
+                {this.renderActions()}
+                {table}
                 {this.props.children}
             </div>
         );
     }
 
     private renderActions() {
+        if (this.props.isLoading && _.isEmpty(this.props.data)) {
+            return <ActionBarLoading />;
+        }
+
         if (this.props.hasActionButtons || this.props.actions.length) {
             return (
                 <ActionBarConnected
