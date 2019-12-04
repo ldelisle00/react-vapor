@@ -22,6 +22,7 @@ export interface ITableHOCOwnProps {
     tableHeader?: React.ReactNode;
     onUpdate?: () => void;
     containerClassName?: string;
+    numberOfColumn?: number;
     showBorderTop?: boolean;
 }
 
@@ -39,15 +40,14 @@ export class TableHOC extends React.PureComponent<
     };
 
     render() {
-        const table =
-            this.props.isLoading && _.isEmpty(this.props.data) ? (
-                <TableLoading />
-            ) : (
-                <table className={classNames(this.props.className)}>
-                    {this.props.tableHeader}
-                    <tbody>{this.props.renderBody(this.props.data || [])}</tbody>
-                </table>
-            );
+        const table = this.props.isLoading ? (
+            <TableLoading numberOfRow={_.size(this.props.data) || 5} numberOfColumn={this.props.numberOfColumn} />
+        ) : (
+            <table className={classNames(this.props.className)}>
+                {this.props.tableHeader}
+                <tbody>{this.props.renderBody(this.props.data || [])}</tbody>
+            </table>
+        );
 
         return (
             <div className={classNames('table-container', this.props.containerClassName)}>
@@ -59,7 +59,7 @@ export class TableHOC extends React.PureComponent<
     }
 
     private renderActions() {
-        if (this.props.isLoading && _.isEmpty(this.props.data)) {
+        if (this.props.isLoading) {
             return <ActionBarLoading />;
         }
 

@@ -222,7 +222,7 @@ const setIsLoading = (isLoading: boolean): IReduxAction<ISetExampleIsLoadingPayl
     payload: {isLoading},
 });
 
-const fetchData = ({}): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
+const fetchData = (initialData?: any): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
     const compositeState: ITableHOCCompositeState = TableHOCUtils.getCompositeState(
         TableHOCServerExampleId,
         getState()
