@@ -17,8 +17,8 @@ import {TableHOC} from '../TableHOC';
 import {TableRowNumberHeader} from '../TableRowNumberHeader';
 import {tableWithActions} from '../TableWithActions';
 import {tableWithBlankSlate} from '../TableWithBlankSlate';
+import {tableWithDatePicker} from '../TableWithDatePicker';
 import {tableWithFilter} from '../TableWithFilter';
-import {tableWithPagination} from '../TableWithPagination';
 import {tableWithPredicate} from '../TableWithPredicate';
 import {tableWithSort} from '../TableWithSort';
 import {tableWithUrlState} from '../TableWithUrlState';
@@ -141,6 +141,8 @@ const ServerTableComposed = _.compose(
             title: 'No results found',
         },
     }),
+    tableWithDatePicker({...(TableHOCExampleUtils.tableDatePickerConfig as any)}),
+    tableWithSort(),
     tableWithActions()
 )(TableHOC);
 
