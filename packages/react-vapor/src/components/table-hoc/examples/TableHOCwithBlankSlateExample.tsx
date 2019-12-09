@@ -24,25 +24,17 @@ export interface IExampleRowData {
 }
 
 // start-print
-const mapStateToProps = () => ({
-    data: generateDataWithFacker(0),
-});
 
-const TableWithBlankSlateExampleDisconnected: React.FunctionComponent = () => {
-    const tableId = 'tableWithBlankSlate';
-
-    return (
-        <Section>
-            <TableWithBlankSlateComposed
-                id={tableId}
-                className="table"
-                data={generateDataWithFacker(0)}
-                renderBody={generateTableRow}
-            />
-        </Section>
-    );
-};
-const TableWithBlankSlateExample = connect(mapStateToProps)(TableWithBlankSlateExampleDisconnected);
+const TableWithBlankSlateExample: React.FunctionComponent = () => (
+    <Section>
+        <TableWithBlankSlateComposed
+            id={'tableWithBlankSlate'}
+            className="table"
+            data={generateDataWithFacker(0)}
+            renderBody={generateTableRow}
+        />
+    </Section>
+);
 
 const TableWithBlankSlateComposed = _.compose(
     tableWithBlankSlate({title: 'No data caused the table to be empty'}),

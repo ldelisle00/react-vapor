@@ -13,8 +13,8 @@ import {NavigationConnected} from '../navigation/NavigationConnected';
 import {NavigationSelectors} from '../navigation/NavigationSelectors';
 import {TableWithPaginationActions} from './actions/TableWithPaginationActions';
 import {ITableHOCOwnProps} from './TableHOC';
-import {TableHOCUtils} from './TableHOCUtils';
 import {TableSelectors} from './TableSelectors';
+import {TableHOCUtils} from './utils/TableHOCUtils';
 
 export interface ITableWithPaginationConfig
     extends WithServerSideProcessingProps,
@@ -94,8 +94,9 @@ export const tableWithPagination = (supplier: ConfigSupplier<ITableWithPaginatio
         }
 
         componentDidUpdate(prevProps: ITableWithPaginationProps) {
-            if (prevProps.pageNb !== this.props.pageNb || prevProps.perPage !== this.props.perPage) {
-                this.props.onUpdate?.();
+            const {pageNb, perPage} = this.props;
+            if (prevProps.pageNb !== pageNb || prevProps.perPage !== perPage) {
+                this.props.update?.({pageNb, perPage});
             }
         }
 

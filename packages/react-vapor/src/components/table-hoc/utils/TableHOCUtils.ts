@@ -1,10 +1,10 @@
 import * as _ from 'underscore';
 
-import {IReactVaporState} from '../../ReactVapor';
-import {DatePickerSelectors} from '../datePicker/DatePickerSelectors';
-import {IFilterState} from '../filterBox/FilterBoxReducers';
-import {IListBoxState} from '../listBox/ListBoxReducers';
-import {ITableWithSortState} from './reducers/TableWithSortReducers';
+import {IReactVaporState} from '../../../ReactVapor';
+import {DatePickerSelectors} from '../../datePicker/DatePickerSelectors';
+import {IFilterState} from '../../filterBox/FilterBoxReducers';
+import {IListBoxState} from '../../listBox/ListBoxReducers';
+import {ITableWithSortState} from '../reducers/TableWithSortReducers';
 
 export interface ITableHOCPredicateValue {
     id: string;

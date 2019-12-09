@@ -7,32 +7,25 @@ import * as _ from 'underscore';
 
 import {ExampleComponent} from '../../../../docs/src/components/ComponentsInterface';
 import {withServerSideProcessing} from '../../../hoc/withServerSideProcessing/withServerSideProcessing';
-import {DateUtils} from '../../../utils/DateUtils';
-import {IDispatch, IReduxAction, IThunkAction} from '../../../utils/ReduxUtils';
+import {IDispatch, IThunkAction} from '../../../utils/ReduxUtils';
 import {IReactVaporTestState} from '../../../utils/tests/TestUtils';
-import {SELECTION_BOXES_LONG} from '../../datePicker/examples/DatePickerExamplesCommon';
 import {LastUpdated} from '../../lastUpdated/LastUpdated';
-import {turnOffLoading} from '../../loading/LoadingActions';
 import {Section} from '../../section/Section';
 import {TableWithPaginationActions} from '../actions/TableWithPaginationActions';
 import {TableHeaderWithSort} from '../TableHeaderWithSort';
 import {TableHOC} from '../TableHOC';
-import {ITableHOCCompositeState, TableHOCUtils} from '../TableHOCUtils';
-import {TableRowConnected} from '../TableRowConnected';
-import {TableRowNumberColumn} from '../TableRowNumberColumn';
 import {TableRowNumberHeader} from '../TableRowNumberHeader';
 import {tableWithActions} from '../TableWithActions';
 import {tableWithBlankSlate} from '../TableWithBlankSlate';
-import {tableWithDatePicker} from '../TableWithDatePicker';
 import {tableWithFilter} from '../TableWithFilter';
 import {tableWithPagination} from '../TableWithPagination';
 import {tableWithPredicate} from '../TableWithPredicate';
 import {tableWithSort} from '../TableWithSort';
 import {tableWithUrlState} from '../TableWithUrlState';
+import {TableHOCExampleUtils} from '../utils/TableHOCExampleUtils';
+import {ITableHOCCompositeState, TableHOCUtils} from '../utils/TableHOCUtils';
 
-type TableHOCServerProps = RouteComponentProps &
-    ReturnType<typeof mapStateToProps> &
-    ReturnType<typeof mapDispatchToProps>;
+type TableHOCServerProps = RouteComponentProps & ReturnType<typeof mapDispatchToProps>;
 
 export interface IExampleRowData {
     city: string;
@@ -48,15 +41,10 @@ export interface IExampleServerTableState {
     isLoading: boolean;
 }
 
-interface ISetExampleDataPayload {
+interface TableHOCServerExamplesState {
     data: any[];
-}
-
-interface ISetExampleIsLoadingPayload {
     isLoading: boolean;
 }
-
-type IExamplePayload = ISetExampleDataPayload | ISetExampleIsLoadingPayload;
 
 export const TableHOCServerExamples: ExampleComponent = () => <TableHOCServer />;
 
@@ -64,36 +52,6 @@ TableHOCServerExamples.title = 'TableHOC server';
 
 // start-print
 export const TableHOCServerExampleId = 'complex-example';
-
-const tableActions = (username: string) => [
-    {
-        primary: true,
-        icon: 'edit',
-        name: 'edit',
-        enabled: true,
-        trigger: () => alert(username),
-        callOnDoubleClick: true,
-    },
-];
-
-const generateRows = (allData: IExampleRowData[]) =>
-    allData.map((data: IExampleRowData, i: number) => (
-        <TableRowConnected
-            id={data.username}
-            tableId={TableHOCServerExampleId}
-            key={data.username}
-            actions={tableActions(data.username)}
-            isMultiselect
-            disabled={i % 3 === 0}
-            collapsible={{content: <div className="py2">👋</div>}}
-        >
-            <TableRowNumberColumn number={i + 1} />
-            <td key="city">{data.city}</td>
-            <td key="email">{data.email.toLowerCase()}</td>
-            <td key="username">{data.username.toLowerCase()}</td>
-            <td key="date-of-birth">{data.dateOfBirth.toLocaleDateString()}</td>
-        </TableRowConnected>
-    ));
 
 const renderHeader = () => (
     <thead>
@@ -114,47 +72,29 @@ const renderHeader = () => (
     </thead>
 );
 
-const tablePredicates = [
-    {
-        id: 'address.city',
-        prepend: <span className="mr1 text-medium-grey">City:</span>,
-        values: [
-            {displayValue: 'All', value: '', selected: true},
-            {displayValue: 'Lebsackbury', value: 'Lebsackbury'},
-        ],
-    },
-    {
-        id: 'username',
-        prepend: <span className="mr1 text-medium-grey">Username:</span>,
-        values: [
-            {displayValue: 'All', value: '', selected: true},
-            {displayValue: 'bret', value: 'Bret'},
-        ],
-    },
-];
-
-const tableDatePickerConfig = {
-    datesSelectionBoxes: SELECTION_BOXES_LONG,
-    years: [...DateUtils.getPreviousYears(25), DateUtils.currentYear.toString()],
-    initialDateRange: [
-        moment()
-            .subtract(25, 'years')
-            .toDate(),
-        moment().toDate(),
-    ],
-};
-
-const mapStateToProps = (state: IReactVaporTestState) => ({
-    isLoading: state.tableHOCExample?.isLoading,
-    serverData: state.tableHOCExample.data,
-});
 const mapDispatchToProps = (dispatch: IDispatch) => ({
-    fetch: _.debounce(() => dispatch(TableHOCServerActions.fetchData()), 400),
+    fetch: () => dispatch(TableHOCServerActions.fetchData()),
 });
 
-class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps> {
+class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps, TableHOCServerExamplesState> {
+    state = {
+        data: null,
+        isLoading: true,
+    };
+
+    private fetch() {
+        this.setState({...this.state, isLoading: true});
+        window.setTimeout(
+            () =>
+                this.props.fetch().done((data: any) => {
+                    this.setState({data, isLoading: false});
+                }),
+            500
+        );
+    }
+
     private onUpdate = () => {
-        this.props.fetch();
+        this.fetch();
     };
 
     private updateUrl = (query: string) => {
@@ -162,7 +102,7 @@ class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps> 
     };
 
     componentDidMount() {
-        this.props.fetch();
+        this.fetch();
     }
 
     render() {
@@ -175,12 +115,12 @@ class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps> 
                 <ServerTableComposed
                     id={TableHOCServerExampleId}
                     className="table table-numbered mod-collapsible-rows"
-                    data={this.props.serverData}
-                    renderBody={generateRows}
+                    data={this.state.data?.users ?? []}
+                    renderBody={TableHOCExampleUtils.generateRows}
                     tableHeader={renderHeader()}
                     onUpdate={this.onUpdate}
                     onUpdateUrl={this.updateUrl}
-                    isLoading={!!this.props.isLoading}
+                    isLoading={this.state.isLoading}
                 >
                     <LastUpdated time={new Date()} />
                 </ServerTableComposed>
@@ -193,36 +133,20 @@ const ServerTableComposed = _.compose(
     withServerSideProcessing,
     tableWithUrlState,
     tableWithBlankSlate({title: 'No data fetched from the server'}),
-    tableWithPredicate({...tablePredicates[0]}),
-    tableWithPredicate({...tablePredicates[1]}),
-    tableWithFilter(),
-    tableWithDatePicker({...(tableDatePickerConfig as any)}),
-    tableWithSort(),
-    tableWithPagination({perPageNumbers: [3, 5, 10]}),
+    tableWithPredicate({...TableHOCExampleUtils.tablePredicates[0]}),
+    tableWithPredicate({...TableHOCExampleUtils.tablePredicates[1]}),
+    tableWithFilter({
+        placeholder: 'Filter all',
+        blankSlate: {
+            title: 'No results found',
+        },
+    }),
     tableWithActions()
 )(TableHOC);
 
-const TableHOCServer = connect(mapStateToProps, mapDispatchToProps)(withRouter(TableExampleDisconnected));
+const TableHOCServer = connect(undefined, mapDispatchToProps)(withRouter(TableExampleDisconnected));
 
-/* ACTIONS */
-
-export const TableHOCServerActionsType = {
-    setData: 'TABLE_HOC_SET_DATA',
-    setIsLoading: 'TABLE_HOC_SET_IS_LOADING',
-    fetch: 'TABLE_HOC_FETCH_DATA',
-};
-
-const setData = (data: any[]): IReduxAction<ISetExampleDataPayload> => ({
-    type: TableHOCServerActionsType.setData,
-    payload: {data},
-});
-
-const setIsLoading = (isLoading: boolean): IReduxAction<ISetExampleIsLoadingPayload> => ({
-    type: TableHOCServerActionsType.setIsLoading,
-    payload: {isLoading},
-});
-
-const fetchData = (initialData?: any): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
+const fetchData = (): IThunkAction => (dispatch: IDispatch, getState: () => IReactVaporTestState) => {
     const compositeState: ITableHOCCompositeState = TableHOCUtils.getCompositeState(
         TableHOCServerExampleId,
         getState()
@@ -240,10 +164,9 @@ const fetchData = (initialData?: any): IThunkAction => (dispatch: IDispatch, get
     _.each(compositeState.predicates, (predicate: {id: string; value: string}) => {
         params[predicate.id] = predicate.value;
     });
-    dispatch(setIsLoading(true));
-    $.get('https://jsonplaceholder.typicode.com/users', params).done((response: any[], status, request) => {
+    return $.get('https://jsonplaceholder.typicode.com/users', params).then((response: any[], status, request) => {
         const count = request.getResponseHeader('x-total-count');
-        const users = response.map((user: any) => ({
+        const users = _.map(response, (user: any) => ({
             city: user.address.city,
             username: user.username,
             email: user.email,
@@ -251,38 +174,14 @@ const fetchData = (initialData?: any): IThunkAction => (dispatch: IDispatch, get
                 .subtract(user.address.city.length, 'years')
                 .toDate(), // fake a year of birth
         }));
-        dispatch(setData(users));
-        dispatch(turnOffLoading([TableHOCServerExampleId]));
-        dispatch(TableWithPaginationActions.setCount(TableHOCServerExampleId, count));
+        dispatch(TableWithPaginationActions.setCount(TableHOCServerExampleId, count as any));
+        return {
+            count,
+            users,
+        };
     });
 };
 
 export const TableHOCServerActions = {
-    setData,
-    setIsLoading,
     fetchData,
-};
-
-/* REDUCER */
-
-export const TableHOCServerExampleReducer = (
-    state: IExampleServerTableState = {data: [], isLoading: true},
-    action: IReduxAction<IExamplePayload>
-) => {
-    if (action.type === TableHOCServerActionsType.setData) {
-        const payload = action.payload as ISetExampleDataPayload;
-        return {
-            ...state,
-            data: [...payload.data],
-            isLoading: false,
-        };
-    }
-    if (action.type === TableHOCServerActionsType.setIsLoading) {
-        const payload = action.payload as ISetExampleIsLoadingPayload;
-        return {
-            ...state,
-            isLoading: payload.isLoading,
-        };
-    }
-    return state;
 };

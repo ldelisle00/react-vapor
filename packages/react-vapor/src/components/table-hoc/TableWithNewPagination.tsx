@@ -12,8 +12,8 @@ import {NavigationConnected} from '../navigation/NavigationConnected';
 import {NavigationSelectors} from '../navigation/NavigationSelectors';
 import {TableWithPaginationActions} from './actions/TableWithPaginationActions';
 import {ITableHOCOwnProps} from './TableHOC';
-import {TableHOCUtils} from './TableHOCUtils';
 import {TableSelectors} from './TableSelectors';
+import {TableHOCUtils} from './utils/TableHOCUtils';
 
 export interface ITableWithPaginationConfig
     extends WithServerSideProcessingProps,

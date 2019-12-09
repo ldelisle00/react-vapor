@@ -12,7 +12,7 @@ import {changePage} from '../navigation/pagination/NavigationPaginationActions';
 import {changePerPage} from '../navigation/perPage/NavigationPerPageActions';
 import {TableHeaderActions} from './actions/TableHeaderActions';
 import {ITableHOCOwnProps} from './TableHOC';
-import {ITableHOCPredicateValue, TableHOCUtils} from './TableHOCUtils';
+import {ITableHOCPredicateValue, TableHOCUtils} from './utils/TableHOCUtils';
 
 export interface TableWithUrlStateProps {
     onUpdateUrl: (queryString: string) => void;

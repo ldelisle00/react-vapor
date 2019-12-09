@@ -12,7 +12,7 @@ import {SelectSelector} from '../select/SelectSelector';
 import {SingleSelectConnected} from '../select/SingleSelectConnected';
 import * as styles from './styles/TableWithPredicates.scss';
 import {ITableHOCOwnProps} from './TableHOC';
-import {TableHOCUtils} from './TableHOCUtils';
+import {TableHOCUtils} from './utils/TableHOCUtils';
 
 export interface ITableWithPredicateConfig extends WithServerSideProcessingProps {
     id: string;
