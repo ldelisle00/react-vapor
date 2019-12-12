@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
 import * as _ from 'underscore';
 import {ExampleComponent} from '../../../../docs/src/components/ComponentsInterface';
 import {Section} from '../../section/Section';

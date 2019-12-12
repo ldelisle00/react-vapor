@@ -4,8 +4,7 @@ import * as _ from 'underscore';
 
 import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/withServerSideProcessing';
 import {ActionBarConnected} from '../actions/ActionBar';
-import {ActionBarLoading} from '../loading/components/ActionBarLoading';
-import {TableLoading} from '../loading/components/TableLoading';
+import {TableBodyLoading} from '../loading/components/TableLoading';
 
 /**
  * @deprecated Use WithServerSideProcessingProps directly instead
@@ -41,12 +40,17 @@ export class TableHOC extends React.PureComponent<
     };
 
     render() {
-        const table = this.props.isLoading ? (
-            <TableLoading numberOfRow={_.size(this.props.data) || 10} numberOfColumn={this.props.numberOfColumn} />
-        ) : (
+        const table = (
             <table className={classNames(this.props.className)}>
                 {this.props.tableHeader}
-                <tbody>{this.props.renderBody(this.props.data || [])}</tbody>
+                {this.props.isLoading ? (
+                    <TableBodyLoading
+                        numberOfRow={_.size(this.props.data) || 10}
+                        numberOfColumn={this.props.numberOfColumn}
+                    />
+                ) : (
+                    <tbody>{this.props.renderBody(this.props.data || [])}</tbody>
+                )}
             </table>
         );
 
@@ -60,10 +64,6 @@ export class TableHOC extends React.PureComponent<
     }
 
     private renderActions() {
-        if (this.props.isLoading && _.isNull(this.props.data)) {
-            return <ActionBarLoading />;
-        }
-
         if (this.props.hasActionButtons || this.props.actions.length) {
             return (
                 <ActionBarConnected
@@ -77,6 +77,8 @@ export class TableHOC extends React.PureComponent<
                             'mod-border-top': this.props.showBorderTop,
                         }
                     ).split(' ')}
+                    ]}
+                    isLoading={this.props.isLoading}
                 >
                     {this.props.actions}
                 </ActionBarConnected>

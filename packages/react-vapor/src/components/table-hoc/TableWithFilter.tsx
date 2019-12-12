@@ -6,12 +6,14 @@ import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/
 import {IReactVaporState} from '../../ReactVapor';
 import {ConfigSupplier, HocUtils} from '../../utils/HocUtils';
 import {IDispatch, ReduxConnect} from '../../utils/ReduxUtils';
+import {UrlUtils} from '../../utils/UrlUtils';
 import {IBlankSlateProps} from '../blankSlate/BlankSlate';
 import {BlankSlateWithTable} from '../blankSlate/BlankSlatesHOC';
 import {filterThrough} from '../filterBox/FilterBoxActions';
 import {FilterBoxConnected} from '../filterBox/FilterBoxConnected';
 import {FilterBoxSelectors} from '../filterBox/FilterBoxSelectors';
 import {ITableHOCOwnProps} from './TableHOC';
+import {Params} from './TableWithUrlState';
 
 export interface ITableWithFilterConfig extends WithServerSideProcessingProps {
     blankSlate?: IBlankSlateProps;
@@ -21,9 +23,12 @@ export interface ITableWithFilterConfig extends WithServerSideProcessingProps {
 
 export interface ITableWithFilterStateProps {
     filter: string;
+    urlFilter: string;
 }
 
 export interface ITableWithFilterDispatchProps {
+    resetFilter: () => void;
+    addFilter: (filterText: string) => void;
     onRender: () => void;
 }
 
@@ -49,12 +54,14 @@ export const tableWithFilter = (
         ownProps: ITableWithFilterProps
     ): ITableWithFilterStateProps | ITableHOCOwnProps => {
         const filterText = FilterBoxSelectors.getFilterText(state, ownProps);
+
         const matchFilter = config.matchFilter || defaultMatchFilter;
         const filterData = () =>
             filterText ? _.filter(ownProps.data, (datum: any) => matchFilter(filterText, datum)) : ownProps.data;
-
+        const urlParams = UrlUtils.getSearchParams();
         return {
             filter: filterText,
+            urlFilter: urlParams[Params.filter],
             data: ownProps.isServer || config.isServer ? ownProps.data : ownProps.data && filterData(),
         };
     };
@@ -66,7 +73,7 @@ export const tableWithFilter = (
     @ReduxConnect(mapStateToProps, mapDispatchToProps)
     class TableWithFilter extends React.Component<ITableWithFilterProps> {
         componentDidUpdate(prevProps: ITableWithFilterProps) {
-            if (prevProps.filter !== this.props.filter) {
+            if (prevProps.filter !== this.props.filter && this.props.filter !== this.props.urlFilter) {
                 this.props.onUpdate?.();
             }
         }

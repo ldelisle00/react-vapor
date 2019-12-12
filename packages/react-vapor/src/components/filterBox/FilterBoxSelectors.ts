@@ -13,6 +13,11 @@ const getFilterText = (state: IReactVaporState, props: GetFilterTextProps): stri
     return (filter && filter.filterText) || '';
 };
 
+const getFilterTextOrUndefined = (state: IReactVaporState, props: GetFilterTextProps): string => {
+    const filter: IFilterState = _.findWhere(state.filters, {id: props.id});
+    return filter?.filterText;
+};
+
 export interface GetMatchFilterTextProps {
     matchFilter?: MatchFilter;
 }
@@ -23,4 +28,5 @@ const getMatchFilter = (state: IReactVaporState, props: GetMatchFilterTextProps)
 export const FilterBoxSelectors = {
     getFilterText,
     getMatchFilter,
+    getFilterTextOrUndefined,
 };

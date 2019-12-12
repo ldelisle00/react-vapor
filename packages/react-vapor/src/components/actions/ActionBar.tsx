@@ -33,6 +33,7 @@ export interface IActionBarProps {
     width?: number;
     moreLabel?: string;
     itemFilterCropLength?: number;
+    isLoading?: boolean;
 }
 
 export class ActionBar extends React.PureComponent<
@@ -65,6 +66,19 @@ export class ActionBar extends React.PureComponent<
         });
 
         const prefixContentElement = this.props.prefixContent ? <Content {...this.props.prefixContent} /> : null;
+
+        if (this.props.isLoading) {
+            return (
+                <div
+                    className={classNames(containerClasses, 'mod-no-border')}
+                    style={this.props.width ? {width: this.props.width} : null}
+                >
+                    {prefixContentElement}
+                    <this.Filter />
+                    <this.Actions />
+                </div>
+            );
+        }
 
         return (
             <div className={containerClasses} style={this.props.width ? {width: this.props.width} : null}>

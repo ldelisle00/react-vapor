@@ -6,6 +6,10 @@ import {IFilterState} from '../../filterBox/FilterBoxReducers';
 import {IListBoxState} from '../../listBox/ListBoxReducers';
 import {ITableWithSortState} from '../reducers/TableWithSortReducers';
 
+export interface ITableLoading {
+    isLoading?: boolean;
+}
+
 export interface ITableHOCPredicateValue {
     id: string;
     value: string;

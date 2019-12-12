@@ -7,7 +7,9 @@ import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/
 import {IReactVaporState} from '../../ReactVapor';
 import {ConfigSupplier, HocUtils} from '../../utils/HocUtils';
 import {ReduxConnect} from '../../utils/ReduxUtils';
+import {UrlUtils} from '../../utils/UrlUtils';
 import {IItemBoxProps} from '../itemBox/ItemBox';
+import {selectListBoxOption} from '../listBox/ListBoxActions';
 import {SelectSelector} from '../select/SelectSelector';
 import {SingleSelectConnected} from '../select/SingleSelectConnected';
 import * as styles from './styles/TableWithPredicates.scss';
@@ -23,6 +25,7 @@ export interface ITableWithPredicateConfig extends WithServerSideProcessingProps
 
 export interface ITableWithPredicateStateProps {
     predicate: string;
+    urlPredicate: string[];
 }
 
 export interface ITableWithPredicateProps
@@ -46,24 +49,35 @@ export const tableWithPredicate = (supplier: ConfigSupplier<ITableWithPredicateC
         state: IReactVaporState,
         ownProps: ITableWithPredicateProps
     ): ITableWithPredicateStateProps | ITableHOCOwnProps => {
-        const predicate = SelectSelector.getListBoxSelected(state, {
-            id: TableHOCUtils.getPredicateId(ownProps.id, config.id),
-        })[0];
+        const predicate =
+            SelectSelector.getListBoxSelected(state, {
+                id: TableHOCUtils.getPredicateId(ownProps.id, config.id),
+            })[0] || '';
         const matchPredicate = config.matchPredicate || defaultMatchPredicate;
         const predicateData = () =>
             !ownProps.isServer && !config.isServer && predicate
                 ? _.filter(ownProps.data, (datum: any) => matchPredicate(predicate, datum))
                 : ownProps.data;
+
+        const urlParams = UrlUtils.getSearchParams();
+        const possiblePredicates = TableHOCUtils.getPredicateIds(ownProps.id, state);
+
         return {
             predicate: predicate,
             data: ownProps.data && predicateData(),
+            urlPredicate: Object.keys(urlParams)
+                .filter((key) => possiblePredicates.includes(key))
+                .map((key) => urlParams[key]),
         };
     };
 
     @ReduxConnect(mapStateToProps)
     class TableWithPredicate extends React.Component<ITableWithPredicateProps> {
         componentDidUpdate(prevProps: ITableWithPredicateProps) {
-            if (prevProps.predicate !== this.props.predicate) {
+            if (
+                prevProps.predicate !== this.props.predicate &&
+                !_.include(this.props.urlPredicate, this.props.predicate)
+            ) {
                 this.props.onUpdate?.();
             }
         }

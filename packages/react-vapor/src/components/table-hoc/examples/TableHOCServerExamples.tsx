@@ -14,6 +14,7 @@ import {Section} from '../../section/Section';
 import {TableWithPaginationActions} from '../actions/TableWithPaginationActions';
 import {TableHeaderWithSort} from '../TableHeaderWithSort';
 import {TableHOC} from '../TableHOC';
+import {TableRowHeader} from '../TableRowHeader';
 import {TableRowNumberHeader} from '../TableRowNumberHeader';
 import {tableWithActions} from '../TableWithActions';
 import {tableWithBlankSlate} from '../TableWithBlankSlate';
@@ -42,7 +43,7 @@ export interface IExampleServerTableState {
 }
 
 interface TableHOCServerExamplesState {
-    data: any[];
+    data: {users: [any]; count: number};
     isLoading: boolean;
 }
 
@@ -53,21 +54,21 @@ TableHOCServerExamples.title = 'TableHOC server';
 // start-print
 export const TableHOCServerExampleId = 'complex-example';
 
-const renderHeader = () => (
+const renderHeader = (isLoading: boolean) => (
     <thead>
         <tr>
-            <TableRowNumberHeader />
-            <TableHeaderWithSort id="address.city" tableId={TableHOCServerExampleId}>
+            <TableRowNumberHeader isLoading={isLoading} />
+            <TableHeaderWithSort id="address.city" tableId={TableHOCServerExampleId} isLoading={isLoading}>
                 City
             </TableHeaderWithSort>
-            <TableHeaderWithSort id="email" tableId={TableHOCServerExampleId}>
+            <TableHeaderWithSort id="email" tableId={TableHOCServerExampleId} isLoading={isLoading}>
                 Email
             </TableHeaderWithSort>
-            <TableHeaderWithSort id="username" tableId={TableHOCServerExampleId} isDefault>
+            <TableHeaderWithSort id="username" tableId={TableHOCServerExampleId} isLoading={isLoading} isDefault>
                 Username
             </TableHeaderWithSort>
-            <th key="date-of-birth">Date of Birth</th>
-            <th>{/* Empty th for the collapsible */}</th>
+            <TableRowHeader isLoading={isLoading}>Date of Birth</TableRowHeader>
+            <TableRowHeader isLoading={isLoading} />
         </tr>
     </thead>
 );
@@ -77,12 +78,12 @@ const mapDispatchToProps = (dispatch: IDispatch) => ({
 });
 
 class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps, TableHOCServerExamplesState> {
-    state = {
+    state: TableHOCServerExamplesState = {
         data: null,
         isLoading: true,
     };
 
-    private fetch() {
+    private fetch = _.debounce(() => {
         this.setState({...this.state, isLoading: true});
         window.setTimeout(
             () =>
@@ -91,7 +92,7 @@ class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps, 
                 }),
             500
         );
-    }
+    }, 40);
 
     private onUpdate = () => {
         this.fetch();
@@ -117,10 +118,11 @@ class TableExampleDisconnected extends React.PureComponent<TableHOCServerProps, 
                     className="table table-numbered mod-collapsible-rows"
                     data={this.state.data?.users ?? []}
                     renderBody={TableHOCExampleUtils.generateRows}
-                    tableHeader={renderHeader()}
+                    tableHeader={renderHeader(this.state.isLoading)}
                     onUpdate={this.onUpdate}
                     onUpdateUrl={this.updateUrl}
                     isLoading={this.state.isLoading}
+                    numberOfColumn={6}
                 >
                     <LastUpdated time={new Date()} />
                 </ServerTableComposed>
@@ -133,16 +135,16 @@ const ServerTableComposed = _.compose(
     withServerSideProcessing,
     tableWithUrlState,
     tableWithBlankSlate({title: 'No data fetched from the server'}),
-    tableWithPredicate({...TableHOCExampleUtils.tablePredicates[0]}),
-    tableWithPredicate({...TableHOCExampleUtils.tablePredicates[1]}),
+    tableWithPredicate(TableHOCExampleUtils.tablePredicates[0]),
+    tableWithPredicate(TableHOCExampleUtils.tablePredicates[1]),
     tableWithFilter({
         placeholder: 'Filter all',
         blankSlate: {
             title: 'No results found',
         },
     }),
-    tableWithDatePicker({...(TableHOCExampleUtils.tableDatePickerConfig as any)}),
     tableWithSort(),
+    tableWithDatePicker({...(TableHOCExampleUtils.tableDatePickerConfig as any)}),
     tableWithActions()
 )(TableHOC);
 

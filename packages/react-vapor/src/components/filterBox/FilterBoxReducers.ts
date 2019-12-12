@@ -30,7 +30,7 @@ export const filterBoxReducer = (
         case FilterActions.addFilter:
             return {
                 id: action.payload.id,
-                filterText: '',
+                filterText: action.payload.filterText,
             };
         case ListBoxActions.select:
             return {
