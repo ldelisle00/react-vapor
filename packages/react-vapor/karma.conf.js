@@ -21,11 +21,7 @@ module.exports = (config) => {
             noInfo: true,
         },
 
-        reporters: ['nyan'],
-
-        nyanReporter: {
-            renderOnRunCompleteOnly: !!process.env.TRAVIS,
-        },
+        reporters: ['progress'],
 
         client: {
             jasmine: {

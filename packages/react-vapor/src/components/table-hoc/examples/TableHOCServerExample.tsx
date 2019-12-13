@@ -47,9 +47,9 @@ interface TableHOCServerExamplesState {
     isLoading: boolean;
 }
 
-export const TableHOCServerExamples: ExampleComponent = () => <TableHOCServer />;
+export const TableHOCServerExample: ExampleComponent = () => <TableHOCServer />;
 
-TableHOCServerExamples.title = 'TableHOC server';
+TableHOCServerExample.title = 'TableHOC server';
 
 // start-print
 export const TableHOCServerExampleId = 'complex-example';

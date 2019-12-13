@@ -4,7 +4,7 @@ import {
     IListBoxExampleCompositeState,
     listBoxExampleReducer,
 } from '../src/components/listBox/examples/ListBoxExampleReducer';
-import {IExampleServerTableState} from '../src/components/table-hoc/examples/TableHOCServerExamples';
+import {IExampleServerTableState} from '../src/components/table-hoc/examples/TableHOCServerExample';
 import {IReactVaporState} from '../src/ReactVapor';
 import {ReactVaporReducers} from '../src/ReactVaporReducers';
 
