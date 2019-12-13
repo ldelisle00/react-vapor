@@ -1,8 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import * as _ from 'underscore';
+import {IComponentLoading} from '../../interfaces/baseInterface';
 import {Svg} from '../svg/Svg';
 
-export interface IFilterBoxOwnProps extends React.ClassAttributes<FilterBox> {
+export interface IFilterBoxOwnProps extends React.ClassAttributes<FilterBox>, IComponentLoading {
     id?: string;
     containerClasses?: string[];
     filterPlaceholder?: string;
@@ -109,6 +111,16 @@ export class FilterBox extends React.Component<IFilterBoxProps, any> {
         const filterBoxContainerClasses = classNames('filter-container', this.props.containerClasses);
         const filterInputClasses = classNames('filter-box', {truncate: this.props.truncate});
         const svgClearClasses = classNames({hidden: !(this.filterInput && this.filterInput.value)});
+
+        if (this.props.isLoading && _.isUndefined(this.props.filterText)) {
+            return (
+                <div className="coveo-table-actions">
+                    <div className="filter-container">
+                        <div className="btn mod-rounded-border-2 bg-pure-white cursor-auto mod-no-border MOD-WIDTH-100 table-header-action-bar-button" />
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <div className={this.props.className}>

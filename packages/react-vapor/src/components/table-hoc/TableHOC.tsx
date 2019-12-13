@@ -77,7 +77,6 @@ export class TableHOC extends React.PureComponent<
                             'mod-border-top': this.props.showBorderTop,
                         }
                     ).split(' ')}
-                    ]}
                     isLoading={this.props.isLoading}
                 >
                     {this.props.actions}

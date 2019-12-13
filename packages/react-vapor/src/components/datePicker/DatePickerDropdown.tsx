@@ -2,6 +2,8 @@ import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as _ from 'underscore';
+import {IComponentLoading} from '../../interfaces/baseInterface';
 
 import {DateUtils} from '../../utils/DateUtils';
 import {IReduxStatePossibleProps} from '../../utils/ReduxUtils';
@@ -12,7 +14,7 @@ import {DatePickerBox, IDatePickerBoxChildrenProps, IDatePickerBoxProps, IDatesS
 import {DatePickerDateRange} from './DatePickerConstants';
 import {IDatePickerState} from './DatePickerReducers';
 
-export interface IDatePickerDropdownOwnProps extends React.ClassAttributes<DatePickerDropdown> {
+export interface IDatePickerDropdownOwnProps extends React.ClassAttributes<DatePickerDropdown>, IComponentLoading {
     label?: string;
     className?: string;
     id?: string;
@@ -28,7 +30,6 @@ export interface IDatePickerDropdownOwnProps extends React.ClassAttributes<DateP
     isClearable?: boolean;
     attributeName?: string;
     readonly?: boolean;
-    isLoading?: boolean;
 }
 
 export interface IDatePickerDropdownChildrenProps extends IDatePickerBoxChildrenProps {
@@ -151,20 +152,21 @@ export class DatePickerDropdown extends React.Component<IDatePickerDropdownProps
             }
         );
 
-        const button = this.props.isLoading ? (
-            <div className="btn mod-rounded-border-2 bg-pure-white cursor-auto mod-no-border mod-small table-header-action-bar-button" />
-        ) : (
-            <button className={toggleClasses} onClick={this.handleClick} disabled={this.props.readonly}>
-                <span className="dropdown-selected-value">
-                    <label>
-                        {label}
-                        {toLabel}
-                        {labelSecondPart}
-                    </label>
-                </span>
-                <span className="dropdown-toggle-arrow"></span>
-            </button>
-        );
+        const button =
+            this.props.isLoading && _.isNull(this.props.datePicker) ? (
+                <div className="btn mod-rounded-border-2 bg-pure-white cursor-auto mod-no-border table-header-action-bar-button" />
+            ) : (
+                <button className={toggleClasses} onClick={this.handleClick} disabled={this.props.readonly}>
+                    <span className="dropdown-selected-value">
+                        <label>
+                            {label}
+                            {toLabel}
+                            {labelSecondPart}
+                        </label>
+                    </span>
+                    <span className="dropdown-toggle-arrow"></span>
+                </button>
+            );
 
         return (
             <div className={classNames('date-picker-dropdown', this.props.className)}>

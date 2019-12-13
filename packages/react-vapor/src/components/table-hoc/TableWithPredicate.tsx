@@ -89,7 +89,12 @@ export const tableWithPredicate = (supplier: ConfigSupplier<ITableWithPredicateC
                     className={classNames('coveo-table-actions predicate-filters', styles.tablePredicateFilters)}
                     key={key}
                 >
-                    <SingleSelectConnected id={key} items={config.values} buttonPrepend={config.prepend} />
+                    <SingleSelectConnected
+                        id={key}
+                        items={config.values}
+                        buttonPrepend={config.prepend}
+                        isLoading={this.props.isLoading}
+                    />
                 </div>
             );
 

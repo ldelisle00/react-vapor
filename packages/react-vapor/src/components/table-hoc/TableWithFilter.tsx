@@ -85,6 +85,7 @@ export const tableWithFilter = (
                     id={this.props.id}
                     className="coveo-table-actions"
                     filterPlaceholder={config.placeholder}
+                    isLoading={this.props.isLoading}
                     isAutoFocus
                 />
             );
