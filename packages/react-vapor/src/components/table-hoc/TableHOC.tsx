@@ -23,7 +23,6 @@ export interface ITableHOCOwnProps {
     containerClassName?: string;
     numberOfColumn?: number;
     showBorderTop?: boolean;
-    update?: (data: any) => void;
 }
 
 export interface ITableHOCProps extends ITableHOCOwnProps {}

@@ -94,9 +94,8 @@ export const tableWithPagination = (supplier: ConfigSupplier<ITableWithPaginatio
         }
 
         componentDidUpdate(prevProps: ITableWithPaginationProps) {
-            const {pageNb, perPage} = this.props;
-            if (prevProps.pageNb !== pageNb || prevProps.perPage !== perPage) {
-                this.props.update?.({pageNb, perPage});
+            if (prevProps.pageNb !== this.props.pageNb || prevProps.perPage !== this.props.perPage) {
+                this.props.onUpdate?.();
             }
         }
 
