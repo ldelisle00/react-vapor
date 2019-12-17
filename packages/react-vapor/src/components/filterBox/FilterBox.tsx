@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as _ from 'underscore';
-import {IComponentLoading} from '../../interfaces/baseInterface';
+import {IComponentBehaviour} from '../../../docs/src/components/ComponentsInterface';
 import {Svg} from '../svg/Svg';
 
-export interface IFilterBoxOwnProps extends React.ClassAttributes<FilterBox>, IComponentLoading {
+export interface IFilterBoxOwnProps extends React.ClassAttributes<FilterBox>, IComponentBehaviour {
     id?: string;
     containerClasses?: string[];
     filterPlaceholder?: string;

@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'underscore';
-import {IComponentLoading} from '../../interfaces/baseInterface';
+import {IComponentBehaviour} from '../../../docs/src/components/ComponentsInterface';
 
 import {DateUtils} from '../../utils/DateUtils';
 import {IReduxStatePossibleProps} from '../../utils/ReduxUtils';
@@ -14,7 +14,7 @@ import {DatePickerBox, IDatePickerBoxChildrenProps, IDatePickerBoxProps, IDatesS
 import {DatePickerDateRange} from './DatePickerConstants';
 import {IDatePickerState} from './DatePickerReducers';
 
-export interface IDatePickerDropdownOwnProps extends React.ClassAttributes<DatePickerDropdown>, IComponentLoading {
+export interface IDatePickerDropdownOwnProps extends React.ClassAttributes<DatePickerDropdown>, IComponentBehaviour {
     label?: string;
     className?: string;
     id?: string;

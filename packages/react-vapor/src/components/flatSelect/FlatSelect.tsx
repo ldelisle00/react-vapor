@@ -6,11 +6,12 @@ import {FlatSelectOption, IFlatSelectOptionProps} from './FlatSelectOption';
 export interface IFlatSelectOwnProps {
     id: string;
     options: IFlatSelectOptionProps[];
-    classes?: string[];
+    className?: string;
     group?: boolean;
     optionPicker?: boolean;
     defaultSelectedOptionId?: string;
     onClick?: (option: IFlatSelectOptionProps) => void;
+    classes?: string[] /* @deprecated use className instead */;
 }
 
 export interface IFlatSelectStateProps {
@@ -65,7 +66,8 @@ export class FlatSelect extends React.Component<IFlatSelectProps> {
                 'mod-btn-group': this.props.group,
                 'mod-option-picker': this.props.optionPicker,
             },
-            this.props.classes
+            this.props.classes,
+            this.props.className
         );
 
         return <div className={classes}>{this.getOptions()}</div>;

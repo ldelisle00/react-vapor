@@ -8,8 +8,8 @@ import {ConfigSupplier, HocUtils} from '../../utils/HocUtils';
 import {IReduxAction, ReduxConnect} from '../../utils/ReduxUtils';
 import {PaginationLoading} from '../loading/components/PaginationLoading';
 import {INavigationChildrenProps, INavigationOwnProps} from '../navigation/Navigation';
-import {NavigationConnected} from '../navigation/NavigationConnected';
 import {NavigationSelectors} from '../navigation/NavigationSelectors';
+import {TablePagination} from '../pagination/TablePagination';
 import {TableWithPaginationActions} from './actions/TableWithPaginationActions';
 import {ITableHOCOwnProps} from './TableHOC';
 import {TableSelectors} from './TableSelectors';
@@ -100,24 +100,17 @@ export const tableWithNewPagination = (supplier: ConfigSupplier<ITableWithPagina
         render() {
             const newProps = _.omit(this.props, [...TableWithPaginationProps]);
 
-            if (this.props.isLoading && _.isEmpty(this.props.data)) {
+            if (this.props.isLoading && (_.isNull(this.props.data) || _.isUndefined(this.props.data))) {
                 return (
                     <Component {...newProps}>
                         <PaginationLoading />
-                        {this.props.children}
                     </Component>
                 );
             }
 
             return (
                 <Component {...newProps}>
-                    <NavigationConnected
-                        id={this.props.id}
-                        loadingIds={[this.props.id]}
-                        {...config}
-                        {..._.pick(this.props, TableWithPaginationProps)}
-                    />
-                    {this.props.children}
+                    <TablePagination id={this.props.id} />
                 </Component>
             );
         }

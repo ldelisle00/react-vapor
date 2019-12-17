@@ -20,6 +20,7 @@ import {tableWithActions} from '../TableWithActions';
 import {tableWithBlankSlate} from '../TableWithBlankSlate';
 import {tableWithDatePicker} from '../TableWithDatePicker';
 import {tableWithFilter} from '../TableWithFilter';
+import {tableWithNewPagination} from '../TableWithNewPagination';
 import {tableWithPredicate} from '../TableWithPredicate';
 import {tableWithSort} from '../TableWithSort';
 import {tableWithUrlState} from '../TableWithUrlState';
@@ -145,6 +146,7 @@ const ServerTableComposed = _.compose(
     }),
     tableWithSort(),
     tableWithDatePicker({...(TableHOCExampleUtils.tableDatePickerConfig as any)}),
+    tableWithNewPagination(),
     tableWithActions()
 )(TableHOC);
 

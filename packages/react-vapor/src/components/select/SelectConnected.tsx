@@ -4,8 +4,8 @@ import {createStructuredSelector} from 'reselect';
 import * as _ from 'underscore';
 
 import {keys} from 'ts-transformer-keys';
+import {IComponentBehaviour} from '../../../docs/src/components/ComponentsInterface';
 import {Defaults} from '../../Defaults';
-import {IComponentLoading} from '../../interfaces/baseInterface';
 import {IReactVaporState, IReduxActionsPayload} from '../../ReactVapor';
 import {mod} from '../../utils/DataStructuresUtils';
 import {keyCode} from '../../utils/InputUtils';
@@ -26,7 +26,7 @@ export interface ISelectSpecificProps {
     button: React.ReactNode;
 }
 
-export interface ISelectOwnProps extends IListBoxOwnProps, IComponentLoading {
+export interface ISelectOwnProps extends IListBoxOwnProps, IComponentBehaviour {
     id: string;
     placeholder?: string;
     selectClasses?: string;

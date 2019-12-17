@@ -3,7 +3,7 @@ import * as VaporSVG from 'coveo-styleguide';
 import * as React from 'react';
 import {keys} from 'ts-transformer-keys';
 import * as _ from 'underscore';
-import {IComponentLoading} from '../../interfaces/baseInterface';
+import {IComponentBehaviour} from '../../../docs/src/components/ComponentsInterface';
 
 import {IReactVaporState} from '../../ReactVapor';
 import {getReactNodeTextContent} from '../../utils/JSXUtils';
@@ -17,7 +17,7 @@ import {ISelectButtonProps, ISelectOwnProps, ISelectProps, SelectConnected} from
 import {SelectSelector} from './SelectSelector';
 import * as styles from './styles/SingleSelect.scss';
 
-export interface ISingleSelectOwnProps extends ISelectProps, IComponentLoading {
+export interface ISingleSelectOwnProps extends ISelectProps, IComponentBehaviour {
     placeholder?: string;
     toggleClasses?: string;
     onSelectOptionCallback?: (option: string) => void;
