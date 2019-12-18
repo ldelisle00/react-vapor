@@ -11,6 +11,7 @@ export interface IFlatSelectOwnProps {
     optionPicker?: boolean;
     defaultSelectedOptionId?: string;
     onClick?: (option: IFlatSelectOptionProps) => void;
+    disabled?: boolean;
     classes?: string[] /* @deprecated use className instead */;
 }
 
@@ -55,7 +56,7 @@ export class FlatSelect extends React.Component<IFlatSelectProps> {
                 this.props.selectedOptionId && this.props.selectedOptionId === flatSelectOption.id;
             flatSelectOption.onClick = (option: IFlatSelectOptionProps) => this.handleOnOptionClick(option);
 
-            return <FlatSelectOption key={index} {...flatSelectOption} />;
+            return <FlatSelectOption key={index} {...flatSelectOption} disabled={this.props.disabled} />;
         });
     }
 

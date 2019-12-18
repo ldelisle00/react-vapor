@@ -146,7 +146,7 @@ const ServerTableComposed = _.compose(
     }),
     tableWithSort(),
     tableWithDatePicker({...(TableHOCExampleUtils.tableDatePickerConfig as any)}),
-    tableWithNewPagination(),
+    tableWithNewPagination({perPageNumbers: [3, 5, 10]}),
     tableWithActions()
 )(TableHOC);
 

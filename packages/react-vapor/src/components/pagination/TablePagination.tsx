@@ -1,18 +1,42 @@
 import * as React from 'react';
+import {TableHOCUtils} from '../table-hoc/utils/TableHOCUtils';
 import {PaginationPagesNumber} from './PaginationPagesNumber';
 import {PaginationPerPage} from './PaginationPerPage';
 
-export class TablePagination extends React.PureComponent<{id: string}> {
-    render() {
-        return (
-            <div className="pagination-container">
-                <PaginationPerPage id={this.props.id} />
-                <div className="flex-auto" />
-                <PaginationPagesNumber id={this.props.id} pagesNumbers={7} />
-            </div>
-        );
-    }
+export interface ITablePaginationProps {
+    id: string;
+    totalPages: number;
+    perPageNumbers: number[];
+    defaultPerPageSelected: number;
+    totalEntries: number;
+    disabled?: boolean;
 }
+
+export const TablePagination = ({
+    id,
+    disabled = false,
+    totalPages,
+    perPageNumbers,
+    defaultPerPageSelected,
+    totalEntries,
+}: ITablePaginationProps) => (
+    <div className="pagination-container">
+        <PaginationPerPage
+            id={id}
+            perPage={perPageNumbers}
+            disabled={disabled}
+            defaultPerPageSelected={defaultPerPageSelected}
+            hidden={perPageNumbers.length && totalEntries < perPageNumbers[0] && !disabled}
+        />
+        <div className="flex-auto" />
+        <PaginationPagesNumber
+            id={TableHOCUtils.getPaginationId(id)}
+            totalPages={totalPages || 1}
+            disabled={disabled}
+            hidden={totalPages === 1}
+        />
+    </div>
+);
 
 export const TablePaginationDefaultValue = {
     PerPage: [10, 20, 30],

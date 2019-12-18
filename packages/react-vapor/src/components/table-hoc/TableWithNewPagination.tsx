@@ -1,14 +1,17 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {keys} from 'ts-transformer-keys';
 import * as _ from 'underscore';
 
 import {WithServerSideProcessingProps} from '../../hoc/withServerSideProcessing/withServerSideProcessing';
 import {IReactVaporState, IReduxActionsPayload} from '../../ReactVapor';
 import {ConfigSupplier, HocUtils} from '../../utils/HocUtils';
-import {IReduxAction, ReduxConnect} from '../../utils/ReduxUtils';
-import {PaginationLoading} from '../loading/components/PaginationLoading';
+import {IReduxAction} from '../../utils/ReduxUtils';
+import {FlatSelectSelectors} from '../flatSelect/FlatSelectSelectors';
 import {INavigationChildrenProps, INavigationOwnProps} from '../navigation/Navigation';
 import {NavigationSelectors} from '../navigation/NavigationSelectors';
+import {PER_PAGE_NUMBERS} from '../navigation/perPage/NavigationPerPage';
+import {PaginationUtils} from '../pagination/PaginationUtils';
 import {TablePagination} from '../pagination/TablePagination';
 import {TableWithPaginationActions} from './actions/TableWithPaginationActions';
 import {ITableHOCOwnProps} from './TableHOC';
@@ -42,7 +45,9 @@ const TableWithPaginationProps = keys<ITableWithPaginationStateProps>();
 
 const sliceData = (data: any[], startingIndex: number, endingIndex: number) => data.slice(startingIndex, endingIndex);
 
-export const tableWithNewPagination = (supplier: ConfigSupplier<ITableWithPaginationConfig> = {}) => (
+export const tableWithNewPagination = (
+    supplier: ConfigSupplier<ITableWithPaginationConfig> = {perPageNumbers: PER_PAGE_NUMBERS}
+) => (
     Component: React.ComponentType<ITableWithPaginationProps>
 ): React.ComponentClass<ITableWithPaginationProps & React.HTMLAttributes<HTMLTableElement>> => {
     const config = HocUtils.supplyConfig(supplier);
@@ -51,7 +56,15 @@ export const tableWithNewPagination = (supplier: ConfigSupplier<ITableWithPagina
         ownProps: ITableWithPaginationProps
     ): ITableWithPaginationStateProps | ITableHOCOwnProps => {
         const pageNb = NavigationSelectors.getPaginationPage(state, {id: TableHOCUtils.getPaginationId(ownProps.id)});
-        const perPage = NavigationSelectors.getPerPage(state, {id: ownProps.id});
+
+        const perPage =
+            parseInt(
+                FlatSelectSelectors.getSelectedOptionId(state, {
+                    id: PaginationUtils.getPaginationPerPageId(ownProps.id),
+                }),
+                10
+            ) || PER_PAGE_NUMBERS[1];
+
         const isServer = ownProps.isServer || config.isServer;
         const length = TableSelectors.getDataCount(state, {
             id: ownProps.id,
@@ -75,14 +88,11 @@ export const tableWithNewPagination = (supplier: ConfigSupplier<ITableWithPagina
         dispatch: (action: IReduxAction<IReduxActionsPayload>) => void,
         ownProps: ITableHOCOwnProps
     ): ITableWithPaginationDispatchProps => ({
-        onMount: () => {
-            dispatch(TableWithPaginationActions.add(ownProps.id));
-        },
+        onMount: () => dispatch(TableWithPaginationActions.add(ownProps.id)),
         onUnmount: () => dispatch(TableWithPaginationActions.remove(ownProps.id)),
     });
 
-    @ReduxConnect(mapStateToProps, mapDispatchToProps)
-    class TableWithPagination extends React.Component<ITableHOCOwnProps & ITableWithPaginationProps> {
+    class TableWithNewPaginationDisconnected extends React.Component<ITableHOCOwnProps & ITableWithPaginationProps> {
         componentDidMount() {
             this.props.onMount();
         }
@@ -99,22 +109,24 @@ export const tableWithNewPagination = (supplier: ConfigSupplier<ITableWithPagina
 
         render() {
             const newProps = _.omit(this.props, [...TableWithPaginationProps]);
-
-            if (this.props.isLoading && (_.isNull(this.props.data) || _.isUndefined(this.props.data))) {
-                return (
-                    <Component {...newProps}>
-                        <PaginationLoading />
-                    </Component>
-                );
-            }
-
             return (
                 <Component {...newProps}>
-                    <TablePagination id={this.props.id} />
+                    <TablePagination
+                        id={this.props.id}
+                        disabled={this.props.isLoading}
+                        totalPages={this.props.totalPages}
+                        defaultPerPageSelected={
+                            config?.perPageNumbers?.length > 1
+                                ? config.perPageNumbers[1]
+                                : config.perPageNumbers[0] ?? PER_PAGE_NUMBERS[1]
+                        }
+                        totalEntries={this.props.totalEntries}
+                        perPageNumbers={config.perPageNumbers}
+                    />
                 </Component>
             );
         }
     }
 
-    return TableWithPagination;
+    return connect(mapStateToProps, mapDispatchToProps)(TableWithNewPaginationDisconnected);
 };
