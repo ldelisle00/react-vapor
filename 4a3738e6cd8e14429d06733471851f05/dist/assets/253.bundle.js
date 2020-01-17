@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[253],{1345:function(n,t,o){"use strict";o.r(t),t.default="export const collapsible: string;\nexport const header: string;\nexport const content: string;\n"}}]);
+//# sourceMappingURL=253.bundle.js.map
