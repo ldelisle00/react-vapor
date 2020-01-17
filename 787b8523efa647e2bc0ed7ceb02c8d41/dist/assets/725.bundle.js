@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[725],{1811:function(t,n,o){"use strict";o.r(n),n.default="export const stickyFooter: string;\nexport const stickyFooterOpened: string;\n"}}]);
+//# sourceMappingURL=725.bundle.js.map

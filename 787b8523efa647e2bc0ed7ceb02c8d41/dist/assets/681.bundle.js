@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[681],{1768:function(n,e,t){"use strict";t.r(e),e.default="export const singleSelectFixedWidth: string;\n"}}]);
+//# sourceMappingURL=681.bundle.js.map
