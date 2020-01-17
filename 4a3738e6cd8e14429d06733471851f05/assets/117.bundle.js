@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[117],{1215:function(n,o,r){"use strict";r.r(o),o.default="import {IActionOptions} from './Action';\r\n\r\nexport const ACTION_SEPARATOR: IActionOptions = {\r\n    separator: true,\r\n    enabled: true,\r\n};\r\n"}}]);
+//# sourceMappingURL=117.bundle.js.map
