@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1074],{2222:function(s,e,n){"use strict";n.r(e),e.default="@import '~coveo-styleguide/scss/common/palette.scss';\r\n@import '~coveo-styleguide/scss/variables.scss';\r\n\r\n.singleSelectFixedWidth {\r\n    width: $dropdown-button-min-width;\r\n}\r\n"}}]);
+//# sourceMappingURL=1074.bundle.js.map
