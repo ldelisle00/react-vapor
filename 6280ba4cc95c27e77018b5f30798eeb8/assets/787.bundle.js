@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[787],{1885:function(n,r,o){"use strict";o.r(r),r.default="import * as React from 'react';\r\nimport {TextLoadingPlaceholder} from '../loading/components/TextLoadingPlaceholder';\r\n\r\nexport const TableRowNumberHeader = ({isLoading}: {isLoading?: boolean}) => {\r\n    return isLoading ? (\r\n        <th>\r\n            <TextLoadingPlaceholder small />\r\n        </th>\r\n    ) : (\r\n        <th></th>\r\n    );\r\n};\r\n"}}]);
+//# sourceMappingURL=787.bundle.js.map
