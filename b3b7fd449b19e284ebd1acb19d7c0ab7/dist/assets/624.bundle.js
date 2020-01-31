@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[624],{1729:function(n,e,i){"use strict";i.r(e),e.default="const getPaginationPagesNumbersId = (id: string) => `${id}_PagesNumber`;\nconst getPaginationPerPageId = (id: string) => `${id}_PerPage`;\n\nexport const PaginationUtils = {\n    getPaginationPagesNumbersId,\n    getPaginationPerPageId,\n};\n"}}]);
+//# sourceMappingURL=624.bundle.js.map
