@@ -89,5 +89,27 @@ describe('TableHOC', () => {
             );
             expect(wrapper.find(ActionBarConnected).exists()).toBe(true);
         });
+
+        it('should keep the tbody with rows data during the loading', () => {
+            const wrapper = shallow(<TableHOC {...defaultProps} isLoading />);
+            expect(wrapper.find('tbody').length).toBe(1);
+        });
+
+        it('should set the tbody rows data hidden during the loading', () => {
+            const wrapper = shallow(<TableHOC {...defaultProps} isLoading />);
+            expect(wrapper.find('tbody').hasClass('hidden')).toBe(true);
+        });
+
+        it('should disabled actions on loading', () => {
+            const wrapper = shallow(<TableHOC {...defaultProps} actions={[<div />]} hasActionButtons isLoading />);
+            expect(wrapper.find(ActionBarConnected).props().disabled).toBe(true);
+        });
+
+        it('should not disabled actions on loading is off', () => {
+            const wrapper = shallow(
+                <TableHOC {...defaultProps} actions={[<div />]} hasActionButtons isLoading={false} />
+            );
+            expect(wrapper.find(ActionBarConnected).props().disabled).toBe(false);
+        });
     });
 });

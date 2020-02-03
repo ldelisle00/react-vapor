@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.3.0](https://github.com/coveo/react-vapor/compare/v5.2.1...v5.3.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* **actions:** action disabled on loading ([1255c2e](https://github.com/coveo/react-vapor/commit/1255c2e16e958a6a5b015c53501b14c41780966d))
+* **add uts:** uts table action disabled ([a9fbd79](https://github.com/coveo/react-vapor/commit/a9fbd792bd6432d7a77d5fd947d5ae57f26b0382))
+
+
+### Features
+
+* **actionbar disabled:** disabled action bar for table ([65d3f5c](https://github.com/coveo/react-vapor/commit/65d3f5ca6af30bee0c1be4b50bad80efc0df767a))
+
+
+
+
+
+## [5.2.1](https://github.com/coveo/react-vapor/compare/v5.2.0...v5.2.1) (2020-02-03)
+
+
+### Bug Fixes
+
+* **select row:** keep selected row table ([84f6c12](https://github.com/coveo/react-vapor/commit/84f6c12dc59bc85e4e1695e995a6bc2d671ee91e))
+
+
+
+
+
+# [5.2.0](https://github.com/coveo/react-vapor/compare/v5.1.0...v5.2.0) (2020-02-03)
+
+
+### Features
+
+* **editor:** add text mode to code mirror modes ([#1422](https://github.com/coveo/react-vapor/issues/1422)) ([5830776](https://github.com/coveo/react-vapor/commit/5830776d7c1a11327dd45f83e108bdea0b82af1c))
+
+
+
+
+
 # [5.1.0](https://github.com/coveo/react-vapor/compare/v5.0.1...v5.1.0) (2020-01-30)
 
 
