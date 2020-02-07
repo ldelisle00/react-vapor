@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[924],{2021:function(n,t,a){"use strict";a.r(t),t.default="export const ValidationTypes = {\n    nonEmpty: 'non-empty',\n    wrongInitialValue: 'initial-value',\n    default: 'default',\n};\n"}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[924],{2022:function(n,i,t){"use strict";t.r(i),i.default="export type ISingleValidation<T> = {\n    validationType: string;\n    value: T;\n};\n\nexport type ValidationState = {\n    isDirty: Array<ISingleValidation<boolean>>;\n    error: Array<ISingleValidation<string>>;\n    warning: Array<ISingleValidation<string>>;\n};\n\nexport type ValidationsState = Record<string, ValidationState>;\n"}}]);
 //# sourceMappingURL=924.bundle.js.map
