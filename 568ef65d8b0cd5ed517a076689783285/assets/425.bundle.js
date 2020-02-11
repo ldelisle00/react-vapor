@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[425],{1534:function(o,n,t){"use strict";t.r(n),n.default="export const infoBox: string;\nexport const infoBoxFooter: string;\n"}}]);
+//# sourceMappingURL=425.bundle.js.map
