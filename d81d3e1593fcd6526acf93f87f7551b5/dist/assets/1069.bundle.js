@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1069],{2222:function(s,e,n){"use strict";n.r(e),e.default="@import '~coveo-styleguide/scss/common/palette.scss';\r\n@import '~coveo-styleguide/scss/variables.scss';\r\n\r\n.borderedLine {\r\n    padding: $default-margin;\r\n}\r\n"}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1069],{2223:function(s,e,n){"use strict";n.r(e),e.default="@import '~coveo-styleguide/scss/common/palette.scss';\r\n@import '~coveo-styleguide/scss/variables.scss';\r\n\r\n.borderedLine {\r\n    padding: $default-margin;\r\n}\r\n"}}]);
 //# sourceMappingURL=1069.bundle.js.map
