@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[74],{1126:function(o,i,e){"use strict";e.r(i),i.default="export * from './SideNavigation';\nexport * from './SideNavigationHeader';\nexport * from './SideNavigationItem';\nexport * from './SideNavigationLoadingHeader';\nexport * from './SideNavigationLoadingItem';\nexport * from './SideNavigationMenuSection';\n"}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[74],{187:function(n,e,o){"use strict";o.r(e),e.default="## Guidelines\n\nUse refresh component to trigger a callback after a number of X seconds.\n\n---\n"}}]);
 //# sourceMappingURL=74.bundle.js.map

@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{1061:function(e,t,o){"use strict";o.r(t),t.default="export * from './ItemFilter';\nexport * from './ItemFilterActions';\nexport * from './ItemFilterReducers';\n"}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{176:function(n,e,o){"use strict";o.r(e),e.default="## Guidelines\n\nUse blankSlate to show information and some actions after an event.\n\n---\n"}}]);
 //# sourceMappingURL=9.bundle.js.map
