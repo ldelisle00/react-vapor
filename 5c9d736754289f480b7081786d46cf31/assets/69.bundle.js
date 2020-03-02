@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[69],{197:function(n,o,e){"use strict";e.r(o),o.default="## Guidelines\n\nDo not display more than one Popover at a time to keep interactions simple and avoid confusion.\n\n---\n\n## Related Components\n\n[Tooltip](#/components/Tooltip)\n"}}]);
+//# sourceMappingURL=69.bundle.js.map
