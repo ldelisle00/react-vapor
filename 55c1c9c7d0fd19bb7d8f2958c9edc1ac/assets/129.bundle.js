@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[129],{406:function(e,r,a){"use strict";a.r(r),a.d(r,"BorderedLineExamples",(function(){return o}));var n=a(0),t=a(9),o=function(){return n.createElement("div",{className:"mt2"},n.createElement("div",{className:"form-group"},n.createElement("label",{className:"form-control-label"},"Bordered Row"),n.createElement("div",{className:"form-control"},n.createElement(t.BorderedLine,{className:"full-content-x"},"I am a bordered row and you can fill me with whatever you want!"))))}}}]);
+//# sourceMappingURL=129.bundle.js.map

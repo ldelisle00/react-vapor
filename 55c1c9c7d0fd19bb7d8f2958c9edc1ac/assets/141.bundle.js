@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[141],{423:function(e,n,t){"use strict";t.r(n),t.d(n,"FileInputExamples",(function(){return o}));var l=t(0),i=t(9),o=function(){return l.createElement(i.Form,null,l.createElement(i.Section,null,l.createElement(i.FileInput,{id:"file-input-example",accept:".csv,.txt",placeholder:"Choose a file..."}),l.createElement(i.Button,{name:"log file",primary:!0,onClick:function(){console.log(i.FileInputSelectors.getFile("file-input-example"))}})))}}}]);
+//# sourceMappingURL=141.bundle.js.map
