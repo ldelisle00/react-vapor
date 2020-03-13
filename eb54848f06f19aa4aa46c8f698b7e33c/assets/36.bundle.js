@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[36],{218:function(e,t,n){"use strict";n.r(t),t.default="import * as React from 'react';\nimport {Filepicker} from 'react-vapor';\n\nconst inputId = 'file-input-example';\n\nexport const FilepickerExamples: React.FunctionComponent = () => (\n    // start-print\n    <Filepicker id={inputId} accept=\".jpg,.png,.csv,.txt\" placeholder=\"Choose a file...\" />\n\n    // Call the selector to get the selected file ➡ FilepickerSelectors.getFile(inputId));\n    // stop-print\n);\n"}}]);
+//# sourceMappingURL=36.bundle.js.map
