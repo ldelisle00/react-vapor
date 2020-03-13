@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[141],{420:function(e,n,i){"use strict";i.r(n),i.d(n,"FilepickerExamples",(function(){return t}));var p=i(0),c=i(8),t=function(){return p.createElement(c.Filepicker,{id:"file-input-example",accept:".jpg,.png,.csv,.txt",placeholder:"Choose a file..."})}}}]);
+//# sourceMappingURL=141.bundle.js.map
