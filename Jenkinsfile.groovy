@@ -29,6 +29,7 @@ pipeline {
     NPM_TOKEN = credentials("npmjs_com_token")
     GIT = credentials("github-coveobot")
     GIT_TOKEN = credentials("github-coveobot_token")
+    SNYK_TOKEN = credentials("snyk_token")
   }
 
   options {
@@ -178,6 +179,10 @@ pipeline {
       steps {
         script {
           setLastStageName();
+
+          sh "npx snyk auth ${env.SNYK_TOKEN}"
+          sh "npx snyk --project-name=react-vapor --org=coveo-adminui test --json > snyk-result.json"
+          sh "npx snyk --project-name=react-vapor --org=coveo-adminui monitor --json > snyk-monitor-result.json"
 
           // Prepare veracode
           sh "mkdir -p veracode"
