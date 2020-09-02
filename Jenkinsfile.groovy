@@ -180,9 +180,15 @@ pipeline {
         script {
           setLastStageName();
 
-          sh "npx snyk auth ${env.SNYK_TOKEN}"
-          sh "npx snyk --project-name=react-vapor --org=coveo-adminui test --json > snyk-result.json"
-          sh "npx snyk --project-name=react-vapor --org=coveo-adminui monitor --json > snyk-monitor-result.json"
+          runSnyk(
+            org: "coveo-admin-ui",
+            projectName: "react-vapor",
+            directory: ".",
+            archiveArtifacts: true,
+            scanDevDependencies: false,
+            dockerVariableMap: ["NODE_OPTIONS": env.NODE_OPTIONS],
+            additionalParameters: "--all-projects --prune-repeated-subdependencies"
+          )
 
           // Prepare veracode
           sh "mkdir -p veracode"
