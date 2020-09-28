@@ -1,4 +1,4 @@
-import moment from 'moment';
+import * as moment from 'moment';
 import * as _ from 'underscore';
 import {IReduxAction} from '../../../utils/ReduxUtils';
 import {

@@ -85,7 +85,7 @@ describe('<JSONEditorConnected />', () => {
 
     it('should call the onChange function from props if it is provided', () => {
         const expectedValue = '{"new-value": "fdsa"}';
-        const onChangeSpy = jasmine.createSpy('onChange');
+        const onChangeSpy = jest.fn();
 
         act(() => mountComponent({}, {...basicProps, onChange: onChangeSpy}));
         wrapper.find(CodeEditor).prop('onChange')(expectedValue);

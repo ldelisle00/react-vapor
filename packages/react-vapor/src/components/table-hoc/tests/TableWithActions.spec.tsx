@@ -2,6 +2,7 @@ import {ShallowWrapper} from 'enzyme';
 import {shallowWithState, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
 import * as _ from 'underscore';
+import {HOCTableRowState} from '..';
 
 import {getStoreMock, ReactVaporMockStore} from '../../../utils/tests/TestUtils';
 import {TableHOCRowActions} from '../actions/TableHOCRowActions';
@@ -52,9 +53,8 @@ describe('Table HOC', () => {
             let store: ReactVaporMockStore;
 
             const shallowComponent = () => {
-                /* eslint-disable jasmine/no-unsafe-spy */
-                spyOn(document.body, 'contains').and.returnValue(true);
-                const spy = spyOn(document, 'addEventListener');
+                jest.spyOn(document.body, 'contains').mockReturnValue(true);
+                const spy = jest.spyOn(document, 'addEventListener');
                 /* eslint-enable */
 
                 store = getStoreMock({});
@@ -62,7 +62,7 @@ describe('Table HOC', () => {
                     <TableWithActions id={id} data={[]} renderBody={_.identity} />,
                     store
                 ).dive();
-                return [spy.calls.mostRecent().args[1]];
+                return [spy.mock.calls[spy.mock.calls.length - 1][1]];
             };
 
             afterEach(() => {
@@ -70,7 +70,7 @@ describe('Table HOC', () => {
             });
 
             it('should not dispatch an action when the user click outside and no rows are selected', () => {
-                spyOn(TableSelectors, 'getSelectedRows').and.returnValue([]);
+                jest.spyOn(TableSelectors, 'getSelectedRows').mockReturnValue([]);
                 const [clickOnElement] = shallowComponent();
 
                 clickOnElement({target: {closest: (): HTMLElement => null}});
@@ -79,7 +79,7 @@ describe('Table HOC', () => {
             });
 
             it('should dispatch an action when the user click outside and a row is selected', () => {
-                spyOn(TableSelectors, 'getSelectedRows').and.returnValue([{}]);
+                jest.spyOn(TableSelectors, 'getSelectedRows').mockReturnValue([{} as HOCTableRowState]);
                 const [clickOnElement] = shallowComponent();
 
                 clickOnElement({target: {closest: (): HTMLElement => null}});
@@ -88,10 +88,10 @@ describe('Table HOC', () => {
             });
 
             it('should not dispatch an action when the user click inside the table', () => {
-                spyOn(TableSelectors, 'getSelectedRows').and.returnValue([{}]);
+                jest.spyOn(TableSelectors, 'getSelectedRows').mockReturnValue([{} as HOCTableRowState]);
                 const [clickOnElement] = shallowComponent();
 
-                clickOnElement({target: {closest: () => jasmine.anything()}});
+                clickOnElement({target: {closest: () => expect.anything()}});
 
                 expect(store.getActions()).not.toContain(TableHOCRowActions.deselectAll(id));
             });

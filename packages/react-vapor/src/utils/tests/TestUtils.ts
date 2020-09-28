@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {DragDropContext} from 'react-dnd';
 import TestBackend from 'react-dnd-test-backend';
 import * as Redux from 'redux';
@@ -53,7 +53,7 @@ export class TestUtils {
     }
 
     static makeDebounceStatic() {
-        spyOn(_, 'debounce').and.callFake(function (func: () => void) {
+        jest.spyOn(_, 'debounce').mockImplementation(function (func: () => void) {
             return function (this: any) {
                 func.apply(this, arguments as any);
             };
@@ -61,7 +61,7 @@ export class TestUtils {
     }
 
     static makeDeferSync() {
-        spyOn(_, 'defer').and.callFake(function (this: any, func: () => void) {
+        jest.spyOn(_, 'defer').mockImplementation(function (this: any, func: () => void) {
             func.apply(this, arguments as any);
         });
     }
@@ -114,3 +114,16 @@ export const getStoreMock = createMockStore<Partial<IReactVaporState>, IDispatch
 export const composeMockStore = (
     ...functions: Array<(state: Partial<IReactVaporState>) => Partial<IReactVaporState>>
 ) => getStoreMock(_.compose(...functions) as IReactVaporState);
+
+export const createTestAppContainer = () => {
+    const div = document.createElement('div');
+    div.setAttribute('id', 'App');
+    document.body.appendChild(div);
+};
+
+export const removeTestAppContainer = () => {
+    const div = document.getElementById('App');
+    if (div) {
+        document.body.removeChild(div);
+    }
+};

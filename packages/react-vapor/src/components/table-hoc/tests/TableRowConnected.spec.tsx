@@ -1,6 +1,7 @@
 import {ShallowWrapper} from 'enzyme';
 import {mountWithStore, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
+import {HOCTableRowState} from '..';
 
 import {getStoreMock, ReactVaporMockStore} from '../../../utils/tests/TestUtils';
 import {addActionsToActionBar} from '../../actions/ActionBarActions';
@@ -104,7 +105,10 @@ describe('Table HOC', () => {
 
         it('should dispatch an TableHOCRowActions.remove on componentWillUnmount', () => {
             const expectedAction = TableHOCRowActions.remove(defaultProps.id, defaultProps.tableId, true);
-            spyOn(TableSelectors, 'getTableRow').and.returnValue({selected: true, opened: false});
+            jest.spyOn(TableSelectors, 'getTableRow').mockReturnValue({
+                selected: true,
+                opened: false,
+            } as HOCTableRowState);
 
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} />, store).dive();
             wrapper.unmount();
@@ -138,10 +142,13 @@ describe('Table HOC', () => {
             const actions = [{name: 'name', enabled: false}];
             const newActions = [{name: 'name', enabled: true}];
             const expectedAction = addActionsToActionBar(defaultProps.tableId, actions);
-            spyOn(TableSelectors, 'getTableRow').and.returnValue({selected: true, opened: false});
+            jest.spyOn(TableSelectors, 'getTableRow').mockReturnValue({
+                selected: true,
+                opened: false,
+            } as HOCTableRowState);
 
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} actions={actions} />, store).dive();
-            wrapper.setProps({actions: newActions});
+            wrapper.setProps({actions: newActions} as any);
 
             expect(store.getActions()).toContain(expectedAction);
         });
@@ -150,10 +157,13 @@ describe('Table HOC', () => {
             const actions = [{name: 'name', enabled: false}];
             const newActions = [{name: 'name', enabled: true}];
             const expectedAction = TableHOCRowActions.select(defaultProps.id, false);
-            spyOn(TableSelectors, 'getTableRow').and.returnValue({selected: true, opened: false});
+            jest.spyOn(TableSelectors, 'getTableRow').mockReturnValue({
+                selected: true,
+                opened: false,
+            } as HOCTableRowState);
 
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} actions={actions} />, store).dive();
-            wrapper.setProps({actions: newActions});
+            wrapper.setProps({actions: newActions} as any);
 
             expect(store.getActions()).toContain(expectedAction);
         });
@@ -204,7 +214,7 @@ describe('Table HOC', () => {
         });
 
         it('should dispatch trigger actions with callOnDoubleClick=true when double clicking the row', () => {
-            const triggerActionSpy = jasmine.createSpy('triggerAction');
+            const triggerActionSpy = jest.fn();
 
             const wrapper = shallowWithStore(
                 <TableRowConnected
@@ -305,9 +315,10 @@ describe('Table HOC', () => {
                 shallowComponent();
                 const expectedAction = TableHOCRowActions.toggleCollapsible(defaultProps.id);
 
-                wrapper
-                    .find(CollapsibleToggle)
-                    .simulate('click', jasmine.createSpyObj('event', ['preventDefault', 'stopPropagation']));
+                wrapper.find(CollapsibleToggle).simulate('click', {
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                });
 
                 expect(store.getActions()).toContain(expectedAction);
             });
@@ -378,7 +389,7 @@ describe('Table HOC', () => {
                     expandOnMount: true,
                     content: <div>Whatever</div>,
                 },
-            });
+            } as any);
 
             expect(store.getActions()).toContain(expectedAction);
         });
@@ -408,13 +419,13 @@ describe('Table HOC', () => {
                 collapsible: {
                     content: <div>Whatever</div>,
                 },
-            });
+            } as any);
 
             expect(store.getActions()).not.toContain(actionNotExpected);
         });
 
         it('should call the onToggleCollapsible props with true the row is opened', () => {
-            const spy = jasmine.createSpy('onToggle');
+            const spy = jest.fn();
             store = getStoreMock({
                 tableHOCRow: [
                     {
@@ -438,16 +449,16 @@ describe('Table HOC', () => {
                 store
             ).dive();
 
-            row.find(CollapsibleToggle).simulate(
-                'click',
-                jasmine.createSpyObj('event', ['preventDefault', 'stopPropagation'])
-            );
+            row.find(CollapsibleToggle).simulate('click', {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+            });
 
             expect(spy).toHaveBeenCalledWith(true);
         });
 
         it('should call the onToggleCollapsible props with false the row is closed', () => {
-            const spy = jasmine.createSpy('onToggle');
+            const spy = jest.fn();
             store = getStoreMock({
                 tableHOCRow: [
                     {
@@ -471,10 +482,10 @@ describe('Table HOC', () => {
                 store
             ).dive();
 
-            row.find(CollapsibleToggle).simulate(
-                'click',
-                jasmine.createSpyObj('event', ['preventDefault', 'stopPropagation'])
-            );
+            row.find(CollapsibleToggle).simulate('click', {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+            });
 
             expect(spy).toHaveBeenCalledWith(false);
         });

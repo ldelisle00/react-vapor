@@ -27,7 +27,7 @@ describe('Drop', () => {
         });
 
         it('should call renderOpenButton on mount', () => {
-            const renderOpenButtonSpy = jasmine.createSpy('renderOpenButton').and.returnValue(<div>DIV</div>);
+            const renderOpenButtonSpy = jest.fn(() => <div>DIV</div>);
             shallowWithState(<Drop id={'test'} renderOpenButton={renderOpenButtonSpy} />, {}).dive();
 
             expect(renderOpenButtonSpy).toHaveBeenCalledTimes(1);
@@ -207,7 +207,7 @@ describe('Drop', () => {
 
             describe('events', () => {
                 it('should add the event on click if the drop is opening', () => {
-                    const spy = spyOn(document, 'addEventListener');
+                    const spy = jest.spyOn(document, 'addEventListener');
                     const shallowWrapper = shallowWithState(
                         <Drop id={'test'} renderOpenButton={() => defaultButton} />,
                         {}
@@ -215,20 +215,20 @@ describe('Drop', () => {
 
                     expect(spy).toHaveBeenCalledTimes(0);
 
-                    shallowWrapper.setProps({isOpen: true});
+                    shallowWrapper.setProps({isOpen: true} as any);
 
                     expect(spy).toHaveBeenCalledTimes(1);
                 });
 
                 it('should remove the event on click if the drop is closing', () => {
-                    const spy = spyOn(document, 'removeEventListener');
+                    const spy = jest.spyOn(document, 'removeEventListener');
                     const shallowWrapper = shallowWithState(
                         <Drop id={'test'} renderOpenButton={() => defaultButton} />,
                         {}
                     ).dive();
 
-                    shallowWrapper.setProps({isOpen: true});
-                    shallowWrapper.setProps({isOpen: false});
+                    shallowWrapper.setProps({isOpen: true} as any);
+                    shallowWrapper.setProps({isOpen: false} as any);
 
                     expect(spy).toHaveBeenCalledTimes(1);
                 });

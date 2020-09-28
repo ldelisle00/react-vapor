@@ -30,7 +30,7 @@ describe('Toasts', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get the toasts as a prop', () => {

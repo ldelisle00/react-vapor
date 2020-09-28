@@ -1,5 +1,5 @@
 import {mount, ReactWrapper} from 'enzyme';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import {Store} from 'redux';
@@ -55,7 +55,7 @@ describe('Calendar', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get an id as a prop', () => {

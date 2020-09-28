@@ -1,5 +1,5 @@
 import {mount, ReactWrapper, shallow, ShallowWrapper} from 'enzyme';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as React from 'react';
 import * as s from 'underscore.string';
 
@@ -29,7 +29,7 @@ describe('LastUpdated', () => {
         });
 
         it('should add the current time if we do not pass it the time prop', () => {
-            jasmine.clock().install();
+            jest.useFakeTimers();
             time = TestUtils.randomDate();
             jasmine.clock().mockDate(time);
 
@@ -39,7 +39,7 @@ describe('LastUpdated', () => {
 
             expect(s.contains(lastUpdatedWrapper.html(), expectedTime)).toBe(true);
 
-            jasmine.clock().uninstall();
+            jest.clearAllTimers();
         });
 
         it('should use the default label if not defined', () => {
@@ -56,7 +56,7 @@ describe('LastUpdated', () => {
         });
 
         it('should trigger onRender prop when mounting', () => {
-            const renderSpy = jasmine.createSpy('onRender');
+            const renderSpy = jest.fn();
             lastUpdated = mount(<LastUpdated />, {attachTo: document.getElementById('App')});
 
             expect(() => (lastUpdated.instance() as LastUpdated).componentWillMount()).not.toThrow();
@@ -65,11 +65,11 @@ describe('LastUpdated', () => {
             lastUpdated.setProps({onRender: renderSpy});
             lastUpdated.mount();
 
-            expect(renderSpy.calls.count()).toBe(1);
+            expect(renderSpy.mock.calls.length).toBe(1);
         });
 
         it('should trigger onDestroy prop when unmounting', () => {
-            const destroySpy = jasmine.createSpy('onDestroy');
+            const destroySpy = jest.fn();
             lastUpdated = mount(<LastUpdated />, {attachTo: document.getElementById('App')});
 
             expect(() => (lastUpdated.instance() as LastUpdated).componentWillUnmount()).not.toThrow();
@@ -79,7 +79,7 @@ describe('LastUpdated', () => {
             lastUpdated.mount();
             lastUpdated.unmount();
 
-            expect(destroySpy.calls.count()).toBe(1);
+            expect(destroySpy.mock.calls.length).toBe(1);
         });
     });
 });

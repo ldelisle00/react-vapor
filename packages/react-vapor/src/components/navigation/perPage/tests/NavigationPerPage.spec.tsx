@@ -30,7 +30,7 @@ describe('NavigationPerPage', () => {
         });
 
         afterEach(() => {
-            navigationPerPage.detach();
+            navigationPerPage.unmount(); // <-- new
         });
 
         it('should get the number of entries as a prop', () => {
@@ -82,7 +82,7 @@ describe('NavigationPerPage', () => {
         });
 
         it('should call onRender if prop is set on mount', () => {
-            const onRenderSpy = jasmine.createSpy('onRender');
+            const onRenderSpy = jest.fn();
 
             expect(() => {
                 navigationPerPageInstance.componentWillMount();
@@ -97,7 +97,7 @@ describe('NavigationPerPage', () => {
         });
 
         it('should call onDestroy if prop is set when unmounting', () => {
-            const onDestroySpy = jasmine.createSpy('onDestroy');
+            const onDestroySpy = jest.fn();
 
             expect(() => {
                 navigationPerPageInstance.componentWillMount();
@@ -139,7 +139,7 @@ describe('NavigationPerPage', () => {
 
         it('should call onPerPageClick prop if it is set when calling handleClick and perPage is different than currentPerPage', () => {
             const newProps: INavigationPerPageProps = _.extend({}, NAVIGATION_PER_PAGE_BASIC_PROPS, {
-                onPerPageClick: jasmine.createSpy('onPerPageClick'),
+                onPerPageClick: jest.fn(),
             });
             const expectedPerPage: number = 22;
 
@@ -153,7 +153,7 @@ describe('NavigationPerPage', () => {
 
         it('should not call onPerPageClick prop if perPage is identical to currentPerPage', () => {
             const newProps: INavigationPerPageProps = _.extend({}, NAVIGATION_PER_PAGE_BASIC_PROPS, {
-                onPerPageClick: jasmine.createSpy('onPerPageClick'),
+                onPerPageClick: jest.fn(),
                 currentPerPage: 10,
             });
             const expectedPerPage: number = 10;

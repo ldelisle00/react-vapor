@@ -34,7 +34,7 @@ describe('Dropdown', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get if dropdown is opened as a prop', () => {

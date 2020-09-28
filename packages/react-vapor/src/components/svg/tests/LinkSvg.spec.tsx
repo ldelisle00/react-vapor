@@ -28,13 +28,13 @@ describe('<LinkSvg>', () => {
 
         expect(() => {
             linkSvgComponent.unmount();
-            linkSvgComponent.detach();
+            linkSvgComponent.unmount(); // <-- new
         }).not.toThrow();
     });
 
     describe('Props handling', () => {
         afterEach(() => {
-            linkSvgComponent.detach();
+            linkSvgComponent.unmount(); // <-- new
         });
 
         const renderLinkSvg = (props: Partial<ILinkSvgProps> = {}) => {

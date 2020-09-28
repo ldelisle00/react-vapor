@@ -8,7 +8,7 @@ describe('Defaults', () => {
     describe('APP_ELEMENT', () => {
         it('should call ReactModal.setAppElement', () => {
             const expectedAppElement = '#app-element';
-            const setAppElementSpy = spyOn(ReactModal, 'setAppElement');
+            const setAppElementSpy = jest.spyOn(ReactModal, 'setAppElement');
 
             Defaults.APP_ELEMENT = expectedAppElement;
 

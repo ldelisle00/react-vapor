@@ -35,7 +35,7 @@ describe('ListBox', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         describe('mount and unmount', () => {

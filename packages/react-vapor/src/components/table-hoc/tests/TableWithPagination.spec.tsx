@@ -141,7 +141,7 @@ describe('Table HOC', () => {
                 });
 
                 it('should call onUpdate when the pageNb or perPage changes', () => {
-                    const updateSpy = jasmine.createSpy('update');
+                    const updateSpy = jest.fn();
                     const initialPage = 2;
                     const initialPerPage = 2;
 
@@ -153,19 +153,19 @@ describe('Table HOC', () => {
                         .dive()
                         .dive();
 
-                    wrapper.setProps({pageNb: initialPage + 1});
+                    wrapper.setProps({pageNb: initialPage + 1} as any);
                     wrapper.update();
 
                     expect(updateSpy).toHaveBeenCalledTimes(1);
 
-                    wrapper.setProps({perPage: initialPerPage + 1});
+                    wrapper.setProps({perPage: initialPerPage + 1} as any);
                     wrapper.update();
 
                     expect(updateSpy).toHaveBeenCalledTimes(2);
                 });
 
                 it('should not call onUpdate when pageNb & perPage does not changes', () => {
-                    const updateSpy = jasmine.createSpy('update');
+                    const updateSpy = jest.fn();
 
                     store = getStoreWithPage(1, 10);
                     const wrapper = shallowWithStore(
@@ -175,7 +175,7 @@ describe('Table HOC', () => {
                         .dive()
                         .dive();
 
-                    wrapper.setProps({ignore: true});
+                    wrapper.setProps({ignore: true} as any);
                     wrapper.update();
 
                     expect(updateSpy).not.toHaveBeenCalled();

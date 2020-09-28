@@ -20,7 +20,7 @@ describe('Actions', () => {
         beforeAll(() => {
             action = {
                 name: 'action2',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             };
         });
@@ -38,7 +38,7 @@ describe('Actions', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get withReduxState as a prop', () => {

@@ -98,7 +98,7 @@ describe('FlatSelect', () => {
     });
 
     it('should call "onClick" prop when changing selection', () => {
-        const onClickSpy = jasmine.createSpy('onClick');
+        const onClickSpy = jest.fn();
         const component = shallowWithState(<FlatSelectConnected {...props} onClick={onClickSpy} />, {}).dive();
         component.children().first().prop('onClick')('new-option');
 

@@ -47,7 +47,7 @@ describe('Tables', () => {
         });
 
         afterEach(() => {
-            tableHeader.detach();
+            tableHeader.unmount(); // <-- new
         });
 
         it('should get the columns as a prop', () => {

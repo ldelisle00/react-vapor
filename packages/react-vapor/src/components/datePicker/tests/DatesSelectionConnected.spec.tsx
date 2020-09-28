@@ -36,7 +36,7 @@ describe('Date picker', () => {
         };
 
         beforeEach(() => {
-            jasmine.clock().install();
+            jest.useFakeTimers();
             jasmine.clock().mockDate(NOW);
             store = TestUtils.buildStore();
 
@@ -45,8 +45,8 @@ describe('Date picker', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
-            jasmine.clock().uninstall();
+            wrapper.unmount(); // <-- new
+            jest.clearAllTimers();
         });
 
         it('should get an id as a prop', () => {

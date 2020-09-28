@@ -1,5 +1,5 @@
 import {date, internet} from 'faker/locale/en';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as React from 'react';
 import * as _ from 'underscore';
 
@@ -133,8 +133,8 @@ export const tablePropsMockWithData = {
             totalPages: 1,
         },
     } as any,
-    getActions: jasmine.createSpy('getActions'),
-    onRowClick: jasmine.createSpy('onClickRow'),
+    getActions: jest.fn(),
+    onRowClick: jest.fn(),
 } as any;
 
 export const tablePossibleProps = [

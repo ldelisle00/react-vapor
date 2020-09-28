@@ -17,7 +17,7 @@ describe('Actions', () => {
             },
             {
                 name: 'action2',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             },
         ];
@@ -37,14 +37,14 @@ describe('Actions', () => {
         });
 
         afterEach(() => {
-            primaryAction.detach();
+            primaryAction.unmount(); // <-- new
         });
 
         it('should get an action as a prop', () => {
             const actionProp = primaryAction.props().action;
 
             expect(actionProp).toBeDefined();
-            expect(actionProp).toEqual(jasmine.objectContaining(actions[0]));
+            expect(actionProp).toEqual(expect.objectContaining(actions[0]));
         });
 
         it('should display a <LinkAction /> component if the action is a link action', () => {

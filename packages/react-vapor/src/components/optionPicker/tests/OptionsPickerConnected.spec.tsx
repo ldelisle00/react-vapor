@@ -46,7 +46,7 @@ describe('Option picker', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get an id as a prop', () => {

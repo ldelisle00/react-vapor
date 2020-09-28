@@ -12,7 +12,7 @@ describe('Item filter', () => {
         ITEM_FILTER_BASIC_PROPS = {
             label: 'Item filter',
             item: '',
-            onClear: jasmine.createSpy('onClear'),
+            onClear: jest.fn(),
         };
     });
 
@@ -32,7 +32,7 @@ describe('Item filter', () => {
         });
 
         afterEach(() => {
-            itemFilterComponent.detach();
+            itemFilterComponent.unmount(); // <-- new
         });
 
         it('should get the label as a prop', () => {

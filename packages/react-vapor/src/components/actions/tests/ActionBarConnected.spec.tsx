@@ -34,17 +34,17 @@ describe('Actions', () => {
             },
             {
                 name: 'action2',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             },
             {
                 name: 'action3',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: false,
             },
             {
                 name: 'action4',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: false,
                 hideDisabled: false,
             },
@@ -73,7 +73,7 @@ describe('Actions', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get an id as a prop', () => {
@@ -91,7 +91,7 @@ describe('Actions', () => {
                 actions.filter((action) => action.enabled || action.hideDisabled === false).length
             );
 
-            expect(actionsProp[0]).toEqual(jasmine.objectContaining(actions[0]));
+            expect(actionsProp[0]).toEqual(expect.objectContaining(actions[0]));
         });
 
         it('should get the item filter as a prop', () => {
@@ -174,7 +174,7 @@ describe('Actions', () => {
         it('should get the <InlinePrompt /> as a prop', () => {
             const expectedClass = 'expected-class';
             const inlinePromptOptions: IInlinePromptOptions = {
-                onClick: jasmine.createSpy('onClick'),
+                onClick: jest.fn(),
                 userChoice: {},
                 className: expectedClass,
             };
@@ -189,7 +189,7 @@ describe('Actions', () => {
         });
 
         it('should call onClearItemFilter when calling clearItemFilter', () => {
-            const onClearItemFilterSpy = jasmine.createSpy('onClearItemFilter');
+            const onClearItemFilterSpy = jest.fn();
 
             wrapper = mount(
                 <Provider store={store}>

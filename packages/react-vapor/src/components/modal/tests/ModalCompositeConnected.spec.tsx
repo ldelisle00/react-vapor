@@ -81,7 +81,7 @@ describe('<ModalCompositeConnected />', () => {
             {}
         ).dive();
 
-        expect(modalCompositeConnected.find(ModalHeaderConnected).length).toBe(0, 'has modalHeaderConnected');
-        expect(modalCompositeConnected.find(ModalHeader).length).toBe(0, 'has modalHeader');
+        expect(modalCompositeConnected.find(ModalHeaderConnected).length).toBe(0);
+        expect(modalCompositeConnected.find(ModalHeader).length).toBe(0);
     });
 });

@@ -44,10 +44,10 @@ describe('WithDirtyInputHOC', () => {
         });
 
         describe('after mount', () => {
-            let validateSpy: jasmine.Spy;
+            let validateSpy: jest.Mock<any, any>;
 
             beforeEach(() => {
-                validateSpy = jasmine.createSpy('validate');
+                validateSpy = jest.fn();
                 inputWrapper = shallowWithStore<typeof InputWithHOC>(
                     <InputWithHOC {...INPUT_PROPS} validate={validateSpy} />,
                     store
@@ -71,7 +71,7 @@ describe('WithDirtyInputHOC', () => {
             });
 
             it('should call the original validate function and return the same value', () => {
-                validateSpy.and.returnValue(true);
+                validateSpy.mockReturnValue(true);
 
                 const result = inputWrapper.prop('validate')('🧀');
 

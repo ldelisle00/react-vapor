@@ -1,12 +1,12 @@
 import {shallow} from 'enzyme';
-import React from 'react';
+import * as React from 'react';
 
 import {ChartTooltipContent} from '../ChartTooltipContent';
 import {XYChartContextMock} from './XYChartContextMock';
 
 describe('<ChartTooltipContent />', () => {
     beforeEach(() => {
-        spyOn(React, 'useContext').and.returnValue(XYChartContextMock);
+        jest.spyOn(React, 'useContext').mockReturnValue(XYChartContextMock);
     });
 
     it('should not throw', () => {
