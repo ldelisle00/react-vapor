@@ -76,11 +76,11 @@ describe('SlideY', () => {
         let component: ReactWrapper<SlideYProps, any>;
 
         beforeEach(() => {
-            jasmine.clock().install();
+            jest.useFakeTimers();
         });
 
         afterEach(() => {
-            jasmine.clock().uninstall();
+            jest.clearAllTimers();
         });
 
         const mountAndWrap = (isIn: boolean, duration?: number) => {
@@ -94,7 +94,7 @@ describe('SlideY', () => {
         };
 
         const transitionToEnd = (el: HTMLElement) => {
-            jasmine.clock().tick(timeout + 1);
+            jest.advanceTimersByTime(timeout + 1);
             el.dispatchEvent(
                 new TransitionEvent('transitionend', {
                     bubbles: true,

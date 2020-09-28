@@ -1,11 +1,11 @@
-import {mount, ReactWrapper, shallow} from 'enzyme';
+import {ShallowWrapper, shallow} from 'enzyme';
 import * as React from 'react';
 import * as _ from 'underscore';
 import {Tooltip} from '../../tooltip/Tooltip';
 import {Button, IButtonProps} from '../Button';
 
 describe('Button', () => {
-    let buttonComponent: ReactWrapper<IButtonProps, any>;
+    let buttonComponent: ShallowWrapper<IButtonProps, any>;
 
     it('should render without errors', () => {
         expect(() => {
@@ -15,7 +15,7 @@ describe('Button', () => {
 
     describe('<Button /> with default props', () => {
         beforeEach(() => {
-            buttonComponent = mount(<Button enabled={true} />, {attachTo: document.getElementById('App')});
+            buttonComponent = shallow(<Button enabled={true} />);
         });
 
         it('should render the default name', () => {
@@ -29,9 +29,7 @@ describe('Button', () => {
 
     describe('<Button /> with custom props', () => {
         const showButton = (props: Partial<IButtonProps>) => {
-            buttonComponent = mount(<Button {..._.defaults(props, {enabled: true})} />, {
-                attachTo: document.getElementById('App'),
-            });
+            buttonComponent = shallow(<Button {..._.defaults(props, {enabled: true})} />);
         };
 
         it('should render the custom name', () => {
@@ -68,7 +66,7 @@ describe('Button', () => {
         });
 
         it('should call the onClick props on click', () => {
-            const spyOnClick = jasmine.createSpy('onClick');
+            const spyOnClick = jest.fn();
 
             showButton({
                 onClick: spyOnClick,
@@ -83,7 +81,7 @@ describe('Button', () => {
                 tooltip: 'tooltip test',
             });
 
-            expect(buttonComponent.find(Tooltip).length).toBe(1);
+            expect(buttonComponent.find(Tooltip)).toHaveLength(1);
         });
 
         describe('with the link button', () => {
@@ -134,7 +132,7 @@ describe('Button', () => {
                     link,
                 });
 
-                expect(buttonComponent.find('.btn-container').length).toBe(1);
+                expect(buttonComponent.find('.btn-container')).toHaveLength(1);
             });
 
             it('should add the rel default value', () => {
@@ -169,11 +167,11 @@ describe('Button', () => {
                     link,
                 });
 
-                expect(buttonComponent.find(Tooltip).length).toBe(1);
+                expect(buttonComponent.find(Tooltip)).toHaveLength(1);
             });
 
             it('should call the onClick props on click', () => {
-                const spyOnClick = jasmine.createSpy('onClick');
+                const spyOnClick = jest.fn();
 
                 showButton({
                     onClick: spyOnClick,

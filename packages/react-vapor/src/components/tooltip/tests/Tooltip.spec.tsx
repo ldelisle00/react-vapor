@@ -1,8 +1,8 @@
 import {shallow, ShallowWrapper} from 'enzyme';
 import {mountWithState} from 'enzyme-redux';
-import React from 'react';
+import * as React from 'react';
 import {OverlayTrigger} from 'react-bootstrap';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
 
 import {ITooltipProps, Tooltip, tooltipReactInstance} from '../Tooltip';
 
@@ -37,7 +37,7 @@ describe('Tooltip', () => {
         it('should display an <OverlayTrigger/>', () => {
             const tooltipWrapper = shallow(<Tooltip {...TOOLTIP_PROPS}>Hover me!</Tooltip>);
 
-            expect(tooltipWrapper.find(OverlayTrigger).length).toBe(1);
+            expect(tooltipWrapper.find(OverlayTrigger)).toHaveLength(1);
         });
 
         it('should pass a <BootstrapTooltip/> to the <OverlayTrigger/>', () => {
@@ -65,7 +65,7 @@ describe('Tooltip', () => {
                 </Tooltip>
             );
 
-            expect(tooltipWrapper.find(OverlayTrigger).length).toBe(0);
+            expect(tooltipWrapper.find(OverlayTrigger)).toHaveLength(0);
         });
     });
 
@@ -91,19 +91,19 @@ describe('Tooltip', () => {
         let el: HTMLElement;
         let customRef: React.RefObject<any>;
 
-        let findDOMNodeSpy: jasmine.Spy;
-        let containsSpy: jasmine.Spy;
-        let appendChildSpy: jasmine.Spy;
+        let findDOMNodeSpy: jest.SpyInstance;
+        let containsSpy: jest.SpyInstance;
+        let appendChildSpy: jest.SpyInstance;
         let tooltipWrapper: ShallowWrapper;
 
         beforeEach(() => {
             el = document.createElement('div');
             customRef = React.createRef();
 
-            spyOn(tooltipReactInstance(), 'createRef').and.returnValue(customRef);
-            findDOMNodeSpy = spyOn(ReactDOM, 'findDOMNode').and.returnValue(el);
-            containsSpy = spyOn(document.body, 'contains').and.returnValue(false);
-            appendChildSpy = spyOn(document.body, 'appendChild');
+            jest.spyOn(tooltipReactInstance(), 'createRef').mockReturnValue(customRef);
+            findDOMNodeSpy = jest.spyOn(ReactDOM, 'findDOMNode').mockReturnValue(el);
+            containsSpy = jest.spyOn(document.body, 'contains').mockReturnValue(false);
+            appendChildSpy = jest.spyOn(document.body, 'appendChild');
 
             tooltipWrapper = shallow(<Tooltip {...TOOLTIP_PROPS}>Hello</Tooltip>);
             (customRef as any).current = el;
@@ -116,7 +116,8 @@ describe('Tooltip', () => {
         });
 
         it('should not re-add the tooltip element on unmount if the DOM already contain the node', () => {
-            containsSpy.and.returnValue(true);
+            containsSpy.mockReturnValue(true);
+            appendChildSpy.mockReset();
 
             tooltipWrapper.unmount();
 
@@ -124,7 +125,8 @@ describe('Tooltip', () => {
         });
 
         it('should not re-add the tooltip element on unmount if the html node does not exists', () => {
-            findDOMNodeSpy.and.returnValue(null);
+            findDOMNodeSpy.mockReturnValue(null);
+            appendChildSpy.mockReset();
 
             tooltipWrapper.unmount();
 
@@ -133,6 +135,7 @@ describe('Tooltip', () => {
 
         it('should not re-add the tooltip element on unmount if the ref has no current view', () => {
             (customRef as any).current = undefined;
+            appendChildSpy.mockReset();
 
             tooltipWrapper.unmount();
 

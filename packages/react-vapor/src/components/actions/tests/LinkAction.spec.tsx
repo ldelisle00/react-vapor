@@ -30,14 +30,16 @@ describe('Actions', () => {
         });
 
         afterEach(() => {
-            linkAction.detach();
+            if (linkAction?.exists()) {
+                linkAction.unmount(); // <-- new
+            }
         });
 
         it('should get an action as a prop', () => {
             const actionProp = linkAction.props().action;
 
             expect(actionProp).toBeDefined();
-            expect(actionProp).toEqual(jasmine.objectContaining(action));
+            expect(actionProp).toEqual(expect.objectContaining(action));
         });
 
         it('should get if the action is simple (no html) as a prop', () => {
@@ -48,7 +50,7 @@ describe('Actions', () => {
         });
 
         it('should render a <Action /> component', () => {
-            expect(linkAction.find('Action').length).toBe(1);
+            expect(linkAction.find('Action')).toHaveLength(1);
         });
 
         it('should have a target attribute if there is a target for the action', () => {

@@ -1,5 +1,6 @@
 import {shallowWithState, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
+
 import {getStoreMock} from '../../../utils/tests/TestUtils';
 import {Button} from '../../button/Button';
 import {ButtonWithRefreshCallback, IButtonWithRefreshCallbackProps} from '../ButtonWithRefreshCallback';
@@ -18,13 +19,15 @@ describe('ButtonWithRefreshCallback tests', () => {
         };
 
         it('should mount and unmount without error', () => {
-            const component = shallowWithState(<ButtonWithRefreshCallback {...defaultProps} />, {}).dive();
-            component.unmount();
+            expect(() => {
+                const component = shallowWithState(<ButtonWithRefreshCallback {...defaultProps} />, {}).dive();
+                component.unmount();
+            }).not.toThrow();
         });
 
         describe('once mounted', () => {
             it('should call the callback on click button', () => {
-                const spy = jasmine.createSpy('callback');
+                const spy = jest.fn();
 
                 const component = shallowWithState(<ButtonWithRefreshCallback {...defaultProps} callback={spy} />, {
                     refreshCallback: {id: RefreshStatus.inProgress},
@@ -42,7 +45,7 @@ describe('ButtonWithRefreshCallback tests', () => {
                 const component = shallowWithStore(<ButtonWithRefreshCallback {...defaultProps} />, store).dive();
                 component.find(Button).props().onClick();
 
-                expect(store.getActions()).toContain(RefreshCallBackActions.stop(defaultProps.id));
+                expect(store.getActions()).toContainEqual(RefreshCallBackActions.stop(defaultProps.id));
             });
 
             it('should disable the button if the status is "stop"', () => {

@@ -41,7 +41,9 @@ describe('SubNavigation', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get what to do on render as a prop', () => {
@@ -63,13 +65,13 @@ describe('SubNavigation', () => {
         });
 
         it('should add the sub navigation in the store on mount', () => {
-            expect(store.getState().subNavigations.length).toBe(1);
+            expect(store.getState().subNavigations).toHaveLength(1);
         });
 
         it('should remove the dropdown from the store when unmounting', () => {
             wrapper.unmount();
 
-            expect(store.getState().subNavigations.length).toBe(0);
+            expect(store.getState().subNavigations).toHaveLength(0);
         });
 
         it('should set the selected property of the sub navigation on item click', () => {
@@ -83,7 +85,7 @@ describe('SubNavigation', () => {
                 .first();
             li.find('.sub-navigation-item-link').simulate('click');
 
-            expect(findWhere(store.getState().subNavigations, {id: basicProps.id}).selected).toBe(li.key(), 'after');
+            expect(findWhere(store.getState().subNavigations, {id: basicProps.id}).selected).toBe(li.key());
         });
     });
 

@@ -6,7 +6,7 @@ describe('<TableCollapsibleRowWrapper />', () => {
     describe('render', () => {
         it('should render without error without children', () => {
             expect(() => {
-                mount(<TableCollapsibleRowWrapper />, {attachTo: document.getElementById('App')});
+                mount(<TableCollapsibleRowWrapper />);
             }).not.toThrow();
         });
 
@@ -30,7 +30,7 @@ describe('<TableCollapsibleRowWrapper />', () => {
             );
 
             expect(tableRowWrapper.find('tbody').exists()).toBe(true);
-            expect(tableRowWrapper.find('tbody').find('div').length).toBe(1);
+            expect(tableRowWrapper.find('tbody').find('div')).toHaveLength(1);
             expect(tableRowWrapper.find('tbody').find('div').text()).toBe('Hello World');
         });
     });

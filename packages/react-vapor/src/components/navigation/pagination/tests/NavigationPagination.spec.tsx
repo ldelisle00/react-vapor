@@ -27,41 +27,39 @@ describe('NavigationPagination', () => {
         let navigationPaginationInstance: NavigationPagination;
 
         beforeEach(() => {
-            navigationPagination = mount(<NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} />, {
-                attachTo: document.getElementById('App'),
-            });
+            navigationPagination = mount(<NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} />);
             navigationPaginationInstance = navigationPagination.instance() as NavigationPagination;
         });
 
         afterEach(() => {
-            navigationPagination.detach();
+            if (navigationPagination?.exists()) {
+                navigationPagination.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {
-            const renderSpy: jasmine.Spy = jasmine.createSpy('onRender');
+            const renderSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 navigationPaginationInstance.componentDidMount();
             }).not.toThrow();
 
             navigationPagination = mount(
-                <NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} onRender={renderSpy} />,
-                {attachTo: document.getElementById('App')}
+                <NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} onRender={renderSpy} />
             );
 
             expect(renderSpy).toHaveBeenCalledTimes(1);
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
-            const destroySpy: jasmine.Spy = jasmine.createSpy('onDestroy');
+            const destroySpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 navigationPaginationInstance.componentWillUnmount();
             }).not.toThrow();
 
             navigationPagination = mount(
-                <NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} onDestroy={destroySpy} />,
-                {attachTo: document.getElementById('App')}
+                <NavigationPagination {...NAVIGATION_PAGINATION_BASIC_PROPS} onDestroy={destroySpy} />
             );
             navigationPagination.unmount();
 
@@ -72,7 +70,7 @@ describe('NavigationPagination', () => {
             'should call onPageClick prop if set when clicking on next/previous or page number and page number is greater' +
                 'than or is 0 and does not equal the current page',
             () => {
-                const clickSpy: jasmine.Spy = jasmine.createSpy('onClick');
+                const clickSpy: jest.Mock<any, any> = jest.fn();
                 const newNavigationPaginationProps: INavigationPaginationProps = _.extend(
                     {},
                     NAVIGATION_PAGINATION_BASIC_PROPS,
@@ -149,11 +147,11 @@ describe('NavigationPagination', () => {
                 {numberOfPagesToShow: 2}
             );
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(NUMBER_OF_PAGES_SHOWING);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(NUMBER_OF_PAGES_SHOWING);
 
             navigationPagination.setProps(newNavigationPaginationProps);
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(expectedNbOfPagesToShow);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(expectedNbOfPagesToShow);
         });
 
         it('should not show any page number if the prop hidePages is set to true', () => {
@@ -167,9 +165,9 @@ describe('NavigationPagination', () => {
 
             navigationPagination.setProps(newNavigationPaginationProps);
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(0);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(0);
 
-            expect(navigationPagination.find('.flat-select-option.mod-link').length).toBe(2); // Next and previous buttons
+            expect(navigationPagination.find('.flat-select-option.mod-link')).toHaveLength(2); // Next and previous buttons
         });
     });
 });

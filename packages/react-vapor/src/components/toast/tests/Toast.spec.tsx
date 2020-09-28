@@ -19,16 +19,18 @@ describe('Toasts', () => {
                 title: 'some title',
             };
 
-            toastComponent = mount(<Toast {...toastBasicAttributes} />, {attachTo: document.getElementById('App')});
+            toastComponent = mount(<Toast {...toastBasicAttributes} />);
             toastInstance = toastComponent.instance() as Toast;
         });
 
         afterEach(() => {
-            toastComponent.detach();
+            if (toastComponent?.exists()) {
+                toastComponent.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {
-            const renderSpy = jasmine.createSpy('onRender');
+            const renderSpy = jest.fn();
             const newToastAttributes = _.extend({}, toastBasicAttributes, {onRender: renderSpy});
 
             expect(() => toastInstance.componentWillMount()).not.toThrow();
@@ -40,7 +42,7 @@ describe('Toasts', () => {
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
-            const destroySpy = jasmine.createSpy('onDestroy');
+            const destroySpy = jest.fn();
             const newToastAttributes = _.extend({}, toastBasicAttributes, {onDestroy: destroySpy});
 
             expect(() => toastInstance.componentWillUnmount()).not.toThrow();
@@ -66,38 +68,38 @@ describe('Toasts', () => {
             const expectedClass = '.mod-warning';
             const newToastAttributes = _.extend({}, toastBasicAttributes, {type: ToastType.Warning});
 
-            expect(toastComponent.find(expectedClass).length).toBe(0);
+            expect(toastComponent.find(expectedClass)).toHaveLength(0);
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(expectedClass).length).toBe(1);
+            expect(toastComponent.find(expectedClass)).toHaveLength(1);
         });
 
         it('should have class "mod-warning" if the type is Error', () => {
             const expectedClass = '.mod-error';
             const newToastAttributes = _.extend({}, toastBasicAttributes, {type: ToastType.Error});
 
-            expect(toastComponent.find(expectedClass).length).toBe(0);
+            expect(toastComponent.find(expectedClass)).toHaveLength(0);
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(expectedClass).length).toBe(1);
+            expect(toastComponent.find(expectedClass)).toHaveLength(1);
         });
 
         it('should have class "mod-animated" if the animate props is undefined or true', () => {
             const expectedClass = '.mod-animated';
             let newToastAttributes = _.extend({}, toastBasicAttributes, {animate: true});
 
-            expect(toastComponent.find(expectedClass).length).toBe(1);
+            expect(toastComponent.find(expectedClass)).toHaveLength(1);
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(expectedClass).length).toBe(1);
+            expect(toastComponent.find(expectedClass)).toHaveLength(1);
 
             newToastAttributes = _.extend({}, toastBasicAttributes, {animate: false});
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(expectedClass).length).toBe(0);
+            expect(toastComponent.find(expectedClass)).toHaveLength(0);
         });
 
         it('should have any class specified in the className prop', () => {
@@ -113,11 +115,11 @@ describe('Toasts', () => {
             const expectedDescription = 'description';
             const newToastAttributes = _.extend({}, toastBasicAttributes, {content: expectedDescription});
 
-            expect(toastComponent.find(descriptionContainer).length).toBe(0);
+            expect(toastComponent.find(descriptionContainer)).toHaveLength(0);
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(descriptionContainer).length).toBe(1);
+            expect(toastComponent.find(descriptionContainer)).toHaveLength(1);
             expect(toastComponent.find(descriptionContainer).text()).toBe(expectedDescription);
         });
 
@@ -128,11 +130,11 @@ describe('Toasts', () => {
                 content: () => <a href="#">{expectedDescription}</a>,
             });
 
-            expect(toastComponent.find(descriptionContainer).length).toBe(0);
+            expect(toastComponent.find(descriptionContainer)).toHaveLength(0);
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(descriptionContainer).length).toBe(1);
+            expect(toastComponent.find(descriptionContainer)).toHaveLength(1);
             expect(toastComponent.find(descriptionContainer).text()).toBe(expectedDescription);
         });
 
@@ -144,7 +146,7 @@ describe('Toasts', () => {
                 attachTo: document.getElementById('App'),
             });
 
-            expect(toastComponent.find(descriptionContainer).length).toBe(1);
+            expect(toastComponent.find(descriptionContainer)).toHaveLength(1);
             expect(toastComponent.find(descriptionContainer).children().equals(expectedChildren)).toBe(true);
         });
 
@@ -152,17 +154,17 @@ describe('Toasts', () => {
             const closeSelector = '.toast-close';
 
             // By default dismisslbe is omitted
-            expect(toastComponent.find(closeSelector).length).toBe(1);
+            expect(toastComponent.find(closeSelector)).toHaveLength(1);
 
             const newToastAttributes = _.extend({}, toastBasicAttributes, {dismissible: true});
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(closeSelector).length).toBe(1);
+            expect(toastComponent.find(closeSelector)).toHaveLength(1);
         });
 
         it('should call onClose when the user clicks on .toast-close', () => {
             const closeSelector = '.toast-close';
-            const newToastAttributes = _.extend({}, toastBasicAttributes, {onClose: jasmine.createSpy('onClose')});
+            const newToastAttributes = _.extend({}, toastBasicAttributes, {onClose: jest.fn()});
 
             toastComponent.find(closeSelector).simulate('click');
 
@@ -181,16 +183,16 @@ describe('Toasts', () => {
 
             toastComponent.setProps(newToastAttributes).mount();
 
-            expect(toastComponent.find(closeSelector).length).toBe(0);
+            expect(toastComponent.find(closeSelector)).toHaveLength(0);
         });
     });
 
     describe('<Toast /> with a dismiss timer', () => {
         const dismissDelay = 2000;
-        let onCloseToast: jasmine.Spy;
+        let onCloseToast: jest.Mock<any, any>;
 
         beforeEach(() => {
-            onCloseToast = jasmine.createSpy('onClose');
+            onCloseToast = jest.fn();
             toastBasicAttributes = {
                 title: 'some title',
                 // Subtract 1 so the jasmine.tick work as expected
@@ -198,27 +200,27 @@ describe('Toasts', () => {
                 onClose: onCloseToast,
             };
 
-            onCloseToast.calls.reset();
-            jasmine.clock().install();
+            onCloseToast.mockReset();
+            jest.useFakeTimers();
 
-            toastComponent = mount(<Toast {...toastBasicAttributes} />, {attachTo: document.getElementById('App')});
+            toastComponent = mount(<Toast {...toastBasicAttributes} />);
             toastInstance = toastComponent.instance() as Toast;
         });
 
         afterEach(() => {
-            jasmine.clock().uninstall();
-            toastComponent.detach();
-            onCloseToast.calls.reset();
+            jest.clearAllTimers();
+            toastComponent.unmount(); // <-- new
+            onCloseToast.mockReset();
         });
 
         it('should call onClose when the timer expires', () => {
             expect(onCloseToast).not.toHaveBeenCalled();
 
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).toHaveBeenCalledTimes(1);
 
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).toHaveBeenCalledTimes(1);
         });
@@ -233,7 +235,7 @@ describe('Toasts', () => {
 
             expect(onCloseToast).not.toHaveBeenCalled();
 
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).not.toHaveBeenCalled();
         });
@@ -241,9 +243,9 @@ describe('Toasts', () => {
         it('should clear the timeout on mouseenter', () => {
             expect(onCloseToast).not.toHaveBeenCalled();
 
-            expect(toastComponent.find('.toast').length).toBe(1);
+            expect(toastComponent.find('.toast')).toHaveLength(1);
             toastComponent.find('.toast').simulate('mouseEnter');
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).not.toHaveBeenCalled();
         });
@@ -252,12 +254,12 @@ describe('Toasts', () => {
             expect(onCloseToast).not.toHaveBeenCalled();
 
             toastComponent.simulate('mouseEnter');
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).not.toHaveBeenCalled();
 
             toastComponent.simulate('mouseLeave');
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).toHaveBeenCalledTimes(1);
         });
@@ -269,12 +271,12 @@ describe('Toasts', () => {
             expect(onCloseToast).not.toHaveBeenCalled();
 
             toastComponent.simulate('mouseEnter');
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).not.toHaveBeenCalled();
 
             toastComponent.simulate('mouseLeave');
-            jasmine.clock().tick(dismissDelay);
+            jest.advanceTimersByTime(dismissDelay);
 
             expect(onCloseToast).not.toHaveBeenCalled();
         });

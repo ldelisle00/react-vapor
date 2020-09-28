@@ -34,7 +34,9 @@ describe('Dropdown', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            if (wrapper && wrapper.length) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get if dropdown is opened as a prop', () => {
@@ -69,13 +71,13 @@ describe('Dropdown', () => {
         });
 
         it('should add the dropdown in the store on mount', () => {
-            expect(store.getState().dropdowns.length).toBe(1);
+            expect(store.getState().dropdowns).toHaveLength(1);
         });
 
         it('should remove the dropdown from the store when unmounting', () => {
             wrapper.unmount();
 
-            expect(store.getState().dropdowns.length).toBe(0);
+            expect(store.getState().dropdowns).toHaveLength(0);
         });
 
         it('should toggle the open property of the dropdown on click', () => {
@@ -91,7 +93,7 @@ describe('Dropdown', () => {
 
             expect(_.findWhere(store.getState().dropdowns, {id: basicDropdownProps.id}).opened).toBe(true);
 
-            document.getElementById('App').click();
+            document.body.click();
 
             expect(_.findWhere(store.getState().dropdowns, {id: basicDropdownProps.id}).opened).toBe(false);
         });

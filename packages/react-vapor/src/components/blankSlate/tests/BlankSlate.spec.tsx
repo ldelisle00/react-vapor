@@ -1,12 +1,13 @@
-import {mount, ReactWrapper, shallow} from 'enzyme';
+import {ShallowWrapper, shallow} from 'enzyme';
 import * as React from 'react';
 import * as _ from 'underscore';
+import {Button} from '../../button/Button';
 
 import {Svg} from '../../svg/Svg';
 import {BlankSlate, IBlankSlateProps} from '../BlankSlate';
 
 describe('BlankSlate', () => {
-    let blankSlateComponent: ReactWrapper<IBlankSlateProps, any>;
+    let blankSlateComponent: ShallowWrapper<IBlankSlateProps, any>;
 
     it('should render without errors', () => {
         expect(() => {
@@ -16,7 +17,7 @@ describe('BlankSlate', () => {
 
     describe('<Blankslate /> with default props', () => {
         beforeEach(() => {
-            blankSlateComponent = mount(<BlankSlate />, {attachTo: document.getElementById('App')});
+            blankSlateComponent = shallow(<BlankSlate />);
         });
 
         it('should render the default title', () => {
@@ -24,15 +25,15 @@ describe('BlankSlate', () => {
         });
 
         it('should render without the class added to adjust the style with a modal', () => {
-            expect(blankSlateComponent.find('.mod-header-padding').length).toBe(0);
+            expect(blankSlateComponent.find('.mod-header-padding')).toHaveLength(0);
         });
 
         it('should render without description', () => {
-            expect(blankSlateComponent.find('p').length).toBe(0);
+            expect(blankSlateComponent.find('p')).toHaveLength(0);
         });
 
         it('should render without button', () => {
-            expect(blankSlateComponent.find('button').length).toBe(0);
+            expect(blankSlateComponent.find('button')).toHaveLength(0);
         });
     });
 
@@ -52,9 +53,7 @@ describe('BlankSlate', () => {
         };
 
         const renderBlankSlate = (props: IBlankSlateProps = {}) => {
-            blankSlateComponent = mount(<BlankSlate {..._.defaults(props, customProps)} />, {
-                attachTo: document.getElementById('App'),
-            });
+            blankSlateComponent = shallow(<BlankSlate {..._.defaults(props, customProps)} />);
         };
 
         it('should render the custom title', () => {
@@ -68,13 +67,13 @@ describe('BlankSlate', () => {
                 withModal: true,
             });
 
-            expect(blankSlateComponent.find('.mod-header-padding').length).toBe(1);
+            expect(blankSlateComponent.find('.mod-header-padding')).toHaveLength(1);
         });
 
         it('should render the custom description', () => {
             renderBlankSlate();
 
-            expect(blankSlateComponent.find('p').length).toBe(1);
+            expect(blankSlateComponent.find('p')).toHaveLength(1);
             expect(blankSlateComponent.find('p').text()).toEqual(customProps.description);
         });
 
@@ -93,7 +92,7 @@ describe('BlankSlate', () => {
         it('should render the button', () => {
             renderBlankSlate();
 
-            expect(blankSlateComponent.find('button').length).toBe(1);
+            expect(blankSlateComponent.find(Button)).toHaveLength(1);
         });
 
         it('should render two buttons', () => {
@@ -112,13 +111,13 @@ describe('BlankSlate', () => {
                 ],
             });
 
-            expect(blankSlateComponent.find('button').length).toBe(2);
+            expect(blankSlateComponent.find(Button)).toHaveLength(2);
         });
 
         it('should render the icon', () => {
             renderBlankSlate();
 
-            expect(blankSlateComponent.find(Svg).length).toBe(1);
+            expect(blankSlateComponent.find(Svg)).toHaveLength(1);
         });
     });
 });

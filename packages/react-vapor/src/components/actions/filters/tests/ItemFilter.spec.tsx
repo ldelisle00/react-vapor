@@ -12,7 +12,7 @@ describe('Item filter', () => {
         ITEM_FILTER_BASIC_PROPS = {
             label: 'Item filter',
             item: '',
-            onClear: jasmine.createSpy('onClear'),
+            onClear: jest.fn(),
         };
     });
 
@@ -32,7 +32,9 @@ describe('Item filter', () => {
         });
 
         afterEach(() => {
-            itemFilterComponent.detach();
+            if (itemFilterComponent.exists()) {
+                itemFilterComponent.unmount(); // <-- new
+            }
         });
 
         it('should get the label as a prop', () => {
@@ -78,35 +80,35 @@ describe('Item filter', () => {
             let cropProps: IItemFilterProps = _.extend({}, ITEM_FILTER_BASIC_PROPS, {crop: 10, item: longItem});
             itemFilterComponent.setProps(cropProps);
 
-            expect(itemFilterComponent.find('.item-filter-item').text().length).toBe(ELLIPSIS.length + cropProps.crop);
+            expect(itemFilterComponent.find('.item-filter-item').text()).toHaveLength(ELLIPSIS.length + cropProps.crop);
 
             cropProps = _.extend({}, ITEM_FILTER_BASIC_PROPS, {crop: -12, item: longItem});
             itemFilterComponent.setProps(cropProps);
 
-            expect(itemFilterComponent.find('.item-filter-item').text().length).toBe(
+            expect(itemFilterComponent.find('.item-filter-item').text()).toHaveLength(
                 ELLIPSIS.length + Math.abs(cropProps.crop)
             );
 
             cropProps = _.extend({}, ITEM_FILTER_BASIC_PROPS, {crop: longItem.length, item: longItem});
             itemFilterComponent.setProps(cropProps);
 
-            expect(itemFilterComponent.find('.item-filter-item').text().length).toBe(longItem.length);
+            expect(itemFilterComponent.find('.item-filter-item').text()).toHaveLength(longItem.length);
 
             cropProps = _.extend({}, ITEM_FILTER_BASIC_PROPS, {crop: -longItem.length, item: longItem});
             itemFilterComponent.setProps(cropProps);
 
-            expect(itemFilterComponent.find('.item-filter-item').text().length).toBe(longItem.length);
+            expect(itemFilterComponent.find('.item-filter-item').text()).toHaveLength(longItem.length);
         });
 
         describe('itemTooltipProps', () => {
             it('should not add a tooltip on the item if no props are passed', () => {
-                expect(itemFilterComponent.find(Tooltip).length).toBe(0);
+                expect(itemFilterComponent.find(Tooltip)).toHaveLength(0);
             });
 
             it('should add a tooltip to the item if tooltip props are passed', () => {
                 itemFilterComponent.setProps({itemTooltipProps: {title: 'what a nice feature'}});
 
-                expect(itemFilterComponent.find(Tooltip).length).toBe(1);
+                expect(itemFilterComponent.find(Tooltip)).toHaveLength(1);
             });
 
             it('should add all tooltip options passed to itemTooltipProps to the item tooltip', () => {

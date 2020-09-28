@@ -15,20 +15,20 @@ import {TableCollapsibleRowWrapper} from '../TableCollapsibleRowWrapper';
 import {TableHeadingRow} from '../TableHeadingRow';
 
 describe('<TableChildBody />', () => {
-    let spyOnRowClick: jasmine.Spy;
-    let spyHandleOnRowClick: jasmine.Spy;
+    let spyOnRowClick: jest.Mock<any, any>;
+    let spyHandleOnRowClick: jest.Mock<any, any>;
     let someActions: IActionOptions[];
     let tableChildBodyProps: ITableChildBodyProps;
     let store: Store<IReactVaporState>;
 
     beforeAll(() => {
         document.body.innerHTML += '<div id="App"></div>';
-        spyOnRowClick = jasmine.createSpy('onRowClick');
-        spyHandleOnRowClick = jasmine.createSpy('handleOnRowClick');
+        spyOnRowClick = jest.fn();
+        spyHandleOnRowClick = jest.fn();
         someActions = [
             {
                 name: 'some-action',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             },
         ];
@@ -43,7 +43,7 @@ describe('<TableChildBody />', () => {
             isLoading: false,
             onRowClick: spyOnRowClick,
             handleOnRowClick: spyHandleOnRowClick,
-            getActions: jasmine.createSpy('getActions').and.returnValue(someActions),
+            getActions: jest.fn().mockReturnValue(someActions),
             headingAttributes: [
                 {
                     attributeName: 'email',
@@ -105,7 +105,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should trigger an onClick event on click cell element', () => {
-            const spy = jasmine.createSpy('onclickcell');
+            const spy = jest.fn();
 
             const component = mountComponentWithProps({
                 ...tableChildBodyProps,
@@ -123,7 +123,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should not render a <TableCollapsibleRowWrapper /> if the prop collapsibleFormatter is not defined', () => {
-            expect(mountComponentWithProps().find(TableCollapsibleRowWrapper).length).toBe(0);
+            expect(mountComponentWithProps().find(TableCollapsibleRowWrapper)).toHaveLength(0);
         });
 
         it('should render a <TableCollapsibleRowWrapper /> if the prop collapsibleFormatter is defined', () => {
@@ -132,16 +132,16 @@ describe('<TableChildBody />', () => {
                     _.extend({}, tableChildBodyProps, {
                         collapsibleFormatter: () => <div></div>,
                     })
-                ).find(TableCollapsibleRowWrapper).length
-            ).toBe(1);
+                ).find(TableCollapsibleRowWrapper)
+            ).toHaveLength(1);
         });
 
         it('should render a <TableHeadingRow />', () => {
-            expect(mountComponentWithProps().find(TableHeadingRow).length).toBe(1);
+            expect(mountComponentWithProps().find(TableHeadingRow)).toHaveLength(1);
         });
 
         it('should not render a <TableCollapsibleRow /> if there is not a defined collapsibleFormatter ouput', () => {
-            expect(mountComponentWithProps().find(TableCollapsibleRow).length).toBe(0);
+            expect(mountComponentWithProps().find(TableCollapsibleRow)).toHaveLength(0);
         });
 
         it('should render a <TableCollapsibleRow /> if there is a defined collapsibleFormatter ouput', () => {
@@ -149,15 +149,15 @@ describe('<TableChildBody />', () => {
                 collapsibleFormatter: (rowData: IData) => rowData.url,
             });
 
-            expect(mountComponentWithProps(newProps).find(TableCollapsibleRow).length).toBe(1);
+            expect(mountComponentWithProps(newProps).find(TableCollapsibleRow)).toHaveLength(1);
         });
 
         it('should render a wrapper', () => {
-            expect(mountComponentWithProps().find('.wrapper').length).toBe(1);
+            expect(mountComponentWithProps().find('.wrapper')).toHaveLength(1);
         });
 
         it('should call onRowClick with getActions result if it is defined on click of a heading row', () => {
-            spyOnRowClick.calls.reset();
+            spyOnRowClick.mockReset();
             mountComponentWithProps().find(TableHeadingRow).simulate('click');
 
             expect(spyOnRowClick).toHaveBeenCalledTimes(1);
@@ -168,7 +168,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should call handleOnRowClick if it is defined on click of a heading row', () => {
-            spyHandleOnRowClick.calls.reset();
+            spyHandleOnRowClick.mockReset();
             mountComponentWithProps().find(TableHeadingRow).simulate('click');
 
             expect(spyHandleOnRowClick).toHaveBeenCalledTimes(1);
@@ -177,7 +177,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should call getActions results with option callOnDoubleClick true on row double click', () => {
-            const actionSpy: jasmine.Spy = jasmine.createSpy('actionSpy');
+            const actionSpy: jest.Mock<any, any> = jest.fn();
             const twoActions: IActionOptions[] = [
                 {
                     name: 'action that should not be called',
@@ -193,7 +193,7 @@ describe('<TableChildBody />', () => {
                     trigger: actionSpy,
                 },
             ];
-            const getActionsSpy: jasmine.Spy = jasmine.createSpy('getActions').and.returnValue(twoActions);
+            const getActionsSpy: jest.Mock<any, any> = jest.fn().mockReturnValue(twoActions);
             const newProps: ITableChildBodyProps = _.extend({}, tableChildBodyProps, {getActions: getActionsSpy});
 
             mountComponentWithProps(newProps).find(TableHeadingRow).simulate('dblclick');
@@ -203,7 +203,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should send not send disabled as a class to the <TableHeadingRow /> if there is no enabled or disabled property on the row data', () => {
-            expect(mountComponentWithProps().find('.disabled').length).toBe(0);
+            expect(mountComponentWithProps().find('.disabled')).toHaveLength(0);
         });
 
         it('should send not send disabled as a class to the <TableHeadingRow /> if the enabled property is set to true on the row data', () => {
@@ -211,7 +211,7 @@ describe('<TableChildBody />', () => {
                 rowData: _.extend({}, tableChildBodyProps.rowData, {enabled: true}),
             });
 
-            expect(mountComponentWithProps(newProps).find('.disabled').length).toBe(0);
+            expect(mountComponentWithProps(newProps).find('.disabled')).toHaveLength(0);
         });
 
         it('should send disabled as a class to the <TableHeadingRow /> if the enabled property is set to false on the row data', () => {
@@ -236,7 +236,7 @@ describe('<TableChildBody />', () => {
 
         it('should set the selectionDisabled prop to true on the <TableHeadingRow /> if there are no actions defined for the row', () => {
             const newProps: ITableChildBodyProps = _.extend({}, tableChildBodyProps, {
-                getActions: jasmine.createSpy('getActions').and.returnValue([]),
+                getActions: jest.fn(() => []),
             });
 
             expect(mountComponentWithProps(newProps).find(TableHeadingRow).props().selectionDisabled).toBe(true);

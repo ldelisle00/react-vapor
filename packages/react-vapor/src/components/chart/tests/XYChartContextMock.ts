@@ -7,7 +7,7 @@ export const XYChartContextMock: XYChartContextProps = {
     width: 10,
     height: 50,
     xDomain: [0, 5],
-    yDomain: [100, 0],
+    yDomain: [0, 100],
     series: [
         {
             label: 'First',

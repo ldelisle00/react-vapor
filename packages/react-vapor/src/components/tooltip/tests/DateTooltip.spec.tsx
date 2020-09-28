@@ -15,7 +15,7 @@ describe('Tooltip', () => {
         it('should display a tooltip', () => {
             tooltipWrapper = shallow(<DateTooltip date={moment()} />);
 
-            expect(tooltipWrapper.find(Tooltip).length).toBe(1);
+            expect(tooltipWrapper.find(Tooltip)).toHaveLength(1);
         });
 
         it('should display content in LLL if no format is given on moment date', () => {

@@ -15,7 +15,6 @@ import {DatesSelectionConnected} from '../DatesSelectionConnected';
 describe('Date picker', () => {
     describe('<DatesSelectionConnected />', () => {
         const DATES_SELECTION_ID: string = 'dates-selection';
-        const NOW: Date = new Date();
 
         let wrapper: ReactWrapper<any, any>;
         let datesSelection: ReactWrapper<IDatesSelectionProps, any>;
@@ -28,16 +27,16 @@ describe('Date picker', () => {
             wrapper = mount(
                 <Provider store={store}>
                     <DatesSelectionConnected id={DATES_SELECTION_ID} {...props} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             wrapper.update();
             datesSelection = wrapper.find(DatesSelection).first();
         };
 
         beforeEach(() => {
-            jasmine.clock().install();
-            jasmine.clock().mockDate(NOW);
+            const time = new Date('2020-01-01').getTime();
+            jest.useFakeTimers('modern').setSystemTime(time);
+
             store = TestUtils.buildStore();
 
             mountComponent();
@@ -45,8 +44,10 @@ describe('Date picker', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
-            jasmine.clock().uninstall();
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
+            jest.clearAllTimers();
         });
 
         it('should get an id as a prop', () => {
@@ -107,6 +108,7 @@ describe('Date picker', () => {
 
         it('should return the current date for the lower limit when the date picker does not exist in the state', () => {
             store.dispatch(clearState());
+            const NOW: Date = new Date();
             wrapper.update();
 
             expect(_.findWhere(store.getState().datePickers, {id: DATES_SELECTION_ID})).toBeUndefined();
@@ -115,6 +117,7 @@ describe('Date picker', () => {
 
         it('should return the current date for the upper limit when the date picker does not exist in the state', () => {
             store.dispatch(clearState());
+            const NOW: Date = new Date();
             wrapper.update();
 
             expect(_.findWhere(store.getState().datePickers, {id: DATES_SELECTION_ID})).toBeUndefined();
@@ -170,17 +173,17 @@ describe('Date picker', () => {
             wrapper.unmount();
             store.dispatch(clearState());
 
-            expect(store.getState().datePickers.length).toBe(0);
+            expect(store.getState().datePickers).toHaveLength(0);
 
             wrapper.mount();
 
-            expect(store.getState().datePickers.length).toBe(1);
+            expect(store.getState().datePickers).toHaveLength(1);
         });
 
         it('should call onDestroy prop when will unmount', () => {
             wrapper.unmount();
 
-            expect(store.getState().datePickers.length).toBe(0);
+            expect(store.getState().datePickers).toHaveLength(0);
         });
 
         it('should set the selected picker to the one sent when calling the onClick prop', () => {

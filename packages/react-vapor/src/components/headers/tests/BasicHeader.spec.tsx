@@ -21,22 +21,22 @@ describe('<BasicHeader/>', () => {
 
     describe('<Breadcrumb /> with default props', () => {
         beforeEach(() => {
-            basicHeaderComponent = mount(<BasicHeader {...defaultProps} />, {attachTo: document.getElementById('App')});
+            basicHeaderComponent = mount(<BasicHeader {...defaultProps} />);
         });
 
         afterEach(() => {
-            basicHeaderComponent.detach();
+            basicHeaderComponent.unmount(); // <-- new
         });
 
         it('should render the default title', () => {
             const titleComponent = basicHeaderComponent.find(Title);
 
-            expect(titleComponent.length).toBe(1);
+            expect(titleComponent).toHaveLength(1);
             expect(titleComponent.props().text).toBe(defaultProps.title.text);
         });
 
         it('should render the HeaderWrapper', () => {
-            expect(basicHeaderComponent.find(HeaderWrapper).length).toBe(1);
+            expect(basicHeaderComponent.find(HeaderWrapper)).toHaveLength(1);
         });
     });
 });

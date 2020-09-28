@@ -71,18 +71,18 @@ describe('Date picker', () => {
             it('should return the old state with one more IDatePickerState', () => {
                 const newDatePickers: IDatePickerState[] = datePickersReducer(oldDatePickers, action);
 
-                expect(newDatePickers.length).toBe(oldDatePickers.length + 1);
+                expect(newDatePickers).toHaveLength(oldDatePickers.length + 1);
                 expect(
-                    newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id).length
-                ).toBe(1);
+                    newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id)
+                ).toHaveLength(1);
 
                 action.payload.id = 'some-date-picker2';
                 const newDatePickers2 = datePickersReducer(newDatePickers, action);
 
-                expect(newDatePickers2.length).toBe(newDatePickers.length + 1);
+                expect(newDatePickers2).toHaveLength(newDatePickers.length + 1);
                 expect(
-                    newDatePickers2.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id).length
-                ).toBe(1);
+                    newDatePickers2.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id)
+                ).toHaveLength(1);
             });
 
             it('should return the old state with default lowerlimit and upperlimit state properties if initialDateRange is not passed', () => {
@@ -130,19 +130,19 @@ describe('Date picker', () => {
             };
             let newDatePickers: IDatePickerState[] = datePickersReducer(oldDatePickers, action);
 
-            expect(newDatePickers.length).toBe(oldDatePickers.length - 1);
+            expect(newDatePickers).toHaveLength(oldDatePickers.length - 1);
             expect(
-                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id).length
-            ).toBe(0);
+                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id)
+            ).toHaveLength(0);
 
             oldDatePickers = newDatePickers;
             action.payload.id = 'some-date-picker2';
             newDatePickers = datePickersReducer(oldDatePickers, action);
 
-            expect(newDatePickers.length).toBe(oldDatePickers.length - 1);
+            expect(newDatePickers).toHaveLength(oldDatePickers.length - 1);
             expect(
-                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id).length
-            ).toBe(0);
+                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id)
+            ).toHaveLength(0);
         });
 
         it('should return the old state when the action is "REMOVE_DATE_PICKER" and the options cycle id does not exist', () => {
@@ -159,10 +159,10 @@ describe('Date picker', () => {
             };
             const newDatePickers: IDatePickerState[] = datePickersReducer(oldDatePickers, action);
 
-            expect(newDatePickers.length).toBe(oldDatePickers.length);
+            expect(newDatePickers).toHaveLength(oldDatePickers.length);
             expect(
-                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id).length
-            ).toBe(0);
+                newDatePickers.filter((datePicker: IDatePickerState) => datePicker.id === action.payload.id)
+            ).toHaveLength(0);
         });
 
         it('should reset all date pickers starting with the action id if the action is "RESET_DATE_PICKERS"', () => {

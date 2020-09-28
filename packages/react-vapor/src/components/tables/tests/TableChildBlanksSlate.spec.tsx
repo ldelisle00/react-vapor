@@ -8,8 +8,7 @@ import {tablePropsMock} from './TableTestCommon';
 
 describe('<TableChildBlankSlate />', () => {
     describe('render', () => {
-        const mountComponentWithProps = (props: ITableProps) =>
-            mount(<TableChildBlankSlate {...props} />, {attachTo: document.getElementById('App')});
+        const mountComponentWithProps = (props: ITableProps) => mount(<TableChildBlankSlate {...props} />);
 
         describe('render without error', () => {
             it('should render without error if basic props are passed', () => {

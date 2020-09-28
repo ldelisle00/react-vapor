@@ -36,11 +36,13 @@ describe('Svg', () => {
 
     describe('<Svg />', () => {
         const mountWithProps = (props: ISvgProps) => {
-            svg = mount(<Svg {...props} />, {attachTo: document.getElementById('App')});
+            svg = mount(<Svg {...props} />);
         };
 
         afterEach(() => {
-            svg.detach();
+            if (svg.exists()) {
+                svg.unmount(); // <-- new
+            }
         });
 
         it('should mount and unmount/detach without error', () => {
@@ -49,8 +51,7 @@ describe('Svg', () => {
             }).not.toThrow();
 
             expect(() => {
-                svg.unmount();
-                svg.detach();
+                svg.unmount(); // <-- new
             }).not.toThrow();
         });
 

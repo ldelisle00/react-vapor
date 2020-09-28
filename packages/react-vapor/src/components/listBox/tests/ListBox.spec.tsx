@@ -8,7 +8,7 @@ import {IListBoxProps, ListBox} from '../ListBox';
 describe('ListBox', () => {
     let listBoxComponent: ReactWrapper<IListBoxProps, any>;
 
-    const spyOnOptionClick = jasmine.createSpy('onOptionClick');
+    const spyOnOptionClick = jest.fn();
 
     const defaultProps: IListBoxProps = {
         id: '🍄',
@@ -32,17 +32,17 @@ describe('ListBox', () => {
 
     describe('<BoxItem /> with default props', () => {
         beforeEach(() => {
-            listBoxComponent = mount(<ListBox {...defaultProps} />, {attachTo: document.getElementById('App')});
+            listBoxComponent = mount(<ListBox {...defaultProps} />);
         });
 
         afterEach(() => {
             if (listBoxComponent && listBoxComponent.exists()) {
-                listBoxComponent.detach();
+                listBoxComponent.unmount(); // <-- new
             }
         });
 
         it('should render with the box-item class', () => {
-            expect(listBoxComponent.find(ItemBox).length).toBe(defaultProps.items.length);
+            expect(listBoxComponent.find(ItemBox)).toHaveLength(defaultProps.items.length);
         });
 
         it('should not throw on unmount', () => {
@@ -59,12 +59,12 @@ describe('ListBox', () => {
 
         afterEach(() => {
             if (listBoxComponent && listBoxComponent.exists()) {
-                listBoxComponent.detach();
+                listBoxComponent.unmount(); // <-- new
             }
         });
 
         it('should call onRender on mount', () => {
-            const onRenderSpy = jasmine.createSpy('onRender');
+            const onRenderSpy = jest.fn();
             renderListBox({
                 onRender: onRenderSpy,
             });
@@ -73,7 +73,7 @@ describe('ListBox', () => {
         });
 
         it('should call onDestroy on unmount', () => {
-            const onDestroySpy = jasmine.createSpy('onDestroy');
+            const onDestroySpy = jest.fn();
             renderListBox({
                 onDestroy: onDestroySpy,
             });
@@ -94,7 +94,7 @@ describe('ListBox', () => {
         });
 
         it('should render items with events on onOptionClick', () => {
-            const onOptionClick: jasmine.Spy = jasmine.createSpy('onOptionClick');
+            const onOptionClick: jest.Mock<any, any> = jest.fn();
             renderListBox({
                 onOptionClick,
             });
@@ -105,7 +105,7 @@ describe('ListBox', () => {
         });
 
         it('should not trigger onOptionClick if the clicked item is disabled', () => {
-            const onOptionClick: jasmine.Spy = jasmine.createSpy('onOptionClick');
+            const onOptionClick: jest.Mock<any, any> = jest.fn();
             renderListBox({
                 items: [{value: 'test', disabled: true}],
                 onOptionClick,
@@ -158,7 +158,7 @@ describe('ListBox', () => {
                 .find('ul.list-box')
                 .children();
 
-            expect(listItems.length).toBe(7);
+            expect(listItems).toHaveLength(7);
             listItems.forEach((item) => {
                 expect(item.type()).toBe(ItemBoxLoading);
             });

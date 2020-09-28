@@ -36,7 +36,9 @@ describe('Option picker', () => {
         });
 
         afterEach(() => {
-            optionPicker.detach();
+            if (optionPicker.exists()) {
+                optionPicker.unmount(); // <-- new
+            }
         });
 
         it('should get the options as a prop', () => {
@@ -57,15 +59,15 @@ describe('Option picker', () => {
                 ],
             });
 
-            expect(optionPicker.find('Option').length).toBe(OPTION_PICKER_BASIC_PROPS.options.length);
+            expect(optionPicker.find('Option')).toHaveLength(OPTION_PICKER_BASIC_PROPS.options.length);
 
             optionPicker.setProps(moreOptionsProps);
 
-            expect(optionPicker.find('Option').length).toBe(moreOptionsProps.options.length);
+            expect(optionPicker.find('Option')).toHaveLength(moreOptionsProps.options.length);
         });
 
         it('should call prop onRender on mounting if set', () => {
-            const renderSpy: jasmine.Spy = jasmine.createSpy('onRender');
+            const renderSpy: jest.Mock<any, any> = jest.fn();
             const withRenderProps: IOptionPickerProps = _.extend({}, OPTION_PICKER_BASIC_PROPS, {onRender: renderSpy});
 
             expect(() => optionPickerInstance.componentWillMount()).not.toThrow();
@@ -78,7 +80,7 @@ describe('Option picker', () => {
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
-            const destroySpy: jasmine.Spy = jasmine.createSpy('onDestroy');
+            const destroySpy: jest.Mock<any, any> = jest.fn();
             const withDestroyProps: IOptionPickerProps = _.extend({}, OPTION_PICKER_BASIC_PROPS, {
                 onDestroy: destroySpy,
             });
@@ -93,7 +95,7 @@ describe('Option picker', () => {
         });
 
         it('should call prop onClick on mounting if set when calling handleClick', () => {
-            const onClickSpy: jasmine.Spy = jasmine.createSpy('onClick');
+            const onClickSpy: jest.Mock<any, any> = jest.fn();
             const expectedValue: string = 'value';
             const expectedLabel: string = 'label';
             const withOnClickProps: IOptionPickerProps = _.extend({}, OPTION_PICKER_BASIC_PROPS, {onClick: onClickSpy});
@@ -111,7 +113,7 @@ describe('Option picker', () => {
         });
 
         it('should call handleClick when clicking an option', () => {
-            const handleClickSpy: jasmine.Spy = spyOn<any>(optionPickerInstance, 'handleClick');
+            const handleClickSpy: jest.SpyInstance = jest.spyOn<any, string>(optionPickerInstance, 'handleClick');
 
             optionPicker.find('Option').first().find('button').simulate('click');
 

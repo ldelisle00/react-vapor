@@ -21,7 +21,7 @@ describe('DiffViewer', () => {
         let diffViewer: ReactWrapper<DiffViewerProps>;
 
         beforeEach(() => {
-            diffViewer = mount(<DiffViewer {...basicProps} />, {attachTo: document.getElementById('App')});
+            diffViewer = mount(<DiffViewer {...basicProps} />);
         });
 
         it('should get the orginal string for the diff as a prop', () => {
@@ -43,7 +43,7 @@ describe('DiffViewer', () => {
         it('should display a blankslate if there are no changes', () => {
             diffViewer.setProps({...basicProps, second: basicProps.first});
 
-            expect(diffViewer.find(BlankSlate).length).toBe(1);
+            expect(diffViewer.find(BlankSlate)).toHaveLength(1);
         });
     });
 });

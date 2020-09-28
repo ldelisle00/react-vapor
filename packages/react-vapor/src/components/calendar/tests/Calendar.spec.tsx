@@ -30,20 +30,20 @@ describe('Calendar', () => {
         let calendarInstance: Calendar;
 
         beforeEach(() => {
-            calendar = mount(<Calendar />, {attachTo: document.getElementById('App')});
+            calendar = mount(<Calendar />);
             calendarInstance = calendar.instance() as Calendar;
         });
 
         afterEach(() => {
-            calendar.detach();
+            calendar.unmount(); // <-- new
         });
 
         it('should display 2 <OptionsCycle /> (one for the month and the other for the year)', () => {
-            expect(calendar.find('OptionsCycle').length).toBe(2);
+            expect(calendar.find('OptionsCycle')).toHaveLength(2);
         });
 
         it('should display a <TableHeader />', () => {
-            expect(calendar.find('TableHeader').length).toBe(1);
+            expect(calendar.find('TableHeader')).toHaveLength(1);
         });
 
         it('should display the days set as props or the default ones', () => {
@@ -99,7 +99,7 @@ describe('Calendar', () => {
             expect(calendar.html()).toContain(DEFAULT_MONTHS[DateUtils.currentMonth]);
 
             calendar.unmount();
-            calendar = mount(<Calendar startingMonth={startingMonth} />, {attachTo: document.getElementById('App')});
+            calendar = mount(<Calendar startingMonth={startingMonth} />);
 
             expect(calendar.html()).toContain(DEFAULT_MONTHS[startingMonth]);
         });
@@ -110,7 +110,7 @@ describe('Calendar', () => {
             expect(calendar.html()).toContain(DateUtils.currentYear.toString());
 
             calendar.unmount();
-            calendar = mount(<Calendar startingYear={startingYear} />, {attachTo: document.getElementById('App')});
+            calendar = mount(<Calendar startingYear={startingYear} />);
 
             expect(calendar.html()).toContain(DEFAULT_YEARS[startingYear]);
         });
@@ -139,7 +139,7 @@ describe('Calendar', () => {
         });
 
         it('should call onClick when handleClick has been called, onClick is defined and one picker is selected', () => {
-            const onClickSpy: jasmine.Spy = jasmine.createSpy('onClick');
+            const onClickSpy: jest.Mock<any, any> = jest.fn();
             const now: Date = new Date();
 
             expect(() => {
@@ -197,7 +197,7 @@ describe('Calendar', () => {
             'should call handleInvalidDateSelected when it is defined and selecting a day that is not selectable ' +
                 'and one picker is selected',
             () => {
-                const onSelectUnselectableSpy: jasmine.Spy = jasmine.createSpy('onSelectUnselectable');
+                const onSelectUnselectableSpy: jest.Mock<any, any> = jest.fn();
 
                 expect(() => {
                     calendarInstance['handleInvalidDateSelected'].call(calendarInstance);
@@ -252,7 +252,7 @@ describe('Calendar', () => {
         );
 
         it('should call handleClick on <CalendarDay /> click', () => {
-            const handleClickSpy: jasmine.Spy = spyOn<any>(calendarInstance, 'handleClick');
+            const handleClickSpy: jest.SpyInstance = jest.spyOn<any, string>(calendarInstance, 'handleClick');
             const firstCalendarDay: ReactWrapper<ICalendarDayProps, any> = calendar.find(CalendarDay).first();
             firstCalendarDay.find('td').simulate('click');
 
@@ -505,7 +505,7 @@ describe('Calendar', () => {
             it('should add the custom class to the wrapper set by the prop wrapperClassNames', () => {
                 const wrapper = shallow(<Calendar wrapperClassNames="new-class" />, {});
 
-                expect(wrapper.find('.new-class').length).toBe(1);
+                expect(wrapper.find('.new-class')).toHaveLength(1);
             });
 
             describe('saturday and sunday rule', () => {
@@ -573,11 +573,11 @@ describe('Calendar', () => {
                 });
 
                 it('should not have the class mod-width-50 if it has the prop simple', () => {
-                    expect(calendar.find('.mod-width-50').length).toBe(1);
+                    expect(calendar.find('.mod-width-50')).toHaveLength(1);
 
                     calendar.setProps({simple: true});
 
-                    expect(calendar.find('.mod-width-50').length).toBe(0);
+                    expect(calendar.find('.mod-width-50')).toHaveLength(0);
                 });
             });
         });

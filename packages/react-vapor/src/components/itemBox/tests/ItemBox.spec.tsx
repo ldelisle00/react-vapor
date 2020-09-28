@@ -1,6 +1,7 @@
 import {mount, ReactWrapper, shallow} from 'enzyme';
 import * as React from 'react';
 import * as _ from 'underscore';
+
 import {Content, IContentProps} from '../../content/Content';
 import {ITooltipProps, Tooltip} from '../../tooltip/Tooltip';
 import {IItemBoxProps, ItemBox} from '../ItemBox';
@@ -19,7 +20,7 @@ describe('ItemBox', () => {
 
     describe('<ItemBox /> with default props', () => {
         beforeEach(() => {
-            ItemBoxComponent = mount(<ItemBox {...defaultProps} />, {attachTo: document.getElementById('App')});
+            ItemBoxComponent = mount(<ItemBox {...defaultProps} />);
         });
 
         it('should render with the box-item class', () => {
@@ -27,7 +28,7 @@ describe('ItemBox', () => {
         });
 
         it('should render with the data-value set with the value', () => {
-            expect(ItemBoxComponent.find(`[data-value="${defaultProps.value}"]`).length).toBe(1);
+            expect(ItemBoxComponent.find(`[data-value="${defaultProps.value}"]`)).toHaveLength(1);
         });
     });
 
@@ -63,7 +64,7 @@ describe('ItemBox', () => {
                 prepend: content,
             });
 
-            expect(ItemBoxComponent.find(Content).length).toBe(1);
+            expect(ItemBoxComponent.find(Content)).toHaveLength(1);
         });
 
         it('should render an append <Content/>', () => {
@@ -71,7 +72,7 @@ describe('ItemBox', () => {
                 append: content,
             });
 
-            expect(ItemBoxComponent.find(Content).length).toBe(1);
+            expect(ItemBoxComponent.find(Content)).toHaveLength(1);
         });
 
         it('should render the tooltip', () => {
@@ -79,7 +80,7 @@ describe('ItemBox', () => {
                 tooltip,
             });
 
-            expect(ItemBoxComponent.find(Tooltip).length).toBe(1);
+            expect(ItemBoxComponent.find(Tooltip)).toHaveLength(1);
         });
 
         it('should render with the class active if set to true', () => {
@@ -123,7 +124,7 @@ describe('ItemBox', () => {
         });
 
         it('should call the onOptionClick on click', () => {
-            const onOptionClick: jasmine.Spy = jasmine.createSpy('onOptionClick');
+            const onOptionClick: jest.Mock<any, any> = jest.fn();
 
             renderItemBox({
                 onOptionClick,
@@ -135,7 +136,7 @@ describe('ItemBox', () => {
         });
 
         it('should scroll the parent element if needed', () => {
-            const spy = spyOn<any>(ItemBox.prototype, 'scrollIfNeeded').and.callThrough();
+            const spy = jest.spyOn(ItemBox.prototype as any, 'scrollIfNeeded'); // as any needed to spyOn private method in Jest
 
             renderItemBox({});
 

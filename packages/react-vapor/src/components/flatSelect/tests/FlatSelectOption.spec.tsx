@@ -28,23 +28,23 @@ describe('FlatSelect', () => {
         const content: IContentProps = {content: () => <Svg {...svg} />, classes: ['mr1']};
 
         const renderFlatSelectOption = (props: IFlatSelectOptionProps = defaultProps) => {
-            flatSelect = mount(<FlatSelectOption {...props} />, {attachTo: document.getElementById('App')});
+            flatSelect = mount(<FlatSelectOption {...props} />);
         };
 
         afterEach(() => {
-            flatSelect.detach();
+            flatSelect.unmount(); // <-- new
         });
 
         it('should call prop onClick when specified on click', () => {
             renderFlatSelectOption();
 
-            const clickSpy = jasmine.createSpy('onClick');
+            const clickSpy = jest.fn();
             const option = flatSelect.find('a');
 
             flatSelect.setProps({onClick: clickSpy}).mount();
             option.simulate('click');
 
-            expect(clickSpy.calls.count()).toBe(1);
+            expect(clickSpy.mock.calls).toHaveLength(1);
         });
 
         it('should not have the class selectable if the props selected is true', () => {
@@ -74,7 +74,7 @@ describe('FlatSelect', () => {
         it('should have 1 <Content/> if only default props are set', () => {
             renderFlatSelectOption(defaultProps);
 
-            expect(flatSelect.find(Content).length).toBe(1);
+            expect(flatSelect.find(Content)).toHaveLength(1);
         });
 
         it('should have 2 <Content/> if a prop prepend is set', () => {
@@ -84,7 +84,7 @@ describe('FlatSelect', () => {
                 })
             );
 
-            expect(flatSelect.find(Content).length).toBe(2);
+            expect(flatSelect.find(Content)).toHaveLength(2);
         });
 
         it('should have 2 <Content/> if a prop append is set', () => {
@@ -94,7 +94,7 @@ describe('FlatSelect', () => {
                 })
             );
 
-            expect(flatSelect.find(Content).length).toBe(2);
+            expect(flatSelect.find(Content)).toHaveLength(2);
         });
     });
 });

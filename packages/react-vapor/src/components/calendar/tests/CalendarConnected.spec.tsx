@@ -55,7 +55,7 @@ describe('Calendar', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get an id as a prop', () => {
@@ -107,7 +107,7 @@ describe('Calendar', () => {
             store.dispatch(addDatePicker('any', false, undefined, 'any', CALENDAR_ID));
             wrapper.update();
 
-            expect(wrapper.find(Calendar).props().calendarSelection.length).toBe(1);
+            expect(wrapper.find(Calendar).props().calendarSelection).toHaveLength(1);
         });
 
         it('should get what to do on click as a prop', () => {
@@ -129,7 +129,7 @@ describe('Calendar', () => {
         });
 
         it('should display two <OptionsCycleConnected /> (one for the month picker and the other for the year picker)', () => {
-            expect(calendar.find(OptionsCycleConnected).length).toBe(2);
+            expect(calendar.find(OptionsCycleConnected)).toHaveLength(2);
         });
 
         it(

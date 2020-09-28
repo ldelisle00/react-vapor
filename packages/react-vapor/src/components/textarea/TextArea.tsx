@@ -6,7 +6,7 @@ import * as _ from 'underscore';
 import {IReactVaporState} from '../../ReactVapor';
 import {IDispatch, ReduxUtils} from '../../utils';
 import {ILabelProps} from '../input';
-import {addTextArea, changeTextAreaValue, removeTextArea} from './TextAreaActions';
+import {changeTextAreaValue, TextAreaReduxActions} from './TextAreaActions';
 
 export interface ITextAreaOwnProps {
     id: string;
@@ -53,8 +53,9 @@ const mapStateToProps = (state: IReactVaporState, ownProps: ITextAreaOwnProps): 
 
 const mapDispatchToProps = (dispatch: IDispatch, ownProps: ITextAreaOwnProps): ITextAreaDispatchProps => ({
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => dispatch(changeTextAreaValue(ownProps.id, e.target.value)),
-    onMount: () => dispatch(addTextArea(ownProps.id, ownProps.valueOnMount, ownProps.disabledOnMount)),
-    onUnmount: () => dispatch(removeTextArea(ownProps.id)),
+    onMount: () =>
+        dispatch(TextAreaReduxActions.addTextArea(ownProps.id, ownProps.valueOnMount, ownProps.disabledOnMount)),
+    onUnmount: () => dispatch(TextAreaReduxActions.removeTextArea(ownProps.id)),
 });
 
 export const TextArea: React.FunctionComponent<ITextAreaProps> = ({

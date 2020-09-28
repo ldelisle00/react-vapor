@@ -42,7 +42,7 @@ export class Dropdown extends React.Component<IDropdownProps, any> {
         }
     };
 
-    componentWillMount() {
+    componentDidMount() {
         if (this.props.onRender) {
             this.props.onRender();
         }

@@ -13,7 +13,7 @@ describe('SelectedOption', () => {
         let selectedOption: ReactWrapper<ISelectedOptionProps, any>;
 
         const renderSelectedOption = (currentProps?: ISelectedOptionProps) => {
-            selectedOption = mount(<SelectedOption {...currentProps} />, {attachTo: document.getElementById('App')});
+            selectedOption = mount(<SelectedOption {...currentProps} />);
         };
 
         beforeEach(() => {
@@ -21,7 +21,7 @@ describe('SelectedOption', () => {
         });
 
         afterEach(() => {
-            selectedOption.detach();
+            selectedOption.unmount(); // <-- new
         });
 
         describe('render', () => {
@@ -35,7 +35,7 @@ describe('SelectedOption', () => {
 
         describe('remove option', () => {
             it('should call remove option when click on the remove-option div', () => {
-                const onRemoveOptionClick = jasmine.createSpy('onRemoveOptionClick');
+                const onRemoveOptionClick = jest.fn();
                 selectedOption.setProps({onRemoveClick: onRemoveOptionClick});
 
                 selectedOption.find('.remove-option').simulate('click');
@@ -44,7 +44,7 @@ describe('SelectedOption', () => {
             });
 
             it('should not call remove option when clicking anywhere else', () => {
-                const onRemoveOptionClick = jasmine.createSpy('onRemoveOptionClick');
+                const onRemoveOptionClick = jest.fn();
                 selectedOption.setProps({onRemoveClick: onRemoveOptionClick});
 
                 selectedOption.simulate('click');

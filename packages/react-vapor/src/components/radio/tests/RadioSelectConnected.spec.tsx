@@ -24,8 +24,7 @@ describe('RadioSelectConnected', () => {
         mount(
             <Provider store={store}>
                 <RadioSelectConnected {...props} />
-            </Provider>,
-            {attachTo: document.getElementById('App')}
+            </Provider>
         );
 
     const radioSelectProps = {

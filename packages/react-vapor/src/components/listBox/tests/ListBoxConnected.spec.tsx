@@ -35,7 +35,9 @@ describe('ListBox', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         describe('mount and unmount', () => {
@@ -50,20 +52,20 @@ describe('ListBox', () => {
             });
 
             it('should add the list box to the state when mounted', () => {
-                expect(store.getState().listBoxes.length).toBe(0);
+                expect(store.getState().listBoxes).toHaveLength(0);
 
                 mountListBox();
 
-                expect(store.getState().listBoxes.length).toBe(1);
+                expect(store.getState().listBoxes).toHaveLength(1);
             });
 
             it('should remove the list box from the state when the component unmount', () => {
                 mountListBox();
 
-                expect(store.getState().listBoxes.length).toBe(1);
+                expect(store.getState().listBoxes).toHaveLength(1);
                 wrapper.unmount();
 
-                expect(store.getState().listBoxes.length).toBe(0);
+                expect(store.getState().listBoxes).toHaveLength(0);
             });
         });
 
@@ -96,7 +98,7 @@ describe('ListBox', () => {
             const selected = listBox.props().selected;
 
             expect(selected).toBeDefined();
-            expect(selected.length).toBe(expected.length);
+            expect(selected).toHaveLength(expected.length);
             expect(selected).toEqual(expected);
         });
 

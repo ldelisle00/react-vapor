@@ -30,11 +30,11 @@ describe('Tables', () => {
         let tableError: ReactWrapper<ITableErrorProps, any>;
 
         beforeEach(() => {
-            tableError = mount(<TableError error={error} />, {attachTo: document.getElementById('App')});
+            tableError = mount(<TableError error={error} />);
         });
 
         afterEach(() => {
-            tableError.detach();
+            tableError.unmount(); // <-- new
         });
 
         it('should get the error as a prop', () => {
@@ -47,11 +47,11 @@ describe('Tables', () => {
         it('should render an error-description-precision div if there is an error precision in the error', () => {
             const errorNoPrecision = _.extend({}, error, {errorPrecision: undefined});
 
-            expect(tableError.find('.error-description-precision').length).toBe(1);
+            expect(tableError.find('.error-description-precision')).toHaveLength(1);
 
             tableError.setProps({error: errorNoPrecision});
 
-            expect(tableError.find('.error-description-precision').length).toBe(0);
+            expect(tableError.find('.error-description-precision')).toHaveLength(0);
         });
 
         it('should display the error precision if there is an error precision in the error', () => {

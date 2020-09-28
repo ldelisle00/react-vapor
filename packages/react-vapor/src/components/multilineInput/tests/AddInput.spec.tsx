@@ -15,15 +15,15 @@ describe('AddInput', () => {
         let addInput: ReactWrapper<IInputProps, any>;
 
         beforeEach(() => {
-            addInput = mount(<AddInput />, {attachTo: document.getElementById('App')});
+            addInput = mount(<AddInput />);
         });
 
         afterEach(() => {
-            addInput.detach();
+            addInput.unmount(); // <-- new
         });
 
         it('should call property onBlur when input loses focus and prop is specified', () => {
-            const blurSpy = jasmine.createSpy('onBlur');
+            const blurSpy = jest.fn();
             const innerInput = addInput.find('input');
 
             innerInput.simulate('blur');
@@ -38,7 +38,7 @@ describe('AddInput', () => {
         });
 
         it('should call property onBlur when inner input has focus and Enter key is released', () => {
-            const blurSpy = jasmine.createSpy('onBlur');
+            const blurSpy = jest.fn();
             const innerInput = addInput.find('input');
 
             innerInput.simulate('keyUp', {
@@ -57,7 +57,7 @@ describe('AddInput', () => {
         });
 
         it('should call property onBlur when inner add button is clicked', () => {
-            const blurSpy = jasmine.createSpy('onBlur');
+            const blurSpy = jest.fn();
             const innerAddInputButton = addInput.find('.input-actions');
 
             innerAddInputButton.simulate('click');

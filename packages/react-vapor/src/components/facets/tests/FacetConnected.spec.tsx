@@ -49,8 +49,8 @@ describe('Facets', () => {
                     formattedName: 'Row 2',
                 },
             ];
-            onToggleFacet = jasmine.createSpy('onToggleFacet');
-            clearFacet = jasmine.createSpy('clearFacet');
+            onToggleFacet = jest.fn();
+            clearFacet = jest.fn();
 
             store = TestUtils.buildStore();
 
@@ -71,14 +71,14 @@ describe('Facets', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         it('should get the facet rows as a prop', () => {
             const facetRowsProp = facetComponent.props().facetRows;
 
             expect(facetRowsProp).toBeDefined();
-            expect(jasmine.arrayContaining(facetRowsProp)).toEqual(jasmine.arrayContaining(facetRows));
+            expect(facetRows).toEqual(facetRowsProp);
         });
 
         it('should get the facet title as a prop', () => {
@@ -127,11 +127,11 @@ describe('Facets', () => {
         });
 
         it('should render as many <FacetRow /> components as there are facet rows', () => {
-            expect(facetComponent.find(FacetRow).length).toBe(facetRows.length);
+            expect(facetComponent.find(FacetRow)).toHaveLength(facetRows.length);
         });
 
         it('should render a toggle to view more facet rows if there are more than maxRowsToShow (number in props + 1 extra)', () => {
-            expect(facetComponent.find(FacetMoreToggle).length).toBe(0);
+            expect(facetComponent.find(FacetMoreToggle)).toHaveLength(0);
 
             facetRows = facetRows.concat(
                 {
@@ -160,11 +160,11 @@ describe('Facets', () => {
             );
             wrapper.setProps({children: newRow}).update();
 
-            expect(wrapper.find(Facet).find(FacetMoreToggle).length).toBe(1);
+            expect(wrapper.find(Facet).find(FacetMoreToggle)).toHaveLength(1);
         });
 
         it('should render more facet rows if there are more than maxRowsToShow (number in props + 1 extra)', () => {
-            expect(facetComponent.find(FacetMoreRows).length).toBe(0);
+            expect(facetComponent.find(FacetMoreRows)).toHaveLength(0);
 
             facetRows = facetRows.concat(
                 {
@@ -194,11 +194,11 @@ describe('Facets', () => {
             wrapper.setProps({children: newRow});
             wrapper.update();
 
-            expect(wrapper.find(Facet).find(FacetMoreRows).length).toBe(1);
+            expect(wrapper.find(Facet).find(FacetMoreRows)).toHaveLength(1);
         });
 
         it('should show the button to clear the facet if there is a selected row', () => {
-            expect(wrapper.find(Facet).find('.facet-header-eraser.hidden').length).toBe(0);
+            expect(wrapper.find(Facet).find('.facet-header-eraser.hidden')).toHaveLength(0);
 
             selectedFacetRows = [];
 
@@ -214,7 +214,7 @@ describe('Facets', () => {
             wrapper.setProps({children: newRow});
             wrapper.update();
 
-            expect(wrapper.find(Facet).find('.facet-header-eraser.hidden').length).toBe(1);
+            expect(wrapper.find(Facet).find('.facet-header-eraser.hidden')).toHaveLength(1);
         });
 
         it('should display the facet title', () => {
@@ -226,7 +226,7 @@ describe('Facets', () => {
 
             expect(onToggleFacet).not.toHaveBeenCalled();
 
-            expect(facetRowLabel.length).toBe(1);
+            expect(facetRowLabel).toHaveLength(1);
             facetRowLabel.simulate('click');
 
             expect(onToggleFacet).toHaveBeenCalledTimes(1);
@@ -237,7 +237,7 @@ describe('Facets', () => {
 
             expect(clearFacet).not.toHaveBeenCalled();
 
-            expect(facetEraser.length).toBe(1);
+            expect(facetEraser).toHaveLength(1);
             facetEraser.simulate('click');
 
             expect(clearFacet).toHaveBeenCalled();

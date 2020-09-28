@@ -6,13 +6,13 @@ import {IFacet} from '../Facet';
 import {FacetRow, IFacetRowProps} from '../FacetRow';
 
 describe('Facets', () => {
-    let spyOnToggleFacet: jasmine.Spy;
+    let spyOnToggleFacet: jest.Mock<any, any>;
 
     let FACET_ROW_PROPS: IFacetRowProps;
     let FACET_ROW: JSX.Element;
 
     beforeEach(() => {
-        spyOnToggleFacet = jasmine.createSpy('onToggleFacet');
+        spyOnToggleFacet = jest.fn();
 
         FACET_ROW_PROPS = {
             facetRow: {
@@ -36,15 +36,18 @@ describe('Facets', () => {
         let facetRowView: ReactWrapper<IFacetRowProps, any>;
 
         beforeEach(() => {
-            facetRowView = mount(FACET_ROW, {attachTo: document.getElementById('App')});
+            facetRowView = mount(FACET_ROW);
         });
 
         afterEach(() => {
-            facetRowView.detach();
+            facetRowView.unmount(); // <-- new
         });
 
         it('should stop event if click on checkbox directly', () => {
-            const event = jasmine.createSpyObj('e', ['preventDefault', 'stopPropagation']);
+            const event = {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+            };
             (facetRowView.instance() as any).stopEvent(event);
 
             expect(event.preventDefault).toHaveBeenCalled();
@@ -87,7 +90,7 @@ describe('Facets', () => {
         });
 
         it('should call onToggleFacet on change', () => {
-            spyOnToggleFacet.calls.reset();
+            spyOnToggleFacet.mockReset();
 
             expect(FACET_ROW_PROPS.onToggleFacet).not.toHaveBeenCalled();
 
@@ -97,7 +100,7 @@ describe('Facets', () => {
         });
 
         it('should call onToggleFacet on click button', () => {
-            spyOnToggleFacet.calls.reset();
+            spyOnToggleFacet.mockReset();
 
             facetRowView.find('button').simulate('click');
 
@@ -115,11 +118,11 @@ describe('Facets', () => {
                 maxTooltipLabelLength,
             });
 
-            expect(facetRowView.find('Tooltip').length).toBe(0);
+            expect(facetRowView.find('Tooltip')).toHaveLength(0);
 
             facetRowView.setProps(newProps);
 
-            expect(facetRowView.find('Tooltip').length).toBe(1);
+            expect(facetRowView.find('Tooltip')).toHaveLength(1);
         });
 
         it('should display a <Tooltip /> if the formatted name minus the count length is longer than maxTooltipLabelLength', () => {
@@ -134,11 +137,11 @@ describe('Facets', () => {
                 maxTooltipLabelLength,
             });
 
-            expect(facetRowView.find('Tooltip').length).toBe(0);
+            expect(facetRowView.find('Tooltip')).toHaveLength(0);
 
             facetRowView.setProps(newProps);
 
-            expect(facetRowView.find('Tooltip').length).toBe(1);
+            expect(facetRowView.find('Tooltip')).toHaveLength(1);
         });
 
         it('should display a "span.facet-value-count" if there is a count', () => {
@@ -149,11 +152,11 @@ describe('Facets', () => {
             };
             const newProps: IFacetRowProps = _.extend({}, FACET_ROW_PROPS, {facetRow: facetRowWithCount});
 
-            expect(facetRowView.find('span.facet-value-count').length).toBe(0);
+            expect(facetRowView.find('span.facet-value-count')).toHaveLength(0);
 
             facetRowView.setProps(newProps);
 
-            expect(facetRowView.find('span.facet-value-count').length).toBe(1);
+            expect(facetRowView.find('span.facet-value-count')).toHaveLength(1);
         });
 
         it('should display a span.facet-value-count the count as value', () => {
@@ -167,7 +170,7 @@ describe('Facets', () => {
 
             facetRowView.setProps(newProps);
 
-            expect(facetRowView.find('span.facet-value-count').length).toBe(1);
+            expect(facetRowView.find('span.facet-value-count')).toHaveLength(1);
             expect(facetRowView.html()).toContain(newProps.facetRow.count);
         });
     });
@@ -178,11 +181,11 @@ describe('Facets', () => {
 
         beforeEach(() => {
             props = {...FACET_ROW_PROPS, enableExclusions: true};
-            facetRowExcludeView = mount(<FacetRow {...props} />, {attachTo: document.getElementById('App')});
+            facetRowExcludeView = mount(<FacetRow {...props} />);
         });
 
         it('should display a .facet-exclude-button when exclude behavior is enabled', () => {
-            expect(facetRowExcludeView.find('.facet-exclude-button').length).toBe(1);
+            expect(facetRowExcludeView.find('.facet-exclude-button')).toHaveLength(1);
         });
 
         it('should display a .exclude-icon when exclude behavior is enabled and checkbox is checked as exclude', () => {
@@ -206,11 +209,11 @@ describe('Facets', () => {
             });
 
             it('should display a .exclude-box when exclude behavior is enabled and checkbox is checked as exclude', () => {
-                expect(facetRowExcludeView.find('.exclude-box').length).toBe(1);
+                expect(facetRowExcludeView.find('.exclude-box')).toHaveLength(1);
             });
 
             it('should display two .text-exclude when exclude behavior is enabled and checkbox is checked as exclude', () => {
-                expect(facetRowExcludeView.find('.text-exclude').length).toBe(2);
+                expect(facetRowExcludeView.find('.text-exclude')).toHaveLength(2);
             });
 
             it('should display a <Tooltip /> if the excludeTooltipMessage is defined', () => {
@@ -225,11 +228,11 @@ describe('Facets', () => {
                     excludeTooltipMessage: () => 'test exclude tooltip',
                 };
 
-                expect(facetRowExcludeView.find('Tooltip').length).toBe(0);
+                expect(facetRowExcludeView.find('Tooltip')).toHaveLength(0);
 
                 facetRowExcludeView.setProps(newProps);
 
-                expect(facetRowExcludeView.find('Tooltip').length).toBe(1);
+                expect(facetRowExcludeView.find('Tooltip')).toHaveLength(1);
             });
         });
     });

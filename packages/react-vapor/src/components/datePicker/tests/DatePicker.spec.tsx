@@ -4,16 +4,16 @@ import * as _ from 'underscore';
 
 import {DateUtils} from '../../../utils/DateUtils';
 import {DatePicker, IDatePickerProps} from '../DatePicker';
-import {DEFAULT_DATE_PICKER_COLOR} from '../DatePickerConstants';
 import {DateLimits} from '../DatePickerActions';
+import {DEFAULT_DATE_PICKER_COLOR} from '../DatePickerConstants';
 
 describe('Date picker', () => {
     let DATE_PICKER_BASIC_PROPS: IDatePickerProps;
 
     beforeAll(() => {
         DATE_PICKER_BASIC_PROPS = {
-            onClick: jasmine.createSpy('onClick'),
-            onBlur: jasmine.createSpy('onBlur'),
+            onClick: jest.fn(),
+            onBlur: jest.fn(),
             placeholder: 'Pick a date',
         };
     });
@@ -29,12 +29,12 @@ describe('Date picker', () => {
         let datePickerInstance: DatePicker;
 
         beforeEach(() => {
-            datePicker = mount(<DatePicker {...DATE_PICKER_BASIC_PROPS} />, {attachTo: document.getElementById('App')});
+            datePicker = mount(<DatePicker {...DATE_PICKER_BASIC_PROPS} />);
             datePickerInstance = datePicker.instance() as DatePicker;
         });
 
         afterEach(() => {
-            datePicker.detach();
+            datePicker.unmount(); // <-- new
         });
 
         it('should get what to do on blur as a prop', () => {
@@ -46,15 +46,15 @@ describe('Date picker', () => {
         it('should display a <SetToNowButton /> component if hasSetToNowButton prop is set to true', () => {
             const propsWithButton: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {hasSetToNowButton: true});
 
-            expect(datePicker.find('SetToNowButton').length).toBe(0);
+            expect(datePicker.find('SetToNowButton')).toHaveLength(0);
 
             datePicker.setProps(propsWithButton);
 
-            expect(datePicker.find('SetToNowButton').length).toBe(1);
+            expect(datePicker.find('SetToNowButton')).toHaveLength(1);
         });
 
         it('should display an <input /> element', () => {
-            expect(datePicker.find('input').length).toBe(1);
+            expect(datePicker.find('input')).toHaveLength(1);
         });
 
         it('should have a class "border-COLOR_PROP" on the input or "border-DEFAULT_COLOR" if the color prop is not set', () => {
@@ -150,12 +150,11 @@ describe('Date picker', () => {
 
             expect(datePickerInstance['dateInput'].value).toBe('');
 
-            jasmine.clock().install();
-            jasmine.clock().mockDate(expectedDate);
+            jest.useFakeTimers();
             datePicker.find('button').simulate('click');
 
             expect(datePickerInstance['dateInput'].value).toBe(DateUtils.getDateWithTimeString(expectedDate));
-            jasmine.clock().uninstall();
+            jest.clearAllTimers();
         });
 
         it('should change the input value to the current day when calling setToToday and withTime prop is set to false', () => {
@@ -168,12 +167,11 @@ describe('Date picker', () => {
 
             expect(datePickerInstance['dateInput'].value).toBe('');
 
-            jasmine.clock().install();
-            jasmine.clock().mockDate(expectedDate);
+            jest.useFakeTimers();
             datePicker.find('button').simulate('click');
 
             expect(datePickerInstance['dateInput'].value).toBe(DateUtils.getSimpleDate(expectedDate));
-            jasmine.clock().uninstall();
+            jest.clearAllTimers();
         });
 
         it('should call onBlur when calling setToToday', () => {
@@ -186,7 +184,7 @@ describe('Date picker', () => {
         });
 
         it('should call onBlur prop on handleChangeDate only if the input value is a valid date', () => {
-            const onBlurSpy = jasmine.createSpy('newSpy');
+            const onBlurSpy = jest.fn();
             const simpleDate: string = DateUtils.getSimpleDate(new Date());
             const newOnChangeSpyProps: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {onBlur: onBlurSpy});
             datePicker.setProps(newOnChangeSpyProps);
@@ -274,7 +272,7 @@ describe('Date picker', () => {
             const dateProps: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {isSelecting: DateLimits.lower});
 
             datePicker.setProps(dateProps);
-            (DATE_PICKER_BASIC_PROPS.onBlur as jasmine.Spy).calls.reset();
+            // (DATE_PICKER_BASIC_PROPS.onBlur as unknown as jest.SpyInstance).mockReset(); // TODO: fix as unknown might not be the best
 
             datePicker.simulate('focus');
 
@@ -293,7 +291,7 @@ describe('Date picker', () => {
                 const dateProps: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {
                     isSelecting: DateLimits.lower,
                 });
-                const handleChangeDateSpy: jasmine.Spy = spyOn<any>(datePickerInstance, 'handleChangeDate');
+                const handleChangeDateSpy = jest.spyOn<any, string>(datePickerInstance, 'handleChangeDate');
 
                 datePicker.setProps(dateProps);
 
@@ -307,7 +305,7 @@ describe('Date picker', () => {
             it('should not call prop onBlur when clicking a calendar day', () => {
                 const dateProps: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {
                     isSelecting: DateLimits.lower,
-                    onBlur: jasmine.createSpy('onBlur'),
+                    onBlur: jest.fn(),
                 });
 
                 datePicker.setProps(dateProps);

@@ -21,42 +21,42 @@ describe('Dropdown', () => {
         let dropdownInstance: Dropdown;
 
         beforeEach(() => {
-            dropdown = mount(<Dropdown {...basicDropdownProps} />, {attachTo: document.getElementById('App')});
+            dropdown = mount(<Dropdown {...basicDropdownProps} />);
             dropdownInstance = dropdown.instance() as Dropdown;
         });
 
         afterEach(() => {
-            dropdown.detach();
+            dropdown.unmount(); // <-- new
         });
 
         it('should get the toggleContent as a prop', () => {
             const toggleContentProp = dropdown.props().toggleContent;
 
             expect(toggleContentProp).toBeDefined();
-            expect(toggleContentProp.length).toBe(basicDropdownProps.toggleContent.length);
+            expect(toggleContentProp).toHaveLength(basicDropdownProps.toggleContent.length);
         });
 
         it('should get the dropdown items as a prop', () => {
             const dropdownItemsProp = dropdown.props().dropdownItems;
 
             expect(dropdownItemsProp).toBeDefined();
-            expect(dropdownItemsProp.length).toBe(basicDropdownProps.dropdownItems.length);
+            expect(dropdownItemsProp).toHaveLength(basicDropdownProps.dropdownItems.length);
         });
 
         it('should have "open" class if opened', () => {
             const newDropdownProps = _.extend({}, basicDropdownProps, {isOpened: true});
 
-            expect(dropdown.find('.open').length).toBe(0);
+            expect(dropdown.find('.open')).toHaveLength(0);
 
             dropdown.setProps(newDropdownProps);
 
-            expect(dropdown.find('.open').length).toBe(1);
+            expect(dropdown.find('.open')).toHaveLength(1);
         });
 
         it('should have the classes passed as props if any', () => {
             const newDropdownProps = _.extend({}, basicDropdownProps, {className: 'some-class'});
 
-            expect(dropdown.find('.some-class').length).toBe(0);
+            expect(dropdown.find('.some-class')).toHaveLength(0);
 
             dropdown.setProps(newDropdownProps).update();
 
@@ -64,7 +64,7 @@ describe('Dropdown', () => {
         });
 
         it('should call onClick prop if set when clicking the toggle', () => {
-            const onClickSpy = jasmine.createSpy('onClick');
+            const onClickSpy = jest.fn();
             const newDropdownProps = _.extend({}, basicDropdownProps, {onClick: onClickSpy});
 
             expect(() => dropdownInstance['handleClick'].call(dropdownInstance)).not.toThrow();
@@ -96,20 +96,20 @@ describe('Dropdown', () => {
         };
 
         it('should not add a listener on document on mount if onDocumentClick is set but the dropdown is not opened', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicDropdownProps, {onDocumentClick: onDocumentClickSpy});
 
-            mount(<Dropdown {...props} />, {attachTo: document.getElementById('App')});
+            mount(<Dropdown {...props} />);
             clickOnOther();
 
             expect(onDocumentClickSpy).not.toHaveBeenCalled();
         });
 
         it('should add a listener on document on mount and remove it on unmount if prop onDocumentClick is set', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicDropdownProps, {isOpened: true, onDocumentClick: onDocumentClickSpy});
 
-            const dropdown = mount(<Dropdown {...props} />, {attachTo: document.getElementById('App')});
+            const dropdown = mount(<Dropdown {...props} />);
 
             expect(dropdown.props().isOpened).toBe(true);
 
@@ -124,10 +124,10 @@ describe('Dropdown', () => {
         });
 
         it('should not call onDocumentClick when prop is set and clicking on the dropdown', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicDropdownProps, {isOpened: true, onDocumentClick: onDocumentClickSpy});
 
-            mount(<Dropdown {...props} />, {attachTo: document.getElementById('App')});
+            mount(<Dropdown {...props} />);
 
             (document.getElementsByClassName('dropdown')[0] as HTMLDivElement).click();
 
@@ -140,7 +140,7 @@ describe('Dropdown', () => {
     });
 
     describe('once mounted', () => {
-        it('should not add the class to set the cursor to default by default ', () => {
+        it('should not add the class to set the cursor to default by default', () => {
             const wrapper = shallow(<Dropdown toggleContent={[<div />]} dropdownItems={[<div />]} />);
 
             expect(wrapper.find('.dropdown').hasClass('cursor-default')).toBe(false);
@@ -153,7 +153,7 @@ describe('Dropdown', () => {
         });
 
         it('should trigger the onClick by default', () => {
-            const spy = jasmine.createSpy('onClick');
+            const spy = jest.fn();
             const wrapper = shallow(<Dropdown toggleContent={[<div />]} dropdownItems={[<div />]} onClick={spy} />);
             wrapper.find('.dropdown-toggle').simulate('click');
 
@@ -161,7 +161,7 @@ describe('Dropdown', () => {
         });
 
         it('should not trigger the onClick if disabled', () => {
-            const spy = jasmine.createSpy('onClick');
+            const spy = jest.fn();
             const wrapper = shallow(
                 <Dropdown toggleContent={[<div />]} dropdownItems={[<div />]} onClick={spy} disabled />
             );

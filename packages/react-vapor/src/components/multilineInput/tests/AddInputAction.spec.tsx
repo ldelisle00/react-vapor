@@ -14,17 +14,17 @@ describe('AddInputAction', () => {
         let addInput: ReactWrapper<IAddInputActionProps, any>;
 
         beforeEach(() => {
-            addInput = mount(<AddInputAction />, {attachTo: document.getElementById('App')});
+            addInput = mount(<AddInputAction />);
         });
 
         afterEach(() => {
-            addInput.detach();
+            addInput.unmount(); // <-- new
         });
 
         it('should render title prop if prop is set', () => {
             const title = 'a title';
 
-            expect(addInput.find(`[title="${title}"]`).length).toBe(0);
+            expect(addInput.find(`[title="${title}"]`)).toHaveLength(0);
 
             addInput.setProps({title}).mount().update();
 
@@ -32,17 +32,17 @@ describe('AddInputAction', () => {
         });
 
         it('should call onClick props on button click if prop is set', () => {
-            const clickSpy = jasmine.createSpy('onClick');
+            const clickSpy = jest.fn();
 
             const innerAction = addInput.find('.input-actions');
             innerAction.simulate('click');
 
-            expect(clickSpy.calls.count()).toBe(0);
+            expect(clickSpy.mock.calls).toHaveLength(0);
 
             addInput.setProps({onClick: clickSpy}).mount();
             innerAction.simulate('click');
 
-            expect(clickSpy.calls.count()).toBe(1);
+            expect(clickSpy.mock.calls).toHaveLength(1);
         });
     });
 });

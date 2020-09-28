@@ -1,5 +1,6 @@
 import {mount, shallow} from 'enzyme';
 import * as React from 'react';
+
 import {keyCode} from '../../../utils/InputUtils';
 import {Svg} from '../../svg/Svg';
 import {SearchBar} from '../SearchBar';
@@ -60,7 +61,7 @@ describe('SearchBar', () => {
     });
 
     it('should have a clickable span containing an svg by default, which when clicked, the search method is called', () => {
-        const searchSpy = spyOn(SearchBar.prototype as any, 'search');
+        const searchSpy = jest.spyOn(SearchBar.prototype as any, 'search');
         const component = shallow(<SearchBar {...requiredProps} />);
         const clickableSpan = component.find('div .search-bar-icon-container span');
 
@@ -70,7 +71,7 @@ describe('SearchBar', () => {
 
         const svg = clickableSpan.find(Svg);
 
-        expect(svg.length).toBe(1);
+        expect(svg).toHaveLength(1);
         expect(svg.prop('svgName')).toBe('search');
         expect(svg.prop('svgClass')).toBe('fill-medium-blue');
     });
@@ -78,11 +79,11 @@ describe('SearchBar', () => {
     it('should have an unclickable grey search svg if SearchBar is disabled', () => {
         const component = shallow(<SearchBar {...requiredProps} disabled />);
 
-        expect(component.find('div .search-bar-icon-container span').length).toBe(0);
+        expect(component.find('div .search-bar-icon-container span')).toHaveLength(0);
 
         const svg = component.find('div .search-bar-icon-container').find(Svg);
 
-        expect(svg.length).toBe(1);
+        expect(svg).toHaveLength(1);
         expect(svg.prop('svgName')).toBe('search');
         expect(svg.prop('svgClass')).toBe('fill-light-grey');
     });
@@ -90,13 +91,13 @@ describe('SearchBar', () => {
     it('should have an unclickable loading animation if searching is passed as prop', () => {
         const component = shallow(<SearchBar {...requiredProps} searching />);
 
-        expect(component.find('div .search-bar-icon-container span').length).toBe(0);
-        expect(component.find('div .search-bar-icon-container').find(Svg).length).toBe(0);
-        expect(component.find('div .search-bar-icon-container .search-bar-spinner').length).toBe(1);
+        expect(component.find('div .search-bar-icon-container span')).toHaveLength(0);
+        expect(component.find('div .search-bar-icon-container').find(Svg)).toHaveLength(0);
+        expect(component.find('div .search-bar-icon-container .search-bar-spinner')).toHaveLength(1);
     });
 
     it('should call onChange on input change if it is defined', () => {
-        const onChange = jasmine.createSpy('onChange');
+        const onChange = jest.fn();
         const props = {...requiredProps, onChange};
         const component = mount(<SearchBar {...props} />);
         component.find('input').simulate('change');
@@ -105,7 +106,7 @@ describe('SearchBar', () => {
     });
 
     it('should call search on enter keyup', () => {
-        const searchSpy = spyOn(SearchBar.prototype as any, 'search');
+        const searchSpy = jest.spyOn(SearchBar.prototype as any, 'search');
         const component = mount(<SearchBar {...requiredProps} />);
         component.find('input').simulate('keyup', {keyCode: keyCode.enter} as any);
 
@@ -113,7 +114,7 @@ describe('SearchBar', () => {
     });
 
     it('should not call search on keyups other than enter', () => {
-        const searchSpy = spyOn(SearchBar.prototype as any, 'search');
+        const searchSpy = jest.spyOn(SearchBar.prototype as any, 'search');
         const component = mount(<SearchBar {...requiredProps} />);
         component.find('input').simulate('keyup', {keyCode: keyCode.leftArrow} as any);
 
@@ -123,7 +124,7 @@ describe('SearchBar', () => {
     describe('on calling search', () => {
         it('should call the onSearch prop even if value is empty', () => {
             const component = new SearchBar({...requiredProps});
-            spyOn(component.props, 'onSearch');
+            jest.spyOn(component.props, 'onSearch').mockImplementation(() => ({}));
             (component as any).search();
 
             expect(component.props.onSearch).toHaveBeenCalledTimes(1);
@@ -131,7 +132,7 @@ describe('SearchBar', () => {
 
         it('should not call the onSearch prop if value is not empty, searching is false, but disabled is true', () => {
             const component = new SearchBar({...requiredProps, value: 'non empty', disabled: true});
-            spyOn(component.props, 'onSearch');
+            jest.spyOn(component.props, 'onSearch').mockImplementation(() => ({}));
             (component as any).search();
 
             expect(component.props.onSearch).not.toHaveBeenCalled();
@@ -139,7 +140,7 @@ describe('SearchBar', () => {
 
         it('should not call the onSearch prop if value is not empty, disabled is false, but searching is true', () => {
             const component = new SearchBar({...requiredProps, value: 'non empty', searching: true});
-            spyOn(component.props, 'onSearch');
+            jest.spyOn(component.props, 'onSearch').mockImplementation(() => ({}));
             (component as any).search();
 
             expect(component.props.onSearch).not.toHaveBeenCalled();
@@ -147,7 +148,7 @@ describe('SearchBar', () => {
 
         it('should call the onSearch prop if value is not empty, disabled is false, and searching is false', () => {
             const component = new SearchBar({...requiredProps, value: 'non empty'});
-            spyOn(component.props, 'onSearch');
+            jest.spyOn(component.props, 'onSearch').mockImplementation(() => ({}));
             (component as any).search();
 
             expect(component.props.onSearch).toHaveBeenCalledTimes(1);

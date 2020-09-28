@@ -25,7 +25,7 @@ export class StatusCard extends React.Component<StatusCardProps> {
     }
 
     private getContent(): JSX.Element[] {
-        const titleClasses: string = classNames('text-medium-blue', styles.statusCardTitle);
+        const titleClasses: string = classNames('text-medium-blue status-card-title', styles.statusCardTitle);
 
         return this.props.loading
             ? [<Loading key="loading" className="center-align" />]
@@ -35,12 +35,12 @@ export class StatusCard extends React.Component<StatusCardProps> {
                           key="icon"
                           svgName={this.props.icon}
                           svgClass="icon mod-2x"
-                          className={styles.statusCardIcon}
+                          className={classNames('status-card-icon', styles.statusCardIcon)}
                       />
                   ),
                   <div key="status">
                       <h3 className={titleClasses}>{this.props.title}</h3>
-                      <div className={styles.statusCardInfo}>{this.props.children}</div>
+                      <div className={classNames('status-card-info', styles.statusCardInfo)}>{this.props.children}</div>
                   </div>,
               ];
     }

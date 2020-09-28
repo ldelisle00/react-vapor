@@ -33,7 +33,7 @@ describe('<CollapsibleContainerConnected />', () => {
         it('should render with no svg if no informationUrl and informationTooltip are passed', () => {
             mountComponentWithProps();
 
-            expect(wrapper.find(`.${collapsibleProps.headerClasses}`).find(Svg).length).toBe(0);
+            expect(wrapper.find(`.${collapsibleProps.headerClasses}`).find(Svg)).toHaveLength(0);
         });
 
         it('should render a CollapsibleHeaderIcon', () => {
@@ -42,7 +42,7 @@ describe('<CollapsibleContainerConnected />', () => {
                 informationUrl: 'http://whatever.com',
             });
 
-            expect(wrapper.find(`.${styles.header}`).find(CollapsibleHeaderIcon).length).toBe(1);
+            expect(wrapper.find(CollapsibleHeaderIcon)).toHaveLength(1);
         });
     });
 });

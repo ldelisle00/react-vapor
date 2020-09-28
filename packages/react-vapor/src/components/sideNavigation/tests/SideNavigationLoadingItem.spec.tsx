@@ -7,11 +7,11 @@ describe('<SideNavigationLoadingItem />', () => {
     let wrapper: ReactWrapper<ISideNavLoadingItemProps, any>;
 
     beforeEach(() => {
-        wrapper = mount(<SideNavigationLoadingItem />, {attachTo: document.getElementById('App')});
+        wrapper = mount(<SideNavigationLoadingItem />);
     });
 
     afterEach(() => {
-        wrapper.detach();
+        wrapper.unmount();
     });
 
     it('should render without errors', () => {

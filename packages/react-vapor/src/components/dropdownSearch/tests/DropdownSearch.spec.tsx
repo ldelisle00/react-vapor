@@ -40,8 +40,7 @@ describe('DropdownSearch', () => {
     const infiniteScrollProps: InfiniteScrollProps = {
         dataLength: 2,
         hasMore: true,
-        // eslint-disable-next-line jasmine/no-unsafe-spy
-        next: jasmine.createSpy('next'),
+        next: jest.fn(),
         endMessage: 'no more',
         loader: null,
     };
@@ -56,13 +55,15 @@ describe('DropdownSearch', () => {
         let dropdownSearchInstanceAsAny: any;
 
         const renderDropdownSearch = (props?: IDropdownSearchProps) => {
-            dropdownSearch = mount(<DropdownSearch {...props} />, {attachTo: document.getElementById('App')});
+            dropdownSearch = mount(<DropdownSearch {...props} />);
             dropdownSearchInstance = dropdownSearch.instance() as DropdownSearch;
             dropdownSearchInstanceAsAny = dropdownSearchInstance;
         };
 
         afterEach(() => {
-            dropdownSearch.detach();
+            if (dropdownSearch?.exists()) {
+                dropdownSearch.unmount(); // <-- new
+            }
         });
 
         describe('default props', () => {
@@ -99,7 +100,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onMountCallBack prop if set when mounting', () => {
-                const onMountCallBack = jasmine.createSpy('onMountCallBack');
+                const onMountCallBack = jest.fn();
 
                 expect(() => dropdownSearchInstance.componentWillMount()).not.toThrow();
 
@@ -111,7 +112,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onMount prop if set when mounting', () => {
-                const onMountSpy = jasmine.createSpy('onMount');
+                const onMountSpy = jest.fn();
 
                 expect(() => dropdownSearchInstance.componentWillMount()).not.toThrow();
 
@@ -123,7 +124,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onDestroy prop if set when will unmount', () => {
-                const onDestroy = jasmine.createSpy('onDestroy');
+                const onDestroy = jest.fn();
 
                 expect(() => dropdownSearchInstance.componentWillUnmount()).not.toThrow();
 
@@ -134,7 +135,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onFilterTextChange if defined when onChange the "filter-box" input', () => {
-                const onFilterTextChange = jasmine.createSpy('onFilterTextChange');
+                const onFilterTextChange = jest.fn();
                 dropdownSearch.setProps({isOpened: true, onFilterTextChange});
                 dropdownSearch.find('input.filter-box').simulate('change');
 
@@ -142,11 +143,11 @@ describe('DropdownSearch', () => {
             });
 
             it('should not call onFilterTextChange if defined when the filter box input changes and customFiltering is defined', () => {
-                const onFilterTextChange = jasmine.createSpy('onFilterTextChange');
+                const onFilterTextChange = jest.fn();
                 dropdownSearch.setProps({
                     isOpened: true,
                     onFilterTextChange,
-                    customFiltering: jasmine.createSpy('customFiltering'),
+                    customFiltering: jest.fn(),
                 });
                 dropdownSearch.find('input.filter-box').simulate('change');
 
@@ -154,7 +155,7 @@ describe('DropdownSearch', () => {
             });
 
             it('shoudl call customFiltering if defined when the filter box input changes', () => {
-                const customFiltering = jasmine.createSpy('customFiltering');
+                const customFiltering = jest.fn();
                 dropdownSearch.setProps({isOpened: true, customFiltering});
                 dropdownSearch.find('input.filter-box').simulate('change');
 
@@ -162,7 +163,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onBlur if defined when we lost focus on "filter-box" input', () => {
-                const onBlur = jasmine.createSpy('onBlur');
+                const onBlur = jest.fn();
                 dropdownSearch.setProps({onBlur, isOpened: true});
 
                 const element = dropdownSearch.find('.filter-box');
@@ -173,7 +174,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onToggleDropdown if defined when click the "dropdown-toggle" button', () => {
-                const onToggleDropdown = jasmine.createSpy('onToggleDropdown');
+                const onToggleDropdown = jest.fn();
                 dropdownSearch.setProps({onToggleDropdown});
 
                 dropdownSearch.find('button.dropdown-toggle').simulate('click');
@@ -182,7 +183,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onClickCallBack if defined when click the "dropdown-toggle" button', () => {
-                const onClickCallBack = jasmine.createSpy('onClickCallBack');
+                const onClickCallBack = jest.fn();
                 dropdownSearch.setProps({onClickCallBack});
 
                 dropdownSearch.find('button.dropdown-toggle').simulate('click');
@@ -191,7 +192,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onOptionClickCallBack if defined when click an option "dropdown-toggle" button', () => {
-                const onOptionClickCallBack = jasmine.createSpy('onOptionClickCallBack');
+                const onOptionClickCallBack = jest.fn();
                 dropdownSearch.setProps({isOpened: true, onOptionClickCallBack});
 
                 dropdownSearch.find('[data-value="test a"]').simulate('mousedown');
@@ -202,7 +203,7 @@ describe('DropdownSearch', () => {
             it('should call onMouseEnterDropdown if defined when enter over the ul element and dropdown is opened', () => {
                 renderDropdownSearch(_.extend({}, ownProps, {isOpened: true}));
 
-                const onMouseEnterDropdown = jasmine.createSpy('onMouseEnterDropdown');
+                const onMouseEnterDropdown = jest.fn();
                 dropdownSearch.setProps({onMouseEnterDropdown});
 
                 dropdownSearch.find('ul.dropdown-menu').simulate('mouseenter');
@@ -211,7 +212,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onKeyDownFilterBox if defined when key down on "filter-box"', () => {
-                const onKeyDownFilterBox = jasmine.createSpy('onKeyDownFilterBox');
+                const onKeyDownFilterBox = jest.fn();
                 dropdownSearch.setProps({isOpened: true, onKeyDownFilterBox, activeOption: options[0]});
 
                 dropdownSearch.find('input.filter-box').simulate('keydown');
@@ -220,7 +221,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onOptionClickCallBack if defined and they key is enter when key down on "filter-box"', () => {
-                const onOptionClickCallBack = jasmine.createSpy('onOptionClickCallBack');
+                const onOptionClickCallBack = jest.fn();
                 dropdownSearch.setProps({
                     isOpened: true,
                     activeOption: {value: 'test a'},
@@ -233,7 +234,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onOptionClickCallBack if defined and they key is tab when key down on "filter-box"', () => {
-                const onOptionClickCallBack = jasmine.createSpy('onOptionClickCallBack');
+                const onOptionClickCallBack = jest.fn();
                 dropdownSearch.setProps({
                     isOpened: true,
                     activeOption: {value: 'test a'},
@@ -246,7 +247,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call onKeyDownDropdownButton if defined when key down on button "dropdown-toggle"', () => {
-                const onKeyDownDropdownButton = jasmine.createSpy('onKeyDownDropdownButton');
+                const onKeyDownDropdownButton = jest.fn();
                 dropdownSearch.setProps({onKeyDownDropdownButton});
 
                 dropdownSearch.find('button.dropdown-toggle').simulate('keydown');
@@ -255,8 +256,8 @@ describe('DropdownSearch', () => {
             });
 
             it('should call handleOnOptionClickOnKeyDown if search is off', () => {
-                spyOn(DropdownSearch.prototype as any, 'isSearchOn').and.returnValue(false);
-                const handleOnOptionClickOnKeyDownSpy = spyOn(
+                jest.spyOn(DropdownSearch.prototype as any, 'isSearchOn').mockReturnValue(false);
+                const handleOnOptionClickOnKeyDownSpy = jest.spyOn(
                     DropdownSearch.prototype as any,
                     'handleOnOptionClickOnKeyDown'
                 );
@@ -267,8 +268,8 @@ describe('DropdownSearch', () => {
             });
 
             it('should not call handleOnOptionClickOnKeyDown if search is on', () => {
-                spyOn(DropdownSearch.prototype as any, 'isSearchOn').and.returnValue(true);
-                const handleOnOptionClickOnKeyDownSpy = spyOn(
+                jest.spyOn(DropdownSearch.prototype as any, 'isSearchOn').mockReturnValue(true);
+                const handleOnOptionClickOnKeyDownSpy = jest.spyOn(
                     DropdownSearch.prototype as any,
                     'handleOnOptionClickOnKeyDown'
                 );
@@ -279,7 +280,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call updateOptions when receiving new default options when the option list is empty', () => {
-                const updateOptionsSpy: jasmine.Spy = jasmine.createSpy('updateOptions');
+                const updateOptionsSpy: jest.Mock<any, any> = jest.fn();
                 const newProps: IDropdownSearchProps = _.extend({}, ownProps, {updateOptions: updateOptionsSpy});
                 dropdownSearch.setProps(newProps);
 
@@ -309,7 +310,7 @@ describe('DropdownSearch', () => {
 
             describe('handleOnOptionClick', () => {
                 it('should call onOptionClick if option is found in options', () => {
-                    const onOptionClick = jasmine.createSpy('onOptionClick');
+                    const onOptionClick = jest.fn();
                     dropdownSearch.setProps({...ownProps, onOptionClick});
 
                     dropdownSearchInstanceAsAny.handleOnOptionClick({
@@ -321,7 +322,7 @@ describe('DropdownSearch', () => {
                 });
 
                 it('should not call onOptionClick if option was not found in options', () => {
-                    const onOptionClick = jasmine.createSpy('onOptionClick');
+                    const onOptionClick = jest.fn();
                     dropdownSearch.setProps({...ownProps, onOptionClick});
 
                     dropdownSearchInstanceAsAny.handleOnOptionClick({
@@ -409,14 +410,14 @@ describe('DropdownSearch', () => {
                 });
 
                 it('should call the hasMoreItems prop to let the infinite scroll if there are more items', () => {
-                    const hasMoreItemsSpy: jasmine.Spy = jasmine.createSpy('hasMoreItems');
+                    const hasMoreItemsSpy: jest.Mock<any, any> = jest.fn();
                     dropdownSearch.setProps({
                         ...ownProps,
                         isOpened: true,
                         infiniteScroll: {...infiniteScrollProps},
                         hasMoreItems: hasMoreItemsSpy,
                     });
-                    const hasMoreItemsCallsCount = hasMoreItemsSpy.calls.count();
+                    const hasMoreItemsCallsCount = hasMoreItemsSpy.mock.calls.length;
                     dropdownSearchInstanceAsAny.getDropdownMenu();
 
                     expect(hasMoreItemsSpy).toHaveBeenCalledTimes(hasMoreItemsCallsCount + 1);
@@ -424,7 +425,7 @@ describe('DropdownSearch', () => {
 
                 it(`if infiniteScroll prop is defined
                     should call handleOnMouseEnter when calling DropdownSearchInfiniteScrollOptions onMouseEnter prop`, () => {
-                    const handleOnMouseEnterSpy = spyOn<any>(dropdownSearchInstance, 'handleOnMouseEnter');
+                    const handleOnMouseEnterSpy = jest.spyOn<any, string>(dropdownSearchInstance, 'handleOnMouseEnter');
 
                     dropdownSearch.setProps({
                         ...ownProps,
@@ -439,7 +440,7 @@ describe('DropdownSearch', () => {
 
                 it(`if autoInfiniteScroll prop is defined
                     should call handleOnMouseEnter when calling DropdownSearchInfiniteScrollOptions onMouseEnter prop`, () => {
-                    const handleOnMouseEnterSpy = spyOn<any>(dropdownSearchInstance, 'handleOnMouseEnter');
+                    const handleOnMouseEnterSpy = jest.spyOn<any, string>(dropdownSearchInstance, 'handleOnMouseEnter');
 
                     dropdownSearch.setProps({
                         ...ownProps,
@@ -477,7 +478,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find(FilterBox).length).toBe(1);
+                expect(dropdownSearch.find(FilterBox)).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is open and search is off and supportSingleCustomOption is true', () => {
@@ -490,7 +491,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find(FilterBox).length).toBe(1);
+                expect(dropdownSearch.find(FilterBox)).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is open and search is off and supportSingleCustomOption is false', () => {
@@ -502,7 +503,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('button.dropdown-toggle').length).toBe(1);
+                expect(dropdownSearch.find('button.dropdown-toggle')).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is close', () => {
@@ -512,7 +513,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('button.dropdown-toggle').length).toBe(1);
+                expect(dropdownSearch.find('button.dropdown-toggle')).toHaveLength(1);
             });
 
             it('should call handleOnClose if a blur event occurs on the dropdown button', () => {
@@ -522,14 +523,14 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                const handleOnCloseSpy = spyOn(DropdownSearch.prototype as any, 'handleOnClose');
+                const handleOnCloseSpy = jest.spyOn(DropdownSearch.prototype as any, 'handleOnClose');
                 dropdownSearch.find('button.dropdown-toggle').simulate('blur');
 
                 expect(handleOnCloseSpy).toHaveBeenCalledTimes(1);
             });
 
             it('should call this.props.onClose if a blur event occurs on the dropdown button and the onClose prop is defined', () => {
-                const onCloseSpy = jasmine.createSpy('onCloseSpy');
+                const onCloseSpy = jest.fn();
                 renderDropdownSearch(
                     _.extend({}, ownProps, {
                         isOpened: false,
@@ -563,7 +564,7 @@ describe('DropdownSearch', () => {
             it('should show the dropdown svg if the selected option has one', () => {
                 renderDropdownSearch(_.extend({}, {...ownProps, isOpened: true}));
 
-                expect(dropdownSearch.find('.value-icon').length).toBe(1);
+                expect(dropdownSearch.find('.value-icon')).toHaveLength(1);
             });
 
             it('should show the dropdown value if the selected option has one', () => {
@@ -587,7 +588,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('.mod-menu').length).toBe(1);
+                expect(dropdownSearch.find('.mod-menu')).toHaveLength(1);
             });
 
             it('should show options with the highlight set on a span with the class bold when dropdown is opened', () => {
@@ -599,7 +600,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(3);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(3);
             });
 
             it('should show the highlight if the filterText is contained in the middle of a word', () => {
@@ -611,7 +612,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(3);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(3);
             });
 
             it('should not show the highlight if the number of result if greater than the highlightThreshold', () => {
@@ -622,7 +623,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(0);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(0);
             });
 
             it('should disabled the dropdown', () => {
@@ -636,7 +637,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call getNoOptions if no options are in the dropdown', () => {
-                const getNoOptionsSpy = spyOn(DropdownSearch.prototype as any, 'getNoOptions');
+                const getNoOptionsSpy = jest.spyOn(DropdownSearch.prototype as any, 'getNoOptions');
                 renderDropdownSearch(
                     _.extend({}, ownProps, {
                         selectedOption: undefined,
@@ -679,14 +680,11 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                spyOn(dropdownSearchInstanceAsAny, 'isScrolledIntoView').and.returnValue(false);
-                const spy = spyOn(
-                    dropdownSearchInstanceAsAny,
-                    'updateScrollPositionBasedOnActiveElement'
-                ).and.callThrough();
+                jest.spyOn(dropdownSearchInstanceAsAny, 'isScrolledIntoView').mockReturnValue(false);
+                const spy = jest.spyOn(dropdownSearchInstanceAsAny, 'updateScrollPositionBasedOnActiveElement');
 
                 const ul: Element = dropdownSearch.find('ul.dropdown-menu').getDOMNode();
-                spyOn(ul, 'getBoundingClientRect').and.returnValue({bottom: 10, top: 10});
+                jest.spyOn(ul, 'getBoundingClientRect').mockReturnValue({bottom: 10, top: 10} as DOMRect);
 
                 dropdownSearch.setProps({activeOption: {value: 'test 15'}});
 
@@ -706,14 +704,11 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                spyOn(dropdownSearchInstanceAsAny, 'isScrolledIntoView').and.returnValue(false);
-                const spy = spyOn<any>(
-                    dropdownSearchInstance,
-                    'updateScrollPositionBasedOnActiveElement'
-                ).and.callThrough();
+                jest.spyOn(dropdownSearchInstanceAsAny, 'isScrolledIntoView').mockReturnValue(false);
+                const spy = jest.spyOn<any, string>(dropdownSearchInstance, 'updateScrollPositionBasedOnActiveElement');
 
                 const ul: Element = dropdownSearch.find('ul.dropdown-menu').getDOMNode();
-                spyOn(ul, 'getBoundingClientRect').and.returnValue({bottom: 200000, top: 200000});
+                jest.spyOn(ul, 'getBoundingClientRect').mockReturnValue({bottom: 200000, top: 200000} as DOMRect);
 
                 dropdownSearch.setProps({activeOption: {value: 'test 1', displayValue: 'test 1'}});
 
@@ -735,19 +730,19 @@ describe('DropdownSearch', () => {
                 );
             };
 
-            it('should return true if the number of options is greater than the search thresold', () => {
+            it('should return true if the number of options is greater than the search threshold', () => {
                 renderDropdownSearchWithNumberOfOptions(3);
 
                 expect(dropdownSearchInstanceAsAny.isSearchOn()).toBe(true);
             });
 
-            it('should return false if the number of options is equal to the search thresold', () => {
+            it('should return false if the number of options is equal to the search threshold', () => {
                 renderDropdownSearchWithNumberOfOptions(2);
 
                 expect(dropdownSearchInstanceAsAny.isSearchOn()).toBe(false);
             });
 
-            it('should return false if the number of options is lower to the search thresold', () => {
+            it('should return false if the number of options is lower to the search threshold', () => {
                 renderDropdownSearchWithNumberOfOptions(1);
 
                 expect(dropdownSearchInstanceAsAny.isSearchOn()).toBe(false);
@@ -766,7 +761,7 @@ describe('DropdownSearch', () => {
                     })),
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(options.length);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(options.length);
             });
 
             it('should not render each option wrapped by a tooltip if they are disabled and disabledTooltip is undefined', () => {
@@ -776,7 +771,7 @@ describe('DropdownSearch', () => {
                     options: options.map((opt: IDropdownOption) => ({...opt, disabled: true})),
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(0);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(0);
             });
 
             it('should not render each option wrapped by a tooltip if they are not disabled', () => {
@@ -785,7 +780,7 @@ describe('DropdownSearch', () => {
                     isOpened: true,
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(0);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(0);
             });
         });
     });

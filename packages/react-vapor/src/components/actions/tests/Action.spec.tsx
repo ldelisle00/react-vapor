@@ -11,7 +11,7 @@ describe('Actions', () => {
     beforeAll(() => {
         action = {
             name: 'action',
-            trigger: jasmine.createSpy('triggerMethod'),
+            trigger: jest.fn(),
             enabled: true,
         };
     });
@@ -53,14 +53,16 @@ describe('Actions', () => {
         });
 
         afterEach(() => {
-            actionComponent.detach();
+            if (actionComponent.exists()) {
+                actionComponent.unmount(); // <-- new
+            }
         });
 
         it('should get an action as a prop', () => {
             const actionProp = actionComponent.props().action;
 
             expect(actionProp).toBeDefined();
-            expect(actionProp).toEqual(jasmine.objectContaining(action));
+            expect(actionProp).toEqual(expect.objectContaining(action));
         });
 
         it('should get if the action is simple (no html) as a prop', () => {
@@ -75,7 +77,7 @@ describe('Actions', () => {
 
             actionComponent.setProps({action: action, simple: true});
 
-            expect(actionComponent.find('span').length).toBe(1);
+            expect(actionComponent.find('span')).toHaveLength(1);
         });
 
         it('should have icon more if no icon is defined', () => {
@@ -83,8 +85,8 @@ describe('Actions', () => {
 
             actionComponent.setProps({action: {...action, icon: 'delete'}, simple: false});
 
-            expect(actionComponent.find(Svg).length).toBe(1);
-            expect(actionComponent.find('.more-icon').length).toBe(0);
+            expect(actionComponent.find(Svg)).toHaveLength(1);
+            expect(actionComponent.find('.more-icon')).toHaveLength(0);
         });
 
         it('should display the action name', () => {
@@ -92,12 +94,12 @@ describe('Actions', () => {
         });
 
         it('should display a <Tooltip /> if the action has a tooltip', () => {
-            expect(actionComponent.find('Tooltip').length).toBe(0);
+            expect(actionComponent.find('Tooltip')).toHaveLength(0);
 
             const newAction = _.extend({}, action, {tooltip: 'A useful tooltip'});
             actionComponent.setProps({action: newAction, simple: false});
 
-            expect(actionComponent.find('Tooltip').length).toBe(1);
+            expect(actionComponent.find('Tooltip')).toHaveLength(1);
         });
     });
 });

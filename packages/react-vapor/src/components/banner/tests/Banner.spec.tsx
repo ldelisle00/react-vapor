@@ -1,13 +1,12 @@
-import {mount, ReactWrapper, shallow} from 'enzyme';
+import {ShallowWrapper, shallow} from 'enzyme';
 import * as React from 'react';
 import {Banner, BannerMessageStates, BannerProps} from '../Banner';
-import * as styles from '../styles/Banner.scss';
 
 describe('Banner', () => {
     const basicProps: BannerProps = {
         name: 'some name',
     };
-    let banner: ReactWrapper<BannerProps>;
+    let banner: ShallowWrapper<BannerProps>;
 
     it('should render without errors', () => {
         expect(() => {
@@ -16,109 +15,87 @@ describe('Banner', () => {
     });
 
     describe('<Banner />', () => {
-        const mountWithProps = (props?: Partial<BannerProps>) => {
+        const shallowWithProps = (props?: Partial<BannerProps>) => {
             if (banner && banner.length) {
                 banner.unmount();
             }
-            banner = mount(<Banner {...basicProps} {...props} />);
+            banner = shallow(<Banner {...basicProps} {...props} />);
         };
 
         beforeEach(() => {
-            mountWithProps();
-        });
-
-        it('should get the props correctly', () => {
-            const props: Partial<BannerProps> = {
-                nameSubtitle: 'jhdkj',
-                messageTitle: 'hsjkashk',
-                messageState: 'a',
-                alignCenter: true,
-                topRightInfos: <div>Help</div>,
-                bottomRightInfos: <div></div>,
-            };
-            mountWithProps(props);
-
-            const bannerProps = banner.props();
-
-            expect(bannerProps.name).toBe(basicProps.name);
-            expect(bannerProps.nameSubtitle).toBe(props.nameSubtitle);
-            expect(bannerProps.messageTitle).toBe(props.messageTitle);
-            expect(bannerProps.messageState).toBe(props.messageState);
-            expect(bannerProps.alignCenter).toBe(props.alignCenter);
-            expect(bannerProps.topRightInfos).toBe(props.topRightInfos);
-            expect(bannerProps.bottomRightInfos).toBe(props.bottomRightInfos);
+            shallowWithProps();
         });
 
         it('should have the class "center" if the prop alignCenter is set', () => {
-            expect(banner.find('.center').length).toBe(0);
+            expect(banner.find('.center')).toHaveLength(0);
 
-            mountWithProps({alignCenter: true});
+            shallowWithProps({alignCenter: true});
 
-            expect(banner.find('.center').length).toBe(1);
+            expect(banner.find('.center')).toHaveLength(1);
         });
 
         it('should have the class styles.bannerWarningTitle on the title if messageCondition is set to Warning', () => {
-            expect(banner.find(`.${styles.bannerWarningTitle}`).length).toBe(0);
+            expect(banner.find(`.mod-warning`)).toHaveLength(0);
 
-            mountWithProps({messageState: BannerMessageStates.Warning, messageTitle: 'something'});
+            shallowWithProps({messageState: BannerMessageStates.Warning, messageTitle: 'something'});
 
-            expect(banner.find(`.${styles.bannerWarningTitle}`).length).toBe(1);
+            expect(banner.find(`.mod-warning`)).toHaveLength(1);
         });
 
         it('should have the class styles.bannerErrorTitle on the title if messageCondition is set to Error', () => {
-            expect(banner.find(`.${styles.bannerErrorTitle}`).length).toBe(0);
+            expect(banner.find(`.mod-error`)).toHaveLength(0);
 
-            mountWithProps({messageState: BannerMessageStates.Error, messageTitle: 'something'});
+            shallowWithProps({messageState: BannerMessageStates.Error, messageTitle: 'something'});
 
-            expect(banner.find(`.${styles.bannerErrorTitle}`).length).toBe(1);
+            expect(banner.find(`.mod-error`)).toHaveLength(1);
         });
 
         it('should display a <h2> if there is a nameSubtitle', () => {
-            expect(banner.find('h2').length).toBe(0);
+            expect(banner.find('h2')).toHaveLength(0);
 
-            mountWithProps({nameSubtitle: 'something'});
+            shallowWithProps({nameSubtitle: 'something'});
 
-            expect(banner.find('h2').length).toBe(1);
+            expect(banner.find('h2')).toHaveLength(1);
         });
 
         it('should display a bannerRight if there are some topRightInfos or bottomRightInfos', () => {
-            expect(banner.find(`.${styles.bannerRight}`).length).toBe(0);
+            expect(banner.find('.banner-right')).toHaveLength(0);
 
-            mountWithProps({topRightInfos: <div></div>});
+            shallowWithProps({topRightInfos: <div></div>});
 
-            expect(banner.find(`.${styles.bannerRight}`).length).toBe(1);
+            expect(banner.find('.banner-right')).toHaveLength(1);
 
-            mountWithProps({topRightInfos: <div></div>, bottomRightInfos: <div></div>});
+            shallowWithProps({topRightInfos: <div></div>, bottomRightInfos: <div></div>});
 
-            expect(banner.find(`.${styles.bannerRight}`).length).toBe(2);
+            expect(banner.find('.banner-right')).toHaveLength(2);
         });
 
         it('should display a <h3> if there is a messageTitle', () => {
-            expect(banner.find('h3').length).toBe(0);
+            expect(banner.find('h3')).toHaveLength(0);
 
-            mountWithProps({messageTitle: 'something'});
+            shallowWithProps({messageTitle: 'something'});
 
-            expect(banner.find('h3').length).toBe(1);
+            expect(banner.find('h3')).toHaveLength(1);
         });
 
         it('should display a bannerDescription if there are children', () => {
-            expect(banner.find(`.${styles.bannerDescription}`).length).toBe(0);
+            expect(banner.find('.banner-description')).toHaveLength(0);
 
-            banner = mount(<Banner {...basicProps}>I am a child!</Banner>, {attachTo: document.getElementById('App')});
+            banner = shallow(<Banner {...basicProps}>I am a child!</Banner>);
 
-            expect(banner.find(`.${styles.bannerDescription}`).length).toBe(1);
+            expect(banner.find('.banner-description')).toHaveLength(1);
         });
 
         it('should display a bannerWarningIcon if the messageState is either set to Warning or Error', () => {
-            expect(banner.html()).not.toContain(styles.bannerWarningIcon);
+            expect(banner.find('.banner-warning-icon').exists()).toBe(false);
 
-            mountWithProps({messageTitle: 'something', messageState: BannerMessageStates.Warning});
+            shallowWithProps({messageTitle: 'something', messageState: BannerMessageStates.Warning});
 
-            expect(banner.html()).toContain(styles.bannerWarningIcon);
+            expect(banner.find('.banner-warning-icon').exists()).toBe(true);
 
-            mountWithProps({messageTitle: 'something', messageState: BannerMessageStates.Error});
+            shallowWithProps({messageTitle: 'something', messageState: BannerMessageStates.Error});
 
-            expect(banner.html()).toContain(styles.bannerWarningIcon);
+            expect(banner.find('.banner-warning-icon').exists()).toBe(true);
         });
     });
 });

@@ -20,7 +20,7 @@ describe('Actions', () => {
         beforeAll(() => {
             action = {
                 name: 'action2',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             };
         });
@@ -38,7 +38,9 @@ describe('Actions', () => {
         });
 
         afterEach(() => {
-            wrapper.detach();
+            if (wrapper.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get withReduxState as a prop', () => {
@@ -49,7 +51,7 @@ describe('Actions', () => {
         });
 
         it('should display a <TriggerActionConnected /> component if the action is a trigger action', () => {
-            expect(primaryAction.find(TriggerActionConnected).length).toBe(1);
+            expect(primaryAction.find(TriggerActionConnected)).toHaveLength(1);
         });
     });
 });

@@ -1,8 +1,8 @@
-import {mount, ReactWrapper, ShallowWrapper} from 'enzyme';
-import {shallowWithStore} from 'enzyme-redux';
+import {ReactWrapper, ShallowWrapper} from 'enzyme';
+import {mountWithStore, shallowWithStore} from 'enzyme-redux';
 import {Range} from 'rc-slider';
 import * as React from 'react';
-import {Provider} from 'react-redux';
+import {act} from 'react-dom/test-utils';
 
 import {getStoreMock, ReactVaporMockStore} from '../../../utils/tests/TestUtils';
 import {AppendedValueSide, Slider} from '../Slider';
@@ -23,8 +23,8 @@ describe('<Slider/>', () => {
     });
 
     afterEach(() => {
-        middleSlider?.unmount();
-        mountedSlider?.unmount();
+        middleSlider?.exists() ? middleSlider.unmount() : null;
+        mountedSlider?.exists() ? mountedSlider.unmount() : null;
     });
 
     let middleSlider: ShallowWrapper;
@@ -237,37 +237,37 @@ describe('<Slider/>', () => {
     describe('state change', () => {
         it('should set a different Range value than the default [50, 50] if an initialValue is passed in the props', () => {
             const defaultSliderValue = [50, 50];
-            mountedSlider = mount(
-                <Provider store={store}>
-                    <Slider
-                        {...middleSliderRequiredProps}
-                        onChange={(value) => value}
-                        initialValue={20}
-                        customTooltip={() => <span>customTooltip</span>}
-                        step={5}
-                    />
-                </Provider>
+            mountedSlider = mountWithStore(
+                <Slider
+                    {...middleSliderRequiredProps}
+                    onChange={(value) => value}
+                    initialValue={20}
+                    customTooltip={() => <span>customTooltip</span>}
+                    step={5}
+                />,
+                store
             );
 
             expect(mountedSlider.find(Range).prop('value')).not.toEqual(defaultSliderValue);
         });
 
         it('should call the onChange callBack function on state change', () => {
-            const callBackSpy = jasmine.createSpy('🥔');
-            mountedSlider = mount(
-                <Provider store={store}>
-                    <Slider
-                        {...middleSliderRequiredProps}
-                        onChange={callBackSpy}
-                        customTooltip={() => <span>customTooltip</span>}
-                        marks={{0: '-2000', 33: '2000', 17: '0', 100: '10,000'}}
-                        step={5}
-                    />
-                </Provider>
+            const callBackSpy = jest.fn();
+            mountedSlider = mountWithStore(
+                <Slider
+                    {...middleSliderRequiredProps}
+                    onChange={callBackSpy}
+                    customTooltip={() => <span>customTooltip</span>}
+                    marks={{0: '-2000', 33: '2000', 17: '0', 100: '10,000'}}
+                    step={5}
+                />,
+                store
             );
 
-            callBackSpy.calls.reset();
-            mountedSlider.find(Range).prop('onChange')([40, 50]);
+            callBackSpy.mockReset();
+            act(() => {
+                mountedSlider.find(Range).prop('onChange')([40, 50]);
+            });
 
             expect(callBackSpy).toHaveBeenCalledTimes(1);
         });

@@ -17,7 +17,7 @@ describe('Actions', () => {
             },
             {
                 name: 'action2',
-                trigger: jasmine.createSpy('triggerMethod'),
+                trigger: jest.fn(),
                 enabled: true,
             },
         ];
@@ -33,30 +33,32 @@ describe('Actions', () => {
         let primaryAction: ReactWrapper<IPrimaryActionProps, any>;
 
         beforeEach(() => {
-            primaryAction = mount(<PrimaryAction action={actions[0]} />, {attachTo: document.getElementById('App')});
+            primaryAction = mount(<PrimaryAction action={actions[0]} />);
         });
 
         afterEach(() => {
-            primaryAction.detach();
+            if (primaryAction.exists()) {
+                primaryAction.unmount(); // <-- new
+            }
         });
 
         it('should get an action as a prop', () => {
             const actionProp = primaryAction.props().action;
 
             expect(actionProp).toBeDefined();
-            expect(actionProp).toEqual(jasmine.objectContaining(actions[0]));
+            expect(actionProp).toEqual(expect.objectContaining(actions[0]));
         });
 
         it('should display a <LinkAction /> component if the action is a link action', () => {
-            expect(primaryAction.find('LinkAction').length).toBe(1);
-            expect(primaryAction.find('TriggerAction').length).toBe(0);
+            expect(primaryAction.find('LinkAction')).toHaveLength(1);
+            expect(primaryAction.find('TriggerAction')).toHaveLength(0);
         });
 
         it('should display a <TriggerAction /> component if the action is a trigger action', () => {
             primaryAction.setProps({action: actions[1]});
 
-            expect(primaryAction.find('TriggerAction').length).toBe(1);
-            expect(primaryAction.find('LinkAction').length).toBe(0);
+            expect(primaryAction.find('TriggerAction')).toHaveLength(1);
+            expect(primaryAction.find('LinkAction')).toHaveLength(0);
         });
     });
 });

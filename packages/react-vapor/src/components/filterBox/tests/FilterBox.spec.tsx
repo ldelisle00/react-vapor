@@ -17,16 +17,18 @@ describe('FilterBox', () => {
         let filterBoxInstance: FilterBox;
 
         beforeEach(() => {
-            filterBox = mount(<FilterBox id={id} />, {attachTo: document.getElementById('App')});
+            filterBox = mount(<FilterBox id={id} />);
             filterBoxInstance = filterBox.instance() as FilterBox;
         });
 
         afterEach(() => {
-            filterBox.detach();
+            if (filterBox.exists()) {
+                filterBox.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {
-            const renderSpy = jasmine.createSpy('onRender');
+            const renderSpy = jest.fn();
 
             expect(() => filterBoxInstance.componentDidMount()).not.toThrow();
 
@@ -34,11 +36,11 @@ describe('FilterBox', () => {
             filterBox.unmount();
             filterBox.mount();
 
-            expect(renderSpy.calls.count()).toBe(1);
+            expect(renderSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
-            const destroySpy = jasmine.createSpy('onDestroy');
+            const destroySpy = jest.fn();
 
             expect(() => filterBoxInstance.componentDidMount()).not.toThrow();
 
@@ -46,26 +48,26 @@ describe('FilterBox', () => {
             filterBox.mount();
             filterBox.unmount();
 
-            expect(destroySpy.calls.count()).toBe(1);
+            expect(destroySpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onFilter when the filter input value has changed and prop is set', () => {
-            const filterSpy = jasmine.createSpy('onFilter');
+            const filterSpy = jest.fn();
             const input = filterBox.find('input');
 
             input.simulate('change');
 
-            expect(filterSpy.calls.count()).toBe(0);
+            expect(filterSpy.mock.calls).toHaveLength(0);
 
             filterBox.setProps({id: id, onFilter: filterSpy});
             filterBox.mount();
             input.simulate('change');
 
-            expect(filterSpy.calls.count()).toBe(1);
+            expect(filterSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onFilterCallback when the filter input value has changed and prop is set', () => {
-            const onFilterCallbackSpy = jasmine.createSpy('onFilterCallback');
+            const onFilterCallbackSpy = jest.fn();
             const input = filterBox.find('input');
 
             input.simulate('change');
@@ -155,7 +157,7 @@ describe('FilterBox', () => {
         });
 
         it('should call onBlur when the input loose focus', () => {
-            const onBlur = jasmine.createSpy('onBlur');
+            const onBlur = jest.fn();
             filterBox.setProps({onBlur});
 
             const element = filterBox.find('.filter-box');
@@ -166,7 +168,7 @@ describe('FilterBox', () => {
         });
 
         it('should call onKeyDown when the input get a key down event', () => {
-            const onKeyDown = jasmine.createSpy('onKeyDown');
+            const onKeyDown = jest.fn();
             filterBox.setProps({onKeyDown});
 
             const element = filterBox.find('.filter-box');
@@ -176,7 +178,7 @@ describe('FilterBox', () => {
         });
 
         it('should call onKeyUp when the input get a key up event', () => {
-            const onKeyUp = jasmine.createSpy('onKeyUp');
+            const onKeyUp = jest.fn();
             filterBox.setProps({onKeyUp});
 
             const element = filterBox.find('.filter-box');
@@ -186,7 +188,7 @@ describe('FilterBox', () => {
         });
 
         it('should call placeCursorAtEndOfInputValue when a focus event is triggered on the filter box', () => {
-            const placeCursorAtEndOfInputValueSpy = spyOn(FilterBox.prototype, 'placeCursorAtEndOfInputValue');
+            const placeCursorAtEndOfInputValueSpy = jest.spyOn(FilterBox.prototype, 'placeCursorAtEndOfInputValue');
 
             const element = filterBox.find('.filter-box');
             element.simulate('focus');
@@ -215,7 +217,7 @@ describe('FilterBox', () => {
 
         describe('maxWidth', () => {
             it('should set a max width in px on the filter container and the filter input when max width is set', () => {
-                filterBox = mount(<FilterBox id={id} maxWidth={130} />, {attachTo: document.getElementById('App')});
+                filterBox = mount(<FilterBox id={id} maxWidth={130} />);
 
                 expect(filterBox.find('.filter-container').prop('style')).toEqual({maxWidth: '130px'});
                 expect(filterBox.find('.filter-box').prop('style')).toEqual({maxWidth: '130px'});
@@ -224,13 +226,13 @@ describe('FilterBox', () => {
 
         describe('truncate', () => {
             it('should not add the "truncate" class to the filter input if it is not set', () => {
-                filterBox = mount(<FilterBox id={id} />, {attachTo: document.getElementById('App')});
+                filterBox = mount(<FilterBox id={id} />);
 
                 expect(filterBox.find('.filter-box').hasClass('truncate')).toBe(false);
             });
 
             it('should add the "truncate" class to the filter input if it is true', () => {
-                filterBox = mount(<FilterBox id={id} truncate={true} />, {attachTo: document.getElementById('App')});
+                filterBox = mount(<FilterBox id={id} truncate={true} />);
 
                 expect(filterBox.find('.filter-box').hasClass('truncate')).toBe(true);
             });

@@ -31,7 +31,7 @@ describe('Facets', () => {
         });
 
         afterEach(() => {
-            facetMoreRows.detach();
+            facetMoreRows.unmount(); // <-- new
         });
 
         it('should get the facet as a prop', () => {
@@ -49,7 +49,7 @@ describe('Facets', () => {
         });
 
         it('should render a <FilterBox /> component', () => {
-            expect(facetMoreRows.find(FilterBox).length).toBe(1);
+            expect(facetMoreRows.find(FilterBox)).toHaveLength(1);
             expect(facetMoreRows.find(FilterBox).props().id).toBe('filter-' + facet);
         });
 
@@ -88,23 +88,23 @@ describe('Facets', () => {
         };
 
         it('should not add a listener on document on mount if onDocumentClick is set but the dropdown is not opened', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicFacetMoreRowsAttributes, {onDocumentClick: onDocumentClickSpy});
 
-            mount(<FacetMoreRows {...props} />, {attachTo: document.getElementById('App')});
+            mount(<FacetMoreRows {...props} />);
             clickOnOther();
 
             expect(onDocumentClickSpy).not.toHaveBeenCalled();
         });
 
         it('should add a listener on document on mount and remove it on unmount if prop onDocumentClick is set', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicFacetMoreRowsAttributes, {
                 isOpened: true,
                 onDocumentClick: onDocumentClickSpy,
             });
 
-            const facetMoreRows = mount(<FacetMoreRows {...props} />, {attachTo: document.getElementById('App')});
+            const facetMoreRows = mount(<FacetMoreRows {...props} />);
             clickOnOther();
 
             expect(onDocumentClickSpy).toHaveBeenCalledTimes(1);
@@ -116,13 +116,13 @@ describe('Facets', () => {
         });
 
         it('should not call onDocumentClick when prop is set and clicking on "facet-search"', () => {
-            const onDocumentClickSpy = jasmine.createSpy('onDocumentClick');
+            const onDocumentClickSpy = jest.fn();
             const props = _.extend({}, basicFacetMoreRowsAttributes, {
                 isOpened: true,
                 onDocumentClick: onDocumentClickSpy,
             });
 
-            mount(<FacetMoreRows {...props} />, {attachTo: document.getElementById('App')});
+            mount(<FacetMoreRows {...props} />);
 
             (document.getElementsByClassName('facet-search')[0] as HTMLDivElement).click();
 

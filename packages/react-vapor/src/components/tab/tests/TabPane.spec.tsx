@@ -18,11 +18,11 @@ describe('TabPane', () => {
         let tab: ReactWrapper<ITabPaneProps, any>;
 
         beforeEach(() => {
-            tab = mount(<TabPane id={id} />, {attachTo: document.getElementById('App')});
+            tab = mount(<TabPane id={id} />);
         });
 
         afterEach(() => {
-            tab.detach();
+            tab.unmount(); // <-- new
         });
 
         it('should set active class on container when isActive is true', () => {

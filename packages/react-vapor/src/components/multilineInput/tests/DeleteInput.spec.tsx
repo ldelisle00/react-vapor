@@ -15,15 +15,15 @@ describe('DeletableInput', () => {
         let deleteInput: ReactWrapper<IInputProps, any>;
 
         beforeEach(() => {
-            deleteInput = mount(<DeletableInput />, {attachTo: document.getElementById('App')});
+            deleteInput = mount(<DeletableInput />);
         });
 
         afterEach(() => {
-            deleteInput.detach();
+            deleteInput.unmount(); // <-- new
         });
 
         it('should call property onBlur when delete button is clicked and prop is specified', () => {
-            const blurSpy = jasmine.createSpy('onBlur');
+            const blurSpy = jest.fn();
             const deleteButton = deleteInput.find('.input-actions');
 
             deleteButton.simulate('click');

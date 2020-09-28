@@ -33,8 +33,7 @@ describe('<TableChildActionBar />', () => {
             mount(
                 <Provider store={store}>
                     <TableChildActionBar {...props} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
 
         describe('render without error', () => {
@@ -114,15 +113,15 @@ describe('<TableChildActionBar />', () => {
 
             it('should render with an action bar if there is an actionBar prop', () => {
                 expect(
-                    mountComponentWithProps({...tablePropsMock, actionBar: true}).find(ActionBarConnected).length
-                ).toBe(1);
+                    mountComponentWithProps({...tablePropsMock, actionBar: true}).find(ActionBarConnected)
+                ).toHaveLength(1);
             });
 
             it('should render with an action bar and a filter inside it if there is an actionBar prop and a filter prop', () => {
                 const tableActionBar = mountComponentWithProps({...tablePropsMock, actionBar: true, filter: true});
 
-                expect(tableActionBar.find(ActionBarConnected).length).toBe(1);
-                expect(tableActionBar.find(ActionBarConnected).find(FilterBoxConnected).length).toBe(1);
+                expect(tableActionBar.find(ActionBarConnected)).toHaveLength(1);
+                expect(tableActionBar.find(ActionBarConnected).find(FilterBoxConnected)).toHaveLength(1);
             });
 
             it('should render with an action bar and a datePicker inside it if there is an actionBar prop and a datePicker prop', () => {
@@ -132,8 +131,8 @@ describe('<TableChildActionBar />', () => {
                     datePicker: {datesSelectionBoxes: SELECTION_BOXES, attributeName: 'date'},
                 });
 
-                expect(tableActionBar.find(ActionBarConnected).length).toBe(1);
-                expect(tableActionBar.find(ActionBarConnected).find(DatePickerDropdownConnected).length).toBe(1);
+                expect(tableActionBar.find(ActionBarConnected)).toHaveLength(1);
+                expect(tableActionBar.find(ActionBarConnected).find(DatePickerDropdownConnected)).toHaveLength(1);
             });
 
             it('should render with an action bar and a predicate inside it if there is an actionBar prop and one predicate', () => {
@@ -143,8 +142,8 @@ describe('<TableChildActionBar />', () => {
                     predicates: [{attributeName: 'email', attributeNameFormatter: _.identity, props: {}}],
                 });
 
-                expect(tableActionBar.find(ActionBarConnected).length).toBe(1);
-                expect(tableActionBar.find(ActionBarConnected).find(DropdownSearchConnected).length).toBe(1);
+                expect(tableActionBar.find(ActionBarConnected)).toHaveLength(1);
+                expect(tableActionBar.find(ActionBarConnected).find(DropdownSearchConnected)).toHaveLength(1);
             });
 
             it('should render with an action bar and two predicates inside it if there is an actionBar prop and two predicates', () => {
@@ -157,8 +156,8 @@ describe('<TableChildActionBar />', () => {
                     ],
                 });
 
-                expect(tableActionBar.find(ActionBarConnected).length).toBe(1);
-                expect(tableActionBar.find(ActionBarConnected).find(DropdownSearchConnected).length).toBe(2);
+                expect(tableActionBar.find(ActionBarConnected)).toHaveLength(1);
+                expect(tableActionBar.find(ActionBarConnected).find(DropdownSearchConnected)).toHaveLength(2);
             });
 
             it('should render with an action bar and prefix content inside it if there is an actionBar prop and prefixContent', () => {
@@ -170,12 +169,12 @@ describe('<TableChildActionBar />', () => {
                     },
                 });
 
-                expect(tableActionBar.find(ActionBarConnected).length).toBe(1);
-                expect(tableActionBar.find(ActionBarConnected).find(Loading).length).toBe(1);
+                expect(tableActionBar.find(ActionBarConnected)).toHaveLength(1);
+                expect(tableActionBar.find(ActionBarConnected).find(Loading)).toHaveLength(1);
             });
 
             it('should call onPredicateOptionClick if onOptionClickCallback of a dropdownSearch connected is called', () => {
-                const onPredicateOptionClickSpy = jasmine.createSpy('onPredicateOptionClickSpy');
+                const onPredicateOptionClickSpy = jest.fn();
                 const tableActionBar = mountComponentWithProps({
                     ...tablePropsMock,
                     onPredicateOptionClick: onPredicateOptionClickSpy,

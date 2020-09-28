@@ -16,11 +16,11 @@ describe('Radio', () => {
         let radio: ReactWrapper<RadioProps, any>;
 
         beforeEach(() => {
-            radio = mount(<Radio id={anId} />, {attachTo: document.getElementById('App')});
+            radio = mount(<Radio id={anId} />);
         });
 
         afterEach(() => {
-            radio.detach();
+            radio.unmount(); // <-- new
         });
 
         it('should set id prop', () => {
@@ -106,32 +106,32 @@ describe('Radio', () => {
             const outerContainerClass = 'salut-externe';
             radio.setProps({outerContainerClass}).mount().update();
 
-            expect(radio.find('div').length).toBe(2);
+            expect(radio.find('div')).toHaveLength(2);
         });
 
         it('should set only one div tag when the outerContainerClass is not set', () => {
             radio.mount().update();
 
-            expect(radio.find('div').length).toBe(1);
+            expect(radio.find('div')).toHaveLength(1);
         });
 
         it('should includes the element set in the outerElementInContainer props if its set', () => {
             const outerElementInContainer = <img src="https://via.placeholder.com/150x100" />;
 
-            expect(radio.find('img').length).toBe(0);
+            expect(radio.find('img')).toHaveLength(0);
             radio.setProps({outerElementInContainer}).mount().update();
 
-            expect(radio.find('img').length).toBe(1);
+            expect(radio.find('img')).toHaveLength(1);
         });
 
         it('should call prop onChange when specified on click', () => {
-            const changeSpy = jasmine.createSpy('onChange');
+            const changeSpy = jest.fn();
             const innerInput = radio.find('input');
 
             radio.setProps({onChange: changeSpy}).mount();
             innerInput.simulate('change');
 
-            expect(changeSpy.calls.count()).toBe(1);
+            expect(changeSpy.mock.calls).toHaveLength(1);
         });
     });
 });

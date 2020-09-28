@@ -9,11 +9,11 @@ describe('SideNavigationHeader', () => {
     let wrapper: ReactWrapper<ISideNavigationHeaderProps, any>;
 
     beforeEach(() => {
-        wrapper = mount(<SideNavigationHeader title={title} />, {attachTo: document.getElementById('App')});
+        wrapper = mount(<SideNavigationHeader title={title} />);
     });
 
     afterEach(() => {
-        wrapper.detach();
+        wrapper.unmount();
     });
 
     it('should render without errors', () => {

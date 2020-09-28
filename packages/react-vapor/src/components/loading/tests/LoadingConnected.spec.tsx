@@ -20,8 +20,7 @@ describe('<LoadingConnected />', () => {
                 </Provider>,
                 {attachTo: document.getElementById('App')}
             );
-            wrapper.unmount();
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         }).not.toThrow();
     });
 });

@@ -6,11 +6,11 @@ describe('<SideNavigation />', () => {
     let wrapper: ReactWrapper<ISideNavProps, any>;
 
     beforeEach(() => {
-        wrapper = mount(<SideNavigation />, {attachTo: document.getElementById('App')});
+        wrapper = mount(<SideNavigation />);
     });
 
     afterEach(() => {
-        wrapper.detach();
+        wrapper.unmount();
     });
 
     it('should render without errors', () => {

@@ -29,7 +29,7 @@ describe('ModalComposite', () => {
     });
 
     it('should call the onRender prop if defined on mount', () => {
-        const onRenderSpy = jasmine.createSpy('onRender');
+        const onRenderSpy = jest.fn();
 
         shallow(<ModalComposite onRender={onRenderSpy} />);
 
@@ -37,7 +37,7 @@ describe('ModalComposite', () => {
     });
 
     it('should call the onDestroy prop if defined on unmount', () => {
-        const onDestroySpy = jasmine.createSpy('onDestroy');
+        const onDestroySpy = jest.fn();
 
         const modalComposite = shallow(<ModalComposite onDestroy={onDestroySpy} />);
         modalComposite.unmount();
@@ -49,7 +49,7 @@ describe('ModalComposite', () => {
         const modalComposite = shallow(<ModalComposite isOpened title={'my title'} />).dive();
         const modalContent = modalComposite.find('.modal-content');
 
-        expect(modalContent.exists()).toBe(true, 'should exists');
+        expect(modalContent.exists()).toBe(true);
         expect(modalContent.find(ModalHeader).exists()).toBe(true);
     });
 
@@ -77,7 +77,7 @@ describe('ModalComposite', () => {
     });
 
     it('should call the closeCallback prop after the modal has closed', () => {
-        const closeCallbackSpy = jasmine.createSpy('closeCallback');
+        const closeCallbackSpy = jest.fn();
         const modalComposite = shallow(<ModalComposite closeCallback={closeCallbackSpy} />);
 
         modalComposite.prop('onAfterClose')();

@@ -1,6 +1,7 @@
 import {mountWithStore, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
 import {ChromePicker} from 'react-color';
+
 import {getStoreMock, ReactVaporMockStore, TestUtils} from '../../utils/tests/TestUtils';
 import {addInput, removeInput} from '../input/InputActions';
 import {InputConnected} from '../input/InputConnected';
@@ -21,10 +22,10 @@ describe('ColorPicker', () => {
         }).not.toThrow();
     });
 
-    it('should render a ChromeColorPicker ', () => {
+    it('should render a ChromeColorPicker', () => {
         const picker = shallowWithStore(<ColorPicker />, store).dive();
 
-        expect(picker.find(ChromePicker).length).toBe(1);
+        expect(picker.find(ChromePicker)).toHaveLength(1);
     });
 
     it('should pass down props to ChromePicker', () => {
@@ -36,7 +37,7 @@ describe('ColorPicker', () => {
     it('should render an InputConnected', () => {
         const picker = shallowWithStore(<ColorPicker />, store).dive();
 
-        expect(picker.find(InputConnected).length).toBe(1);
+        expect(picker.find(InputConnected)).toHaveLength(1);
     });
 
     it('should sync the InputConnected and ChromePicker with color props', () => {
@@ -56,13 +57,13 @@ describe('ColorPicker', () => {
     it('should add state input on mount', () => {
         mountWithStore(<ColorPicker id="foo" />, store);
 
-        expect(store.getActions()).toContain(addInput('foo'));
+        expect(store.getActions()).toContainEqual(addInput('foo'));
     });
 
     it('should remove state input on destroy', () => {
         const picker = mountWithStore(<ColorPicker id="foo" />, store);
         picker.unmount();
 
-        expect(store.getActions()).toContain(removeInput('foo'));
+        expect(store.getActions()).toContainEqual(removeInput('foo'));
     });
 });

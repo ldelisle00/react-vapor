@@ -14,7 +14,7 @@ describe('Option picker', () => {
                 value: () => 'optionValue',
             },
             isActive: false,
-            onClick: jasmine.createSpy('onClick'),
+            onClick: jest.fn(),
         };
     });
 
@@ -28,11 +28,11 @@ describe('Option picker', () => {
         let option: ReactWrapper<IOptionProps, any>;
 
         beforeEach(() => {
-            option = mount(<Option {...OPTION_BASIC_PROPS} />, {attachTo: document.getElementById('App')});
+            option = mount(<Option {...OPTION_BASIC_PROPS} />);
         });
 
         afterEach(() => {
-            option.detach();
+            option.unmount(); // <-- new
         });
 
         it('should get the value as a prop', () => {

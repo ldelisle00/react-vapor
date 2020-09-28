@@ -14,11 +14,11 @@ describe('ModalBody', () => {
         let modalBody: ReactWrapper<IModalBodyProps, any>;
 
         beforeEach(() => {
-            modalBody = mount(<ModalBody />, {attachTo: document.getElementById('App')});
+            modalBody = mount(<ModalBody />);
         });
 
         afterEach(() => {
-            modalBody.detach();
+            modalBody.unmount(); // <-- new
         });
 
         it('should set class when the class is specified', () => {

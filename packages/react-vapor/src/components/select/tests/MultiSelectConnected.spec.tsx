@@ -38,7 +38,9 @@ describe('Select', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         describe('mount and unmount', () => {
@@ -53,20 +55,20 @@ describe('Select', () => {
             });
 
             it('should add the list box to the state when mounted', () => {
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
 
                 mountMultiSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
             });
 
             it('should remove the list box from the state when the component unmount', () => {
                 mountMultiSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
                 wrapper.unmount();
 
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
             });
         });
 
@@ -115,14 +117,14 @@ describe('Select', () => {
                 {value: secondSelected, selected: true},
             ]);
 
-            expect(multiSelect.find(SelectedOption).length).toBe(2);
+            expect(multiSelect.find(SelectedOption)).toHaveLength(2);
             expect(multiSelect.find(SelectedOption).at(0).props().value).toBe(firstSelected);
             expect(multiSelect.find(SelectedOption).at(1).props().value).toBe(secondSelected);
         });
 
         it('should contains a SelectedOption for a selected custom value', () => {
             const customValue = 'b';
-            spyOn(SelectSelector, 'getMultiSelectSelectedValues').and.returnValue(['a', customValue]);
+            jest.spyOn(SelectSelector, 'getMultiSelectSelectedValues').mockReturnValue(['a', customValue]);
             mountMultiSelect([]);
 
             expect(multiSelect.find(SelectedOption).at(1).props().value).toBe(customValue);
@@ -132,10 +134,10 @@ describe('Select', () => {
             const itemSelected = 'dis 1';
             const customValue: string = 'c';
 
-            spyOn(SelectSelector, 'getMultiSelectSelectedValues').and.returnValue([itemSelected, customValue]);
+            jest.spyOn(SelectSelector, 'getMultiSelectSelectedValues').mockReturnValue([itemSelected, customValue]);
             mountMultiSelect([{value: 'b'}, {value: itemSelected, selected: true}]);
 
-            expect(multiSelect.find(SelectedOption).length).toBe(2);
+            expect(multiSelect.find(SelectedOption)).toHaveLength(2);
             expect(multiSelect.find(SelectedOption).at(0).props().value).toBe(itemSelected);
             expect(multiSelect.find(SelectedOption).at(1).props().value).toBe(customValue);
         });

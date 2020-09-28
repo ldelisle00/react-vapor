@@ -14,17 +14,17 @@ describe('DeleteInputAction', () => {
         let deleteInput: ReactWrapper<IDeleteInputActionProps, any>;
 
         beforeEach(() => {
-            deleteInput = mount(<DeleteInputAction onClick={() => 1} />, {attachTo: document.getElementById('App')});
+            deleteInput = mount(<DeleteInputAction onClick={() => 1} />);
         });
 
         afterEach(() => {
-            deleteInput.detach();
+            deleteInput.unmount(); // <-- new
         });
 
         it('should render title prop if prop is set', () => {
             const title = 'a title';
 
-            expect(deleteInput.find(`[title="${title}"]`).length).toBe(0);
+            expect(deleteInput.find(`[title="${title}"]`)).toHaveLength(0);
 
             deleteInput.setProps({title}).update();
 

@@ -14,11 +14,11 @@ describe('ModalFooter', () => {
         let modalFooter: ReactWrapper<IModalFooterProps, any>;
 
         beforeEach(() => {
-            modalFooter = mount(<ModalFooter />, {attachTo: document.getElementById('App')});
+            modalFooter = mount(<ModalFooter />);
         });
 
         afterEach(() => {
-            modalFooter.detach();
+            modalFooter.unmount(); // <-- new
         });
 
         it('should set class when the class is specified', () => {

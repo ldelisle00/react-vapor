@@ -44,7 +44,7 @@ describe('DropdownSearch', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.detach();
+            wrapper.unmount(); // <-- new
         });
 
         describe('mount and unmount', () => {
@@ -202,10 +202,10 @@ describe('DropdownSearch', () => {
             });
 
             it('should toggle the dropdown class to open and close on click on the dropdown button', () => {
-                expect(wrapper.find('.dropdown').find('.open').length).toBe(0, 'start closed');
+                expect(wrapper.find('.dropdown').find('.open').length).toBe(0);
                 wrapper.find('.dropdown-toggle').simulate('click');
 
-                expect(wrapper.find('.dropdown').find('.open').length).toBe(1, 'open on first click');
+                expect(wrapper.find('.dropdown').find('.open').length).toBe(1);
             });
 
             it('should close the dropdown on calling onClose', () => {
@@ -225,7 +225,7 @@ describe('DropdownSearch', () => {
 
                 dropdownSearch.props().onBlur([]);
 
-                expect(dropdown.find('.open').length).toBe(0, 'close the dropdown on blur');
+                expect(dropdown.find('.open').length).toBe(0);
             });
 
             it('should add the selected value in the state on click an option', () => {

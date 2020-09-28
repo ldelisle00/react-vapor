@@ -23,7 +23,7 @@ describe('<TriggerActionConnected />', () => {
     beforeAll(() => {
         action = {
             name: 'action',
-            trigger: jasmine.createSpy('triggerMethod'),
+            trigger: jest.fn(),
             enabled: true,
         };
     });
@@ -42,7 +42,9 @@ describe('<TriggerActionConnected />', () => {
 
     afterEach(() => {
         store.dispatch(clearState());
-        wrapper.detach();
+        if (wrapper.exists()) {
+            wrapper.unmount(); // <-- new
+        }
     });
 
     it('should get parentId as a prop', () => {
@@ -70,25 +72,25 @@ describe('<TriggerActionConnected />', () => {
     });
 
     it('should add a prompt onTriggerConfirm', () => {
-        expect(store.getState().prompts.length).toBe(0);
-        triggerAction.props().onTriggerConfirm(jasmine.createSpy('onClick'), {}, 'someClass');
+        expect(store.getState().prompts).toHaveLength(0);
+        triggerAction.props().onTriggerConfirm(jest.fn(), {}, 'someClass');
 
-        expect(store.getState().prompts.length).toBe(1);
+        expect(store.getState().prompts).toHaveLength(1);
     });
 
     it('should remove the prompt onConfirm', () => {
         store.dispatch(
             addPrompt(parentId, {
-                onClick: jasmine.createSpy('onClick'),
+                onClick: jest.fn(),
                 userChoice: {},
                 isOpened: false,
                 className: 'someClass',
             })
         );
 
-        expect(store.getState().prompts.length).toBe(1);
+        expect(store.getState().prompts).toHaveLength(1);
         triggerAction.props().onConfirm();
 
-        expect(store.getState().prompts.length).toBe(0);
+        expect(store.getState().prompts).toHaveLength(0);
     });
 });

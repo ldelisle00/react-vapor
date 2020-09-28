@@ -49,7 +49,7 @@ describe('Select', () => {
         afterEach(() => {
             store.dispatch(clearState());
             if (wrapper && wrapper.exists()) {
-                wrapper.detach();
+                wrapper.unmount(); // <-- new
             }
         });
 
@@ -69,11 +69,11 @@ describe('Select', () => {
             });
 
             it('should add the list box to the state when mounted', () => {
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
 
                 mountSingleSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
             });
 
             it('should add the string list to the state when mounted', () => {
@@ -87,11 +87,11 @@ describe('Select', () => {
             it('should remove the list box from the state when the component unmount', () => {
                 mountSingleSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
                 expect(store.getState().selectWithFilter[id]).toBeDefined();
                 wrapper.unmount();
 
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
                 expect(store.getState().selectWithFilter[id]).toBeUndefined();
             });
         });
@@ -105,7 +105,7 @@ describe('Select', () => {
             wrapper.update();
             singleSelect = wrapper.find(SelectConnected);
 
-            expect(singleSelect.props().items.length).toBe(items.length);
+            expect(singleSelect.props().items).toHaveLength(items.length);
             singleSelect
                 .find(SelectConnected)
                 .props()
@@ -124,7 +124,7 @@ describe('Select', () => {
             wrapper.update();
             singleSelect = wrapper.find(SelectConnected);
 
-            expect(singleSelect.props().items.length).toBe(items.length);
+            expect(singleSelect.props().items).toHaveLength(items.length);
             expect(singleSelect.find(SelectConnected).props().items[0].hidden).toBe(true);
             expect(singleSelect.find(SelectConnected).props().items[1].hidden).toBe(false);
             expect(singleSelect.find(SelectConnected).props().items[2].hidden).toBe(false);
@@ -139,7 +139,7 @@ describe('Select', () => {
             wrapper.update();
             singleSelect = wrapper.find(SelectConnected);
 
-            expect(singleSelect.props().items.length).toBe(items.length);
+            expect(singleSelect.props().items).toHaveLength(items.length);
             singleSelect
                 .find(SelectConnected)
                 .props()
@@ -158,7 +158,7 @@ describe('Select', () => {
             wrapper.update();
             singleSelect = wrapper.find(SelectConnected);
 
-            expect(singleSelect.props().items.length).toBe(items.length);
+            expect(singleSelect.props().items).toHaveLength(items.length);
             singleSelect
                 .find(SelectConnected)
                 .props()
@@ -169,10 +169,10 @@ describe('Select', () => {
 
         describe('interactions', () => {
             const items = [{value: 'a'}, {value: 'b', selected: true}, {value: 'c'}];
-            let dispatchSpy: jasmine.Spy;
+            let dispatchSpy: jest.SpyInstance<any, any>;
 
             beforeEach(() => {
-                dispatchSpy = spyOn(store, 'dispatch').and.callThrough();
+                dispatchSpy = jest.spyOn(store, 'dispatch');
                 mountSingleSelect({items});
             });
 
@@ -220,7 +220,7 @@ describe('Select', () => {
 
                 // Close the dropdown
                 store.dispatch(toggleSelect(id, false));
-                dispatchSpy.calls.reset();
+                dispatchSpy.mockReset();
 
                 singleSelect
                     .find('.dropdown-toggle')
@@ -281,7 +281,7 @@ describe('Select', () => {
                 wrapper.update();
                 wrapper.find(SelectConnected).find(ItemBox).find('li').simulate('click');
 
-                expect(store.getState().selectWithFilter[id].list.length).toBe(1);
+                expect(store.getState().selectWithFilter[id].list).toHaveLength(1);
                 expect(store.getState().selectWithFilter[id].list[0]).toBe(filterValue);
             });
         });
@@ -294,7 +294,7 @@ describe('Select', () => {
             const items = [{value: 'a'}, {value: 'b', selected: true}, {value: 'c'}];
 
             it('should not filter the items because it is done on the server', () => {
-                spyOn(FilterBoxSelectors, 'getFilterText').and.returnValue('a');
+                jest.spyOn(FilterBoxSelectors, 'getFilterText').mockReturnValue('a');
                 const component: ShallowWrapper<ISelectWithFilterOwnProps & ISingleSelectOwnProps> = shallowWithStore(
                     <ServerSideMultiSingleSelectWithFilter {...basicProps} items={items} />,
                     store
@@ -304,8 +304,8 @@ describe('Select', () => {
             });
 
             it('should trigger the onUpdate prop when the selected predicate changes', () => {
-                const onUpdateSpy = jasmine.createSpy('onUpdate');
-                spyOn(FilterBoxSelectors, 'getFilterText').and.returnValue('current-filter-value');
+                const onUpdateSpy = jest.fn();
+                jest.spyOn(FilterBoxSelectors, 'getFilterText').mockReturnValue('current-filter-value');
                 const component: ShallowWrapper<ISelectWithFilterOwnProps & ISingleSelectOwnProps> = shallowWithStore(
                     <ServerSideMultiSingleSelectWithFilter {...basicProps} items={items} onUpdate={onUpdateSpy} />,
                     store

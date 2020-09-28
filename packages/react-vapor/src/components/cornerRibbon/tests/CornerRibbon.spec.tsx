@@ -19,20 +19,20 @@ describe('CornerRibbon', () => {
 
     describe('<CornerRibbon />', () => {
         const mountWithProps = (props: Partial<ICornerRibbonProps>) => {
-            cornerRibbon = mount(<CornerRibbon {...props} />, {attachTo: document.getElementById('App')});
+            cornerRibbon = mount(<CornerRibbon {...props} />);
         };
 
         it('should have the default corner-ribon class', () => {
             mountWithProps({});
 
-            expect(cornerRibbon.find(`.${DEFAULT_CORNER_RIBBON_CLASSNAME}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${DEFAULT_CORNER_RIBBON_CLASSNAME}`)).toHaveLength(1);
         });
 
         it('should render in the top right of its ribbon-container by default', () => {
             mountWithProps({});
 
-            expect(cornerRibbon.find(`.${PlacementY.Top}`).length).toBe(1);
-            expect(cornerRibbon.find(`.${PlacementX.Right}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${PlacementY.Top}`)).toHaveLength(1);
+            expect(cornerRibbon.find(`.${PlacementX.Right}`)).toHaveLength(1);
         });
 
         it('should render the label specified as prop if any', () => {
@@ -48,13 +48,13 @@ describe('CornerRibbon', () => {
                 placementX: PlacementX.Left,
             });
 
-            expect(cornerRibbon.find(`.${PlacementX.Left}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${PlacementX.Left}`)).toHaveLength(1);
 
             cornerRibbon.setProps({
                 placementX: PlacementX.Right,
             });
 
-            expect(cornerRibbon.find(`.${PlacementX.Right}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${PlacementX.Right}`)).toHaveLength(1);
         });
 
         it('should render the ribbon in y axle position specified as prop if any', () => {
@@ -62,13 +62,13 @@ describe('CornerRibbon', () => {
                 placementY: PlacementY.Bottom,
             });
 
-            expect(cornerRibbon.find(`.${PlacementY.Bottom}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${PlacementY.Bottom}`)).toHaveLength(1);
 
             cornerRibbon.setProps({
                 placementY: PlacementY.Top,
             });
 
-            expect(cornerRibbon.find(`.${PlacementY.Top}`).length).toBe(1);
+            expect(cornerRibbon.find(`.${PlacementY.Top}`)).toHaveLength(1);
         });
 
         it('should render the ribbon with extra classes if specified as prop', () => {
@@ -76,8 +76,8 @@ describe('CornerRibbon', () => {
                 extraClasses: ['bold', 'bg-orange'],
             });
 
-            expect(cornerRibbon.find('.bold').length).toBe(1);
-            expect(cornerRibbon.find('.bg-orange').length).toBe(1);
+            expect(cornerRibbon.find('.bold')).toHaveLength(1);
+            expect(cornerRibbon.find('.bg-orange')).toHaveLength(1);
         });
     });
 });
