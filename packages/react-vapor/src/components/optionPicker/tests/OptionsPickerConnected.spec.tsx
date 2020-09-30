@@ -46,7 +46,9 @@ describe('Option picker', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get an id as a prop', () => {
@@ -105,17 +107,17 @@ describe('Option picker', () => {
             wrapper.unmount();
             store.dispatch(clearState());
 
-            expect(store.getState().optionPickers.length).toBe(0);
+            expect(store.getState().optionPickers).toHaveLength(0);
 
             wrapper.mount();
 
-            expect(store.getState().optionPickers.length).toBe(1);
+            expect(store.getState().optionPickers).toHaveLength(1);
         });
 
         it('should call onDestroy prop when will unmount', () => {
             wrapper.unmount();
 
-            expect(store.getState().optionPickers.length).toBe(0);
+            expect(store.getState().optionPickers).toHaveLength(0);
         });
 
         it('should set the selected value to the one sent when calling the onClick prop', () => {

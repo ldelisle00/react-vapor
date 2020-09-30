@@ -34,7 +34,9 @@ describe('LastUpdated', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {
@@ -67,11 +69,11 @@ describe('LastUpdated', () => {
         });
 
         it('should add the last update time in the store on render', () => {
-            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id).length).toBe(1);
+            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id)).toHaveLength(1);
         });
 
         it('should update the last update time in the store when dispatching a "changeLastUpdated" action', () => {
-            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id).length).toBe(1);
+            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id)).toHaveLength(1);
 
             const storedTime = store.getState().lastUpdatedComposite.filter((timer) => timer.id === id)[0].time;
             store.dispatch(changeLastUpdated(id));
@@ -84,7 +86,7 @@ describe('LastUpdated', () => {
         it('should remove the last update time in the store on destroy', () => {
             wrapper.unmount();
 
-            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id).length).toBe(0);
+            expect(store.getState().lastUpdatedComposite.filter((timer) => timer.id === id)).toHaveLength(0);
         });
     });
 });

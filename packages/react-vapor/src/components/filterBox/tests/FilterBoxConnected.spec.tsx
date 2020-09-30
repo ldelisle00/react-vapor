@@ -25,15 +25,16 @@ describe('FilterBox', () => {
             wrapper = mount(
                 <Provider store={store}>
                     <FilterBoxConnected id={id} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             filterBox = wrapper.find(FilterBox).first();
         });
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {
@@ -62,37 +63,37 @@ describe('FilterBox', () => {
         });
 
         it('should render an input to filter', () => {
-            expect(filterBox.find('input').length).toBe(1);
+            expect(filterBox.find('input')).toHaveLength(1);
         });
 
         it('should add the filter box in the store on render', () => {
-            expect(store.getState().filters.filter((filter) => filter.id === id).length).toBe(1);
+            expect(store.getState().filters.filter((filter) => filter.id === id)).toHaveLength(1);
         });
 
         it('should remove the filter box in the store on render', () => {
             wrapper.unmount();
 
-            expect(store.getState().filters.filter((filter) => filter.id === id).length).toBe(0);
+            expect(store.getState().filters.filter((filter) => filter.id === id)).toHaveLength(0);
         });
 
         it('should send the text from the filter input to the store on filter', () => {
             const newValue = 'something';
 
             expect(
-                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === '').length
-            ).toBe(1);
+                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === '')
+            ).toHaveLength(1);
 
             // Use the dispatch since the onFilter is debounced, and is hardly testable
             expect(() => filterBox.props().onFilter(filterBox.props().id, 'anyWouldDo')).not.toThrow();
             store.dispatch(filterThrough(filterBox.props().id, newValue));
 
             expect(
-                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === '').length
-            ).toBe(0);
+                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === '')
+            ).toHaveLength(0);
 
             expect(
-                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === newValue).length
-            ).toBe(1);
+                store.getState().filters.filter((filter) => filter.id === id && filter.filterText === newValue)
+            ).toHaveLength(1);
         });
     });
 });

@@ -23,8 +23,8 @@ describe('<Slider/>', () => {
     });
 
     afterEach(() => {
-        middleSlider?.unmount();
-        mountedSlider?.unmount();
+        middleSlider?.exists() ? middleSlider.unmount() : null;
+        mountedSlider?.exists() ? mountedSlider.unmount() : null;
     });
 
     let middleSlider: ShallowWrapper;

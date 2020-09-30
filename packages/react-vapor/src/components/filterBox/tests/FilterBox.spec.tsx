@@ -17,12 +17,14 @@ describe('FilterBox', () => {
         let filterBoxInstance: FilterBox;
 
         beforeEach(() => {
-            filterBox = mount(<FilterBox id={id} />, {attachTo: document.getElementById('App')});
+            filterBox = mount(<FilterBox id={id} />);
             filterBoxInstance = filterBox.instance() as FilterBox;
         });
 
         afterEach(() => {
-            filterBox.unmount(); // <-- new
+            if (filterBox.exists()) {
+                filterBox.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {
@@ -34,7 +36,7 @@ describe('FilterBox', () => {
             filterBox.unmount();
             filterBox.mount();
 
-            expect(renderSpy.mock.calls.length).toBe(1);
+            expect(renderSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
@@ -46,7 +48,7 @@ describe('FilterBox', () => {
             filterBox.mount();
             filterBox.unmount();
 
-            expect(destroySpy.mock.calls.length).toBe(1);
+            expect(destroySpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onFilter when the filter input value has changed and prop is set', () => {
@@ -55,13 +57,13 @@ describe('FilterBox', () => {
 
             input.simulate('change');
 
-            expect(filterSpy.mock.calls.length).toBe(0);
+            expect(filterSpy.mock.calls).toHaveLength(0);
 
             filterBox.setProps({id: id, onFilter: filterSpy});
             filterBox.mount();
             input.simulate('change');
 
-            expect(filterSpy.mock.calls.length).toBe(1);
+            expect(filterSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onFilterCallback when the filter input value has changed and prop is set', () => {

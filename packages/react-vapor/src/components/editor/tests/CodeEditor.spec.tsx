@@ -77,11 +77,11 @@ describe('CodeEditor', () => {
         });
 
         it('should display a <CodeMirror /> component', () => {
-            expect(codeEditor.find(ReactCodeMirror.Controlled).length).toBe(1);
+            expect(codeEditor.find(ReactCodeMirror.Controlled)).toHaveLength(1);
         });
 
         it('should call onChange prop when its value prop changes', () => {
-            const onChangeSpy: jest.Mock<any, any> = jest.fn()();
+            const onChangeSpy: jest.Mock<any, any> = jest.fn();
             const expectedValue: string = 'the expected value';
 
             mountWithProps({onChange: onChangeSpy});

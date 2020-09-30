@@ -2,8 +2,8 @@ import {ShallowWrapper} from 'enzyme';
 import {shallowWithState, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
 import * as _ from 'underscore';
-import {HOCTableRowState} from '..';
 
+import {HOCTableRowState} from '..';
 import {getStoreMock, ReactVaporMockStore} from '../../../utils/tests/TestUtils';
 import {TableHOCRowActions} from '../actions/TableHOCRowActions';
 import {TableHOC} from '../TableHOC';
@@ -84,7 +84,7 @@ describe('Table HOC', () => {
 
                 clickOnElement({target: {closest: (): HTMLElement => null}});
 
-                expect(store.getActions()).toContain(TableHOCRowActions.deselectAll(id));
+                expect(store.getActions()).toContainEqual(TableHOCRowActions.deselectAll(id));
             });
 
             it('should not dispatch an action when the user click inside the table', () => {

@@ -1,10 +1,10 @@
 import {mount, ReactWrapper} from 'enzyme';
+import {shallowWithState} from 'enzyme-redux';
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import {Store} from 'redux';
 import {findWhere} from 'underscore';
 
-import {shallowWithState} from 'enzyme-redux';
 import {IReactVaporState} from '../../../ReactVapor';
 import {clearState} from '../../../utils/ReduxUtils';
 import {TestUtils} from '../../../utils/tests/TestUtils';
@@ -22,7 +22,9 @@ describe('<InputConnected />', () => {
 
     afterEach(() => {
         store.dispatch(clearState());
-        wrapper?.unmount(); // <-- new
+        if (wrapper.exists()) {
+            wrapper.unmount(); // <-- new
+        }
     });
 
     const mountComponentWithProps = (props: IInputProps = {}) => {

@@ -33,7 +33,9 @@ describe('TabPane', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {

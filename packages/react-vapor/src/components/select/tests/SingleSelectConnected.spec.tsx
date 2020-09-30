@@ -41,7 +41,9 @@ describe('Select', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            singleSelect.unmount(); // <-- new
+            if (singleSelect.exists()) {
+                singleSelect.unmount(); // <-- new
+            }
         });
 
         describe('mount and unmount', () => {
@@ -56,20 +58,20 @@ describe('Select', () => {
             });
 
             it('should add the list box to the state when mounted', () => {
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
 
                 mountSingleSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
             });
 
             it('should remove the list box from the state when the component unmount', () => {
                 mountSingleSelect();
 
-                expect(store.getState().selects.length).toBe(1);
+                expect(store.getState().selects).toHaveLength(1);
                 singleSelect.unmount();
 
-                expect(store.getState().selects.length).toBe(0);
+                expect(store.getState().selects).toHaveLength(0);
             });
         });
 

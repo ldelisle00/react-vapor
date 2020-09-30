@@ -36,7 +36,9 @@ describe('Tables', () => {
         });
 
         afterEach(() => {
-            tableHeaderCell.unmount(); // <-- new
+            if (tableHeaderCell?.exists()) {
+                tableHeaderCell.unmount(); // <-- new
+            }
         });
 
         it('should have the sorted attribute UNSORTED as a default prop', () => {
@@ -127,12 +129,12 @@ describe('Tables', () => {
             const sortAscendingClass = 'admin-sort-ascending';
             const sortDescendingClass = 'admin-sort-descending';
             const throwIfSvgNotPresent = () => {
-                expect(tableHeaderCell.find(Svg).length).toBe(1);
+                expect(tableHeaderCell.find(Svg)).toHaveLength(1);
                 expect(tableHeaderCell.find(Svg).props()).toEqual(expect.objectContaining(svgProps));
             };
 
             it('should not be present if the cell has no sort', () => {
-                expect(tableHeaderCell.find(Svg).length).toBe(0);
+                expect(tableHeaderCell.find(Svg)).toHaveLength(0);
             });
 
             it('should have a sort icon in an unsorted state if it has sort in state UNSORTED', () => {
@@ -140,9 +142,9 @@ describe('Tables', () => {
 
                 throwIfSvgNotPresent();
 
-                expect(tableHeaderCell.find(`.${sortDefaultClass}`).length).toBe(1);
-                expect(tableHeaderCell.find(`.${sortAscendingClass}`).length).toBe(0);
-                expect(tableHeaderCell.find(`.${sortDescendingClass}`).length).toBe(0);
+                expect(tableHeaderCell.find(`.${sortDefaultClass}`)).toHaveLength(1);
+                expect(tableHeaderCell.find(`.${sortAscendingClass}`)).toHaveLength(0);
+                expect(tableHeaderCell.find(`.${sortDescendingClass}`)).toHaveLength(0);
             });
 
             it('should have a sort icon in a sorted ascending state if it has sort in state ASCENDING', () => {
@@ -150,9 +152,9 @@ describe('Tables', () => {
 
                 throwIfSvgNotPresent();
 
-                expect(tableHeaderCell.find(`.${sortDefaultClass}`).length).toBe(1);
-                expect(tableHeaderCell.find(`.${sortAscendingClass}`).length).toBe(1);
-                expect(tableHeaderCell.find(`.${sortDescendingClass}`).length).toBe(0);
+                expect(tableHeaderCell.find(`.${sortDefaultClass}`)).toHaveLength(1);
+                expect(tableHeaderCell.find(`.${sortAscendingClass}`)).toHaveLength(1);
+                expect(tableHeaderCell.find(`.${sortDescendingClass}`)).toHaveLength(0);
             });
 
             it('should have a sort icon in a sorted descending state if it has sort in state DESCENDING', () => {
@@ -162,9 +164,9 @@ describe('Tables', () => {
 
                 throwIfSvgNotPresent();
 
-                expect(tableHeaderCell.find(`.${sortDefaultClass}`).length).toBe(1);
-                expect(tableHeaderCell.find(`.${sortAscendingClass}`).length).toBe(0);
-                expect(tableHeaderCell.find(`.${sortDescendingClass}`).length).toBe(1);
+                expect(tableHeaderCell.find(`.${sortDefaultClass}`)).toHaveLength(1);
+                expect(tableHeaderCell.find(`.${sortAscendingClass}`)).toHaveLength(0);
+                expect(tableHeaderCell.find(`.${sortDescendingClass}`)).toHaveLength(1);
             });
         });
     });

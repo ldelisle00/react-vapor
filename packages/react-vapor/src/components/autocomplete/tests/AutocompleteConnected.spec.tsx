@@ -23,8 +23,7 @@ describe('Autocomplete', () => {
             wrapper = mount(
                 <Provider store={store}>
                     <AutocompleteConnected id={id} items={items} {...otherProps} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             autocomplete = wrapper.find(AutocompleteConnected).first();
         };
@@ -35,7 +34,9 @@ describe('Autocomplete', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         describe('mount and unmount', () => {
@@ -50,20 +51,20 @@ describe('Autocomplete', () => {
             });
 
             it('should add the autocomplete to the state when mounted', () => {
-                expect(store.getState().autocompletes.length).toBe(0);
+                expect(store.getState().autocompletes).toHaveLength(0);
 
                 mountAutocomplete();
 
-                expect(store.getState().autocompletes.length).toBe(1);
+                expect(store.getState().autocompletes).toHaveLength(1);
             });
 
             it('should remove the autocomplete from the state when the component unmount', () => {
                 mountAutocomplete();
 
-                expect(store.getState().autocompletes.length).toBe(1);
+                expect(store.getState().autocompletes).toHaveLength(1);
                 wrapper.unmount();
 
-                expect(store.getState().autocompletes.length).toBe(0);
+                expect(store.getState().autocompletes).toHaveLength(0);
             });
         });
 

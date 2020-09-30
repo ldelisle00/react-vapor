@@ -27,7 +27,6 @@ describe('<LinkSvg>', () => {
         }).not.toThrow();
 
         expect(() => {
-            linkSvgComponent.unmount();
             linkSvgComponent.unmount(); // <-- new
         }).not.toThrow();
     });
@@ -46,13 +45,13 @@ describe('<LinkSvg>', () => {
         it('should set the link on the <a> href', () => {
             renderLinkSvg();
 
-            expect(linkSvgComponent.find(`a[href="${linkSvgProps.url}"]`).length).toBe(1);
+            expect(linkSvgComponent.find(`a[href="${linkSvgProps.url}"]`)).toHaveLength(1);
         });
 
         it('should set the target on <a>', () => {
             renderLinkSvg({url: 'test', target: '_blank'});
 
-            expect(linkSvgComponent.find(`a[target="_blank"]`).length).toBe(1);
+            expect(linkSvgComponent.find(`a[target="_blank"]`)).toHaveLength(1);
         });
 
         it('should add custom class with linkClasses on <a>', () => {
@@ -67,7 +66,7 @@ describe('<LinkSvg>', () => {
         it('should show a svg by default', () => {
             renderLinkSvg();
 
-            expect(linkSvgComponent.find(Svg).length).toBe(1);
+            expect(linkSvgComponent.find(Svg)).toHaveLength(1);
         });
 
         it('should show a tooltip', () => {
@@ -77,7 +76,7 @@ describe('<LinkSvg>', () => {
                 },
             });
 
-            expect(linkSvgComponent.find(Tooltip).length).toBe(1);
+            expect(linkSvgComponent.find(Tooltip)).toHaveLength(1);
         });
 
         it('should render without href', () => {

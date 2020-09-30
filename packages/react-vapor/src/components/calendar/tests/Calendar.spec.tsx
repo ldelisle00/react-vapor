@@ -39,11 +39,11 @@ describe('Calendar', () => {
         });
 
         it('should display 2 <OptionsCycle /> (one for the month and the other for the year)', () => {
-            expect(calendar.find('OptionsCycle').length).toBe(2);
+            expect(calendar.find('OptionsCycle')).toHaveLength(2);
         });
 
         it('should display a <TableHeader />', () => {
-            expect(calendar.find('TableHeader').length).toBe(1);
+            expect(calendar.find('TableHeader')).toHaveLength(1);
         });
 
         it('should display the days set as props or the default ones', () => {
@@ -139,7 +139,7 @@ describe('Calendar', () => {
         });
 
         it('should call onClick when handleClick has been called, onClick is defined and one picker is selected', () => {
-            const onClickSpy: jest.Mock<any, any> = jest.fn()();
+            const onClickSpy: jest.Mock<any, any> = jest.fn();
             const now: Date = new Date();
 
             expect(() => {
@@ -505,7 +505,7 @@ describe('Calendar', () => {
             it('should add the custom class to the wrapper set by the prop wrapperClassNames', () => {
                 const wrapper = shallow(<Calendar wrapperClassNames="new-class" />, {});
 
-                expect(wrapper.find('.new-class').length).toBe(1);
+                expect(wrapper.find('.new-class')).toHaveLength(1);
             });
 
             describe('saturday and sunday rule', () => {
@@ -573,11 +573,11 @@ describe('Calendar', () => {
                 });
 
                 it('should not have the class mod-width-50 if it has the prop simple', () => {
-                    expect(calendar.find('.mod-width-50').length).toBe(1);
+                    expect(calendar.find('.mod-width-50')).toHaveLength(1);
 
                     calendar.setProps({simple: true});
 
-                    expect(calendar.find('.mod-width-50').length).toBe(0);
+                    expect(calendar.find('.mod-width-50')).toHaveLength(0);
                 });
             });
         });

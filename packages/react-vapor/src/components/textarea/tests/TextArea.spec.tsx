@@ -23,7 +23,9 @@ describe('TextArea', () => {
         });
 
         afterEach(() => {
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should set textarea id when specified', () => {

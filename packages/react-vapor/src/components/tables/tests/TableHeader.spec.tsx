@@ -47,7 +47,9 @@ describe('Tables', () => {
         });
 
         afterEach(() => {
-            tableHeader.unmount(); // <-- new
+            if (tableHeader?.exists()) {
+                tableHeader.unmount(); // <-- new
+            }
         });
 
         it('should get the columns as a prop', () => {
@@ -65,7 +67,7 @@ describe('Tables', () => {
         });
 
         it('should render as many <TableHeaderCell /> as there are columns', () => {
-            expect(tableHeader.find(TableHeaderCell).length).toBe(columns.length);
+            expect(tableHeader.find(TableHeaderCell)).toHaveLength(columns.length);
         });
 
         it('should have the class sent as a prop', () => {
@@ -93,7 +95,7 @@ describe('Tables', () => {
                     {attachTo: document.getElementById('AppTable')}
                 );
 
-                expect(tableHeader.find(TableHeaderCellConnected).length).toBe(1);
+                expect(tableHeader.find(TableHeaderCellConnected)).toHaveLength(1);
 
                 expect(tableHeader.find(TableHeaderCellConnected).first().text()).toBe(
                     currentColumns.cellWithAttributeToSort.title as string
@@ -112,7 +114,7 @@ describe('Tables', () => {
                     {attachTo: document.getElementById('AppTable')}
                 );
 
-                expect(tableHeader.find(TableHeaderCellConnected).length).toBe(0);
+                expect(tableHeader.find(TableHeaderCellConnected)).toHaveLength(0);
 
                 expect(tableHeader.find(TableHeaderCell).first().text()).toBe(
                     currentColumns.cellWithAttributeToSort.title as string

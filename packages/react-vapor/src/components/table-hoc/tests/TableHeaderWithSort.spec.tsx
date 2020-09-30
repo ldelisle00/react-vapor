@@ -57,7 +57,7 @@ describe('Table HOC', () => {
 
             shallowWithStore(<TableHeaderWithSort {...defaultProps} />, store).dive();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an removeTableHeader on componentWillUnmount', () => {
@@ -66,7 +66,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableHeaderWithSort {...defaultProps} />, store).dive();
             wrapper.unmount();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an sortTable on click', () => {
@@ -75,13 +75,13 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableHeaderWithSort {...defaultProps} />, store).dive();
             wrapper.find('th').simulate('click');
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should render a <TextLoadingPlaceholder /> if the prop isLoading is set to true', () => {
             const wrapper = shallowWithState(<TableHeaderWithSort {...defaultProps} isLoading />, store).dive();
 
-            expect(wrapper.find(TextLoadingPlaceholder).length).toBe(1);
+            expect(wrapper.find(TextLoadingPlaceholder)).toHaveLength(1);
         });
     });
 });

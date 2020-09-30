@@ -38,7 +38,7 @@ describe('NavigationPagination', () => {
         });
 
         it('should call prop onRender on mounting if set', () => {
-            const renderSpy: jest.Mock<any, any> = jest.fn()();
+            const renderSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 navigationPaginationInstance.componentDidMount();
@@ -53,7 +53,7 @@ describe('NavigationPagination', () => {
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
-            const destroySpy: jest.Mock<any, any> = jest.fn()();
+            const destroySpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 navigationPaginationInstance.componentWillUnmount();
@@ -72,7 +72,7 @@ describe('NavigationPagination', () => {
             'should call onPageClick prop if set when clicking on next/previous or page number and page number is greater' +
                 'than or is 0 and does not equal the current page',
             () => {
-                const clickSpy: jest.Mock<any, any> = jest.fn()();
+                const clickSpy: jest.Mock<any, any> = jest.fn();
                 const newNavigationPaginationProps: INavigationPaginationProps = _.extend(
                     {},
                     NAVIGATION_PAGINATION_BASIC_PROPS,
@@ -149,11 +149,11 @@ describe('NavigationPagination', () => {
                 {numberOfPagesToShow: 2}
             );
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(NUMBER_OF_PAGES_SHOWING);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(NUMBER_OF_PAGES_SHOWING);
 
             navigationPagination.setProps(newNavigationPaginationProps);
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(expectedNbOfPagesToShow);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(expectedNbOfPagesToShow);
         });
 
         it('should not show any page number if the prop hidePages is set to true', () => {
@@ -167,9 +167,9 @@ describe('NavigationPagination', () => {
 
             navigationPagination.setProps(newNavigationPaginationProps);
 
-            expect(navigationPagination.find(PaginationSelect).length).toBe(0);
+            expect(navigationPagination.find(PaginationSelect)).toHaveLength(0);
 
-            expect(navigationPagination.find('.flat-select-option.mod-link').length).toBe(2); // Next and previous buttons
+            expect(navigationPagination.find('.flat-select-option.mod-link')).toHaveLength(2); // Next and previous buttons
         });
     });
 });

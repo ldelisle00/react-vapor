@@ -1,8 +1,8 @@
 import {ShallowWrapper} from 'enzyme';
 import {mountWithStore, shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
-import {HOCTableRowState} from '..';
 
+import {HOCTableRowState} from '..';
 import {getStoreMock, ReactVaporMockStore} from '../../../utils/tests/TestUtils';
 import {addActionsToActionBar} from '../../actions/ActionBarActions';
 import {CollapsibleToggle} from '../../collapsible/CollapsibleToggle';
@@ -100,7 +100,7 @@ describe('Table HOC', () => {
 
             shallowWithStore(<TableRowConnected {...defaultProps} />, store).dive();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an TableHOCRowActions.remove on componentWillUnmount', () => {
@@ -113,7 +113,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} />, store).dive();
             wrapper.unmount();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an addActionsToActionBar on click', () => {
@@ -123,7 +123,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} actions={actions} />, store).dive();
             wrapper.find('tr').simulate('click', {});
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch a TableHOCRowActions.select action on click when actions is not empty', () => {
@@ -135,7 +135,7 @@ describe('Table HOC', () => {
             ).dive();
             wrapper.find('tr').simulate('click', {});
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an addActionsToActionBar when the actions change and the row was selected', () => {
@@ -150,7 +150,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} actions={actions} />, store).dive();
             wrapper.setProps({actions: newActions} as any);
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch a TableHOCRowActions.select action when the action change and the row was selected', () => {
@@ -165,7 +165,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} actions={actions} />, store).dive();
             wrapper.setProps({actions: newActions} as any);
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should not dispatch a TableHOCRowActions.select action on click when actions is empty', () => {
@@ -174,7 +174,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableRowConnected {...defaultProps} />, store).dive();
             wrapper.find('tr').simulate('click', {});
 
-            expect(store.getActions()).not.toContain(actionNotExpected);
+            expect(store.getActions()).not.toContainEqual(actionNotExpected);
         });
 
         it('should not dispatch a TableHOCRowActions.select action on click when clicking inside an underlying dropdown', () => {
@@ -206,11 +206,11 @@ describe('Table HOC', () => {
 
             wrapper.find('tr').simulate('click', {ctrlKey: true});
 
-            expect(store.getActions()).toContain(expectedActionWithMulti);
+            expect(store.getActions()).toContainEqual(expectedActionWithMulti);
 
             wrapper.find('tr').simulate('click', {ctrlKey: false});
 
-            expect(store.getActions()).toContain(expectedActionWithoutMulti);
+            expect(store.getActions()).toContainEqual(expectedActionWithoutMulti);
         });
 
         it('should dispatch trigger actions with callOnDoubleClick=true when double clicking the row', () => {
@@ -268,7 +268,7 @@ describe('Table HOC', () => {
             it('should render an additional row for the collapsible content', () => {
                 shallowComponent();
 
-                expect(wrapper.find('tr').length).toBe(2);
+                expect(wrapper.find('tr')).toHaveLength(2);
                 expect(wrapper.find('tr').at(0).hasClass('heading-row')).toBe(true);
                 expect(wrapper.find('tr').at(1).hasClass('collapsible-row')).toBe(true);
             });
@@ -320,13 +320,13 @@ describe('Table HOC', () => {
                     stopPropagation: jest.fn(),
                 });
 
-                expect(store.getActions()).toContain(expectedAction);
+                expect(store.getActions()).toContainEqual(expectedAction);
             });
 
             it('should set the collapsibleToggle null if the content is null', () => {
                 shallowComponent({collapsible: {content: null}});
 
-                expect(wrapper.find(CollapsibleToggle).length).toBe(0);
+                expect(wrapper.find(CollapsibleToggle)).toHaveLength(0);
             });
         });
 
@@ -356,7 +356,7 @@ describe('Table HOC', () => {
                 store
             ).dive();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch a toggleCollapsible action with opened:true when changing from a non-collapsible to a collapsible row', () => {
@@ -391,7 +391,7 @@ describe('Table HOC', () => {
                 },
             } as any);
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should not dispatch a toggleCollapsible action when changing from a non-collapsible to a collapsible row if expandOnMount is false', () => {

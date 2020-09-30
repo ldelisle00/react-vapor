@@ -4,8 +4,8 @@ import * as _ from 'underscore';
 
 import {DateUtils} from '../../../utils/DateUtils';
 import {DatePicker, IDatePickerProps} from '../DatePicker';
-import {DEFAULT_DATE_PICKER_COLOR} from '../DatePickerConstants';
 import {DateLimits} from '../DatePickerActions';
+import {DEFAULT_DATE_PICKER_COLOR} from '../DatePickerConstants';
 
 describe('Date picker', () => {
     let DATE_PICKER_BASIC_PROPS: IDatePickerProps;
@@ -46,15 +46,15 @@ describe('Date picker', () => {
         it('should display a <SetToNowButton /> component if hasSetToNowButton prop is set to true', () => {
             const propsWithButton: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {hasSetToNowButton: true});
 
-            expect(datePicker.find('SetToNowButton').length).toBe(0);
+            expect(datePicker.find('SetToNowButton')).toHaveLength(0);
 
             datePicker.setProps(propsWithButton);
 
-            expect(datePicker.find('SetToNowButton').length).toBe(1);
+            expect(datePicker.find('SetToNowButton')).toHaveLength(1);
         });
 
         it('should display an <input /> element', () => {
-            expect(datePicker.find('input').length).toBe(1);
+            expect(datePicker.find('input')).toHaveLength(1);
         });
 
         it('should have a class "border-COLOR_PROP" on the input or "border-DEFAULT_COLOR" if the color prop is not set', () => {
@@ -151,7 +151,6 @@ describe('Date picker', () => {
             expect(datePickerInstance['dateInput'].value).toBe('');
 
             jest.useFakeTimers();
-            jasmine.clock().mockDate(expectedDate);
             datePicker.find('button').simulate('click');
 
             expect(datePickerInstance['dateInput'].value).toBe(DateUtils.getDateWithTimeString(expectedDate));
@@ -169,7 +168,6 @@ describe('Date picker', () => {
             expect(datePickerInstance['dateInput'].value).toBe('');
 
             jest.useFakeTimers();
-            jasmine.clock().mockDate(expectedDate);
             datePicker.find('button').simulate('click');
 
             expect(datePickerInstance['dateInput'].value).toBe(DateUtils.getSimpleDate(expectedDate));
@@ -274,7 +272,7 @@ describe('Date picker', () => {
             const dateProps: IDatePickerProps = _.extend({}, DATE_PICKER_BASIC_PROPS, {isSelecting: DateLimits.lower});
 
             datePicker.setProps(dateProps);
-            // (DATE_PICKER_BASIC_PROPS.onBlur as jest.SpyInstance).mockReset(); // TODO: fix
+            // (DATE_PICKER_BASIC_PROPS.onBlur as unknown as jest.SpyInstance).mockReset(); // TODO: fix as unknown might not be the best
 
             datePicker.simulate('focus');
 

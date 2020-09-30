@@ -86,7 +86,7 @@ describe('RefreshCallback tests', () => {
                     store = getStoreMock({});
                     component = shallowWithStore(<RefreshCallback id={'id'} callback={() => ''} />, store).dive();
 
-                    expect(store.getActions()).toContain(RefreshCallBackActions.inProgress('id'));
+                    expect(store.getActions()).toContainEqual(RefreshCallBackActions.inProgress('id'));
                 });
 
                 it('should dispatch a stop when the callback is trigger', () => {
@@ -98,7 +98,7 @@ describe('RefreshCallback tests', () => {
                     jest.advanceTimersByTime(1001);
 
                     expect(spy).toHaveBeenCalledTimes(1);
-                    expect(store.getActions()).toContain(RefreshCallBackActions.stop('id'));
+                    expect(store.getActions()).toContainEqual(RefreshCallBackActions.stop('id'));
                 });
             });
         });

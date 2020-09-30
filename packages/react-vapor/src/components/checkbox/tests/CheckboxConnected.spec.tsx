@@ -26,15 +26,16 @@ describe('Checkbox', () => {
             wrapper = mount(
                 <Provider store={store}>
                     <CheckboxConnected id={id} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             checkbox = wrapper.find(Checkbox).first();
         });
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {
@@ -63,11 +64,11 @@ describe('Checkbox', () => {
         });
 
         it('should add the checkbox in the store on render', () => {
-            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id).length).toBe(1);
+            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id)).toHaveLength(1);
         });
 
         it('should toggle the checkbox in the store when dispatching a "toggleCheckbox" action', () => {
-            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id).length).toBe(1);
+            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id)).toHaveLength(1);
             expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id)[0].checked).toBe(
                 false
             );
@@ -80,7 +81,7 @@ describe('Checkbox', () => {
         });
 
         it('should toggle the checkbox in the store when clicking on it', () => {
-            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id).length).toBe(1);
+            expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id)).toHaveLength(1);
             expect(store.getState().checkboxes.filter((currentCheckbox) => currentCheckbox.id === id)[0].checked).toBe(
                 false
             );
@@ -95,7 +96,7 @@ describe('Checkbox', () => {
         it('should remove the checkbox in the store on destroy', () => {
             wrapper.unmount();
 
-            expect(store.getState().checkboxes.filter((checkboxs) => checkboxs.id === id).length).toBe(0);
+            expect(store.getState().checkboxes.filter((checkboxs) => checkboxs.id === id)).toHaveLength(0);
         });
     });
 });

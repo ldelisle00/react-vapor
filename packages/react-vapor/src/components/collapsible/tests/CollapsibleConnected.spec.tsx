@@ -41,7 +41,7 @@ describe('<CollapsibleConnected />', () => {
 
                 wrapper.find(`.${collapsibleProps.headerClasses}`).simulate('click');
 
-                expect(store.getActions()).toContain(setCollapsibleExpanded(collapsibleProps.id, false));
+                expect(store.getActions()).toContainEqual(setCollapsibleExpanded(collapsibleProps.id, false));
             });
 
             it('should toggle the expanded prop to true on click of the collapsible header button', () => {
@@ -49,7 +49,7 @@ describe('<CollapsibleConnected />', () => {
 
                 wrapper.find(`.${collapsibleProps.headerClasses}`).simulate('click');
 
-                expect(store.getActions()).toContain(setCollapsibleExpanded(collapsibleProps.id, true));
+                expect(store.getActions()).toContainEqual(setCollapsibleExpanded(collapsibleProps.id, true));
             });
 
             it('should not toggle the expanded prop on click of the collapsible header button if disabled', () => {
@@ -57,7 +57,7 @@ describe('<CollapsibleConnected />', () => {
 
                 wrapper.find(`.${collapsibleProps.headerClasses}`).simulate('click');
 
-                expect(store.getActions()).not.toContain(setCollapsibleExpanded(collapsibleProps.id, true));
+                expect(store.getActions()).not.toContainEqual(setCollapsibleExpanded(collapsibleProps.id, true));
             });
 
             it('should set the expended from the state to SlideY', () => {
@@ -75,19 +75,19 @@ describe('<CollapsibleConnected />', () => {
             it('should render header content', () => {
                 mountComponentWithProps({headerContent: <div className="test">test</div>});
 
-                expect(wrapper.find('.test').length).toBe(1);
+                expect(wrapper.find('.test')).toHaveLength(1);
             });
 
             it('should render the CollapsibleToggle if no custom collapsible icon defined', () => {
                 mountComponentWithProps();
 
-                expect(wrapper.find(CollapsibleToggle).length).toBe(1);
+                expect(wrapper.find(CollapsibleToggle)).toHaveLength(1);
             });
 
             it('should not render the CollapsibleToggle if a custom collapsible icon is defined', () => {
                 mountComponentWithProps({collapsibleToggleIcon: <div className="test">test</div>});
 
-                expect(wrapper.find(CollapsibleToggle).length).toBe(0);
+                expect(wrapper.find(CollapsibleToggle)).toHaveLength(0);
             });
 
             it('should set the class disabled on collapsible if disabled', () => {

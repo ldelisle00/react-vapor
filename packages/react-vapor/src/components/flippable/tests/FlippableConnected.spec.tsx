@@ -37,7 +37,9 @@ describe('Flippable', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get an id as prop', () => {
@@ -68,22 +70,22 @@ describe('Flippable', () => {
         });
 
         it('should be removed from the store when unmounted', () => {
-            expect(store.getState().flippables.length).toBe(1);
+            expect(store.getState().flippables).toHaveLength(1);
 
             wrapper.unmount();
 
-            expect(store.getState().flippables.length).toBe(0);
+            expect(store.getState().flippables).toHaveLength(0);
         });
 
         it('should add a Flippable in the store when mounted', () => {
             wrapper.unmount();
             store.dispatch(clearState());
 
-            expect(store.getState().flippables.length).toBe(0);
+            expect(store.getState().flippables).toHaveLength(0);
 
             wrapper.mount();
 
-            expect(store.getState().flippables.length).toBe(1);
+            expect(store.getState().flippables).toHaveLength(1);
         });
 
         it('should flip the flippable component when calling onFlip prop', () => {

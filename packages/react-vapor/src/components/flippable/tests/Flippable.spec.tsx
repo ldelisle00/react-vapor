@@ -20,7 +20,9 @@ describe('Flippable', () => {
         });
 
         afterEach(() => {
-            flippable.unmount(); // <-- new
+            if (flippable.exists()) {
+                flippable.unmount(); // <-- new
+            }
         });
 
         it('should call onRender prop if set when mounting', () => {
@@ -47,7 +49,7 @@ describe('Flippable', () => {
         });
 
         it('should have the default flippable class', () => {
-            expect(flippable.find(`.${Flippable.CONTAINER_CLASSNAME}`).length).toBe(1);
+            expect(flippable.find(`.${Flippable.CONTAINER_CLASSNAME}`)).toHaveLength(1);
         });
 
         it('should have the flippable-ie class when the browser is IE', () => {
@@ -62,7 +64,7 @@ describe('Flippable', () => {
         });
 
         it('should show the front face by default', () => {
-            expect(flippable.find(`.${Flippable.triggers.FRONT}`).length).toBe(1);
+            expect(flippable.find(`.${Flippable.triggers.FRONT}`)).toHaveLength(1);
         });
 
         it('should render additional classes if any on the flippable container', () => {
@@ -100,7 +102,7 @@ describe('Flippable', () => {
                 isFlipped: true,
             });
 
-            expect(flippable.find('.show-on-top').length).toBe(1);
+            expect(flippable.find('.show-on-top')).toHaveLength(1);
         });
 
         it('should call onFlip prop if any when clicking on the front side and flippable is not flipped', () => {

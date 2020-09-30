@@ -62,8 +62,7 @@ describe('Actions', () => {
             wrapper = mount(
                 <Provider store={store}>
                     <ActionBarConnected id={id} itemFilterLabel={itemFilterLabel} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             store.dispatch(addActionsToActionBar(id, actions));
             store.dispatch(filterItems(id, itemFilter));
@@ -73,7 +72,9 @@ describe('Actions', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get an id as a prop', () => {
@@ -87,7 +88,7 @@ describe('Actions', () => {
             const actionsProp = actionBar.props().actions;
 
             expect(actionsProp).toBeDefined();
-            expect(actionsProp.length).toBe(
+            expect(actionsProp).toHaveLength(
                 actions.filter((action) => action.enabled || action.hideDisabled === false).length
             );
 
@@ -134,41 +135,41 @@ describe('Actions', () => {
             wrapper.unmount();
             store.dispatch(clearState());
 
-            expect(store.getState().actionBars.length).toBe(0);
-            expect(store.getState().itemFilters.length).toBe(0);
+            expect(store.getState().actionBars).toHaveLength(0);
+            expect(store.getState().itemFilters).toHaveLength(0);
 
             wrapper.mount();
 
-            expect(store.getState().actionBars.length).toBe(1);
-            expect(store.getState().itemFilters.length).toBe(1);
+            expect(store.getState().actionBars).toHaveLength(1);
+            expect(store.getState().itemFilters).toHaveLength(1);
         });
 
         it('should should not add an item filter on mount if there is no item filter label sent as prop', () => {
-            expect(store.getState().itemFilters.length).toBe(1);
+            expect(store.getState().itemFilters).toHaveLength(1);
+            wrapper.unmount();
 
             wrapper = mount(
                 <Provider store={store}>
                     <ActionBarConnected id={id} />
-                </Provider>,
-                {attachTo: document.getElementById('App')}
+                </Provider>
             );
             actionBar = wrapper.find(ActionBar).first();
 
-            expect(store.getState().itemFilters.length).toBe(0);
+            expect(store.getState().itemFilters).toHaveLength(0);
         });
 
         it('should call onDestroy prop when will unmount', () => {
             wrapper.unmount();
 
-            expect(store.getState().actionBars.length).toBe(0);
+            expect(store.getState().actionBars).toHaveLength(0);
         });
 
         it('should display a <PrimaryActionConnected /> component if there is a primary action', () => {
-            expect(actionBar.find(PrimaryActionConnected).length).not.toBe(0);
+            expect(actionBar.find(PrimaryActionConnected)).not.toHaveLength(0);
         });
 
         it('should display a <SecondaryActionsConnected /> component if there are secondary actions', () => {
-            expect(actionBar.find(SecondaryActions).length).toBe(1);
+            expect(actionBar.find(SecondaryActions)).toHaveLength(1);
         });
 
         it('should get the <InlinePrompt /> as a prop', () => {
@@ -185,7 +186,7 @@ describe('Actions', () => {
 
             expect(promptProp).toBeDefined();
 
-            expect(wrapper.find(ActionBar).find(`.prompt-${expectedClass}`).length).toBe(1);
+            expect(wrapper.find(ActionBar).find(`.prompt-${expectedClass}`)).toHaveLength(1);
         });
 
         it('should call onClearItemFilter when calling clearItemFilter', () => {
@@ -236,21 +237,21 @@ describe('Actions', () => {
                 const component = shallowWithStore(<ActionBarConnected {...ownProps} />, RStore).dive();
                 component.unmount();
 
-                expect(RStore.getActions()).toContain(removePrompt(ownProps.id));
+                expect(RStore.getActions()).toContainEqual(removePrompt(ownProps.id));
             });
 
             it('should remove the item filter onDestroy', () => {
                 const component = shallowWithStore(<ActionBarConnected {...ownProps} />, RStore).dive();
                 component.unmount();
 
-                expect(RStore.getActions()).toContain(removeItemFilter(ownProps.id));
+                expect(RStore.getActions()).toContainEqual(removeItemFilter(ownProps.id));
             });
 
             it('should remove the action bar onDestroy', () => {
                 const component = shallowWithStore(<ActionBarConnected {...ownProps} />, RStore).dive();
                 component.unmount();
 
-                expect(RStore.getActions()).toContain(removeActionBar(ownProps.id));
+                expect(RStore.getActions()).toContainEqual(removeActionBar(ownProps.id));
             });
         });
     });

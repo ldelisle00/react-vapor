@@ -58,7 +58,7 @@ describe('Table HOC', () => {
 
             shallowWithStore(<TableWithPagination {...defaultProps} />, store).dive();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch a TableWithPaginationActions.add on mount', () => {
@@ -66,7 +66,7 @@ describe('Table HOC', () => {
 
             shallowWithStore(<TableWithPagination {...defaultProps} />, store).dive();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should dispatch an TableWithPaginationActions.remove on componentWillUnmount', () => {
@@ -75,7 +75,7 @@ describe('Table HOC', () => {
             const wrapper = shallowWithStore(<TableWithPagination {...defaultProps} />, store).dive();
             wrapper.unmount();
 
-            expect(store.getActions()).toContain(expectedAction);
+            expect(store.getActions()).toContainEqual(expectedAction);
         });
 
         it('should slice the data according to the perPageNumbers specified in the HOC config', () => {

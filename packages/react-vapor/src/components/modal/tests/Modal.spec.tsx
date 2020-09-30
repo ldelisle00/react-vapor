@@ -35,7 +35,7 @@ describe('Modal', () => {
             modal.unmount();
             modal.mount();
 
-            expect(renderSpy.mock.calls.length).toBe(1);
+            expect(renderSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
@@ -47,13 +47,13 @@ describe('Modal', () => {
             modal.mount();
             modal.unmount();
 
-            expect(destroySpy.mock.calls.length).toBe(1);
+            expect(destroySpy.mock.calls).toHaveLength(1);
         });
 
         it('should call the prop closeCallback if it exists when closing the modal', () => {
             jest.useFakeTimers();
 
-            const closeCallbackSpy: jest.Mock<any, any> = jest.fn()();
+            const closeCallbackSpy: jest.Mock<any, any> = jest.fn();
             modal.setProps({isOpened: true, closeCallback: closeCallbackSpy});
             modal.update();
             modal.setProps({isOpened: false});
@@ -68,7 +68,7 @@ describe('Modal', () => {
         it('should call the prop closeCallback with a timeout if specified when closing the modal', () => {
             jest.useFakeTimers();
 
-            const closeCallbackSpy: jest.Mock<any, any> = jest.fn()();
+            const closeCallbackSpy: jest.Mock<any, any> = jest.fn();
             modal.setProps({isOpened: true, closeCallback: closeCallbackSpy, closeTimeout: 5});
             modal.update();
             modal.setProps({isOpened: false});

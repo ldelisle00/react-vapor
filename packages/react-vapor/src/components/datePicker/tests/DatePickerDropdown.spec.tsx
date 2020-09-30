@@ -82,7 +82,7 @@ describe('Date picker', () => {
             });
             shallowComponent(props);
 
-            expect(datePickerDropdown.find('DatePickerBox').length).toBe(0);
+            expect(datePickerDropdown.find('DatePickerBox')).toHaveLength(0);
         });
 
         it('should display a <DatePickerBox /> if it is not opened but prop renderDatePickerWhenClosed is true', () => {
@@ -92,7 +92,7 @@ describe('Date picker', () => {
             });
             shallowComponent(props);
 
-            expect(datePickerDropdown.find('DatePickerBox').length).toBe(1);
+            expect(datePickerDropdown.find('DatePickerBox')).toHaveLength(1);
         });
 
         it('should display a <DatePickerBox /> if it is opened regardless of whether prop renderDatePickerWhenClosed is true or false', () => {
@@ -102,7 +102,7 @@ describe('Date picker', () => {
             });
             shallowComponent(props);
 
-            expect(datePickerDropdown.find('DatePickerBox').length).toBe(1);
+            expect(datePickerDropdown.find('DatePickerBox')).toHaveLength(1);
         });
 
         it('should disable the dropdown button when readonly props is truthy', () => {
@@ -362,7 +362,7 @@ describe('Date picker', () => {
             );
 
             expect(dropContentWrapper.find('.dropdown-selected-value').text()).toBe(formattedNow);
-            expect(dropContentWrapper.find('.to-label').length).toBe(0);
+            expect(dropContentWrapper.find('.to-label')).toHaveLength(0);
         });
 
         it('should call onClick when clicking the dropdown toggle', () => {
@@ -400,7 +400,7 @@ describe('Date picker', () => {
         });
 
         it('should call onDestroy prop if set when will unmount', () => {
-            const onDestroySpy: jest.Mock<any, any> = jest.fn()();
+            const onDestroySpy: jest.Mock<any, any> = jest.fn();
             const onDestroyProps: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                 onDestroy: onDestroySpy,
             });
@@ -420,7 +420,7 @@ describe('Date picker', () => {
 
             const datePickerBoxWrapper = shallow(datePickerDropdown.find(DatePickerBox).props().footer);
 
-            expect(datePickerBoxWrapper.find(Button).length).toBe(2);
+            expect(datePickerBoxWrapper.find(Button)).toHaveLength(2);
         });
 
         it('should display the default label on apply if the dropdown is opened', () => {
@@ -474,7 +474,7 @@ describe('Date picker', () => {
         });
 
         it('should call onApply when clicking on the apply button', () => {
-            const handleApplySpy: jest.Mock<any, any> = jest.fn()();
+            const handleApplySpy: jest.Mock<any, any> = jest.fn();
             const propsIsOpened: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                 isOpened: true,
                 onApply: handleApplySpy,
@@ -488,7 +488,7 @@ describe('Date picker', () => {
         });
 
         it('should call onBeforeApply when clicking on the apply button', () => {
-            const handleApplySpy: jest.Mock<any, any> = jest.fn()();
+            const handleApplySpy: jest.Mock<any, any> = jest.fn();
             const propsIsOpened: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                 isOpened: true,
                 onBeforeApply: handleApplySpy,
@@ -502,7 +502,7 @@ describe('Date picker', () => {
         });
 
         it('should call onCancel when clicking on the cancel button', () => {
-            const handleCancelSpy: jest.Mock<any, any> = jest.fn()();
+            const handleCancelSpy: jest.Mock<any, any> = jest.fn();
             const propsIsOpened: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                 isOpened: true,
                 onCancel: handleCancelSpy,
@@ -520,7 +520,7 @@ describe('Date picker', () => {
             'should call onCancel prop with current month and current year when there is no applied lower limit ' +
                 'when calling handleCancel',
             () => {
-                const onCancelSpy: jest.Mock<any, any> = jest.fn()();
+                const onCancelSpy: jest.Mock<any, any> = jest.fn();
                 const newProps: Partial<IDatePickerDropdownProps> = {
                     initiallyUnselected: true,
                     id: 'some-date-picker',
@@ -537,7 +537,7 @@ describe('Date picker', () => {
         );
 
         it('should call onClear prop if set when calling handleClear', () => {
-            const onClearSpy: jest.Mock<any, any> = jest.fn()();
+            const onClearSpy: jest.Mock<any, any> = jest.fn();
             const onClearProps: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                 onClear: onClearSpy,
             });
@@ -550,7 +550,7 @@ describe('Date picker', () => {
         it('should render a Drop', () => {
             const wrapper = shallowWithState(<DatePickerDropdown {...DATE_PICKER_DROPDOWN_BASIC_PROPS} />, {});
 
-            expect(wrapper.find(Drop).length).toBe(1);
+            expect(wrapper.find(Drop)).toHaveLength(1);
         });
 
         describe('with a range limit defined in the <DatePicker/>', () => {

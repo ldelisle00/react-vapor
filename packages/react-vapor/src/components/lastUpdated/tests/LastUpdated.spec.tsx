@@ -31,7 +31,6 @@ describe('LastUpdated', () => {
         it('should add the current time if we do not pass it the time prop', () => {
             jest.useFakeTimers();
             time = TestUtils.randomDate();
-            jasmine.clock().mockDate(time);
 
             const expectedTime = moment(time).format('LTS');
 
@@ -65,7 +64,7 @@ describe('LastUpdated', () => {
             lastUpdated.setProps({onRender: renderSpy});
             lastUpdated.mount();
 
-            expect(renderSpy.mock.calls.length).toBe(1);
+            expect(renderSpy.mock.calls).toHaveLength(1);
         });
 
         it('should trigger onDestroy prop when unmounting', () => {
@@ -79,7 +78,7 @@ describe('LastUpdated', () => {
             lastUpdated.mount();
             lastUpdated.unmount();
 
-            expect(destroySpy.mock.calls.length).toBe(1);
+            expect(destroySpy.mock.calls).toHaveLength(1);
         });
     });
 });

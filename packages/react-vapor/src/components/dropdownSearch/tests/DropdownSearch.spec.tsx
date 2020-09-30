@@ -40,7 +40,6 @@ describe('DropdownSearch', () => {
     const infiniteScrollProps: InfiniteScrollProps = {
         dataLength: 2,
         hasMore: true,
-        // eslint-disable-next-line jasmine/no-unsafe-spy
         next: jest.fn(),
         endMessage: 'no more',
         loader: null,
@@ -279,7 +278,7 @@ describe('DropdownSearch', () => {
             });
 
             it('should call updateOptions when receiving new default options when the option list is empty', () => {
-                const updateOptionsSpy: jest.Mock<any, any> = jest.fn()();
+                const updateOptionsSpy: jest.Mock<any, any> = jest.fn();
                 const newProps: IDropdownSearchProps = _.extend({}, ownProps, {updateOptions: updateOptionsSpy});
                 dropdownSearch.setProps(newProps);
 
@@ -409,7 +408,7 @@ describe('DropdownSearch', () => {
                 });
 
                 it('should call the hasMoreItems prop to let the infinite scroll if there are more items', () => {
-                    const hasMoreItemsSpy: jest.Mock<any, any> = jest.fn()();
+                    const hasMoreItemsSpy: jest.Mock<any, any> = jest.fn();
                     dropdownSearch.setProps({
                         ...ownProps,
                         isOpened: true,
@@ -477,7 +476,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find(FilterBox).length).toBe(1);
+                expect(dropdownSearch.find(FilterBox)).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is open and search is off and supportSingleCustomOption is true', () => {
@@ -490,7 +489,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find(FilterBox).length).toBe(1);
+                expect(dropdownSearch.find(FilterBox)).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is open and search is off and supportSingleCustomOption is false', () => {
@@ -502,7 +501,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('button.dropdown-toggle').length).toBe(1);
+                expect(dropdownSearch.find('button.dropdown-toggle')).toHaveLength(1);
             });
 
             it('should show the button if the dropdown is close', () => {
@@ -512,7 +511,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('button.dropdown-toggle').length).toBe(1);
+                expect(dropdownSearch.find('button.dropdown-toggle')).toHaveLength(1);
             });
 
             it('should call handleOnClose if a blur event occurs on the dropdown button', () => {
@@ -563,7 +562,7 @@ describe('DropdownSearch', () => {
             it('should show the dropdown svg if the selected option has one', () => {
                 renderDropdownSearch(_.extend({}, {...ownProps, isOpened: true}));
 
-                expect(dropdownSearch.find('.value-icon').length).toBe(1);
+                expect(dropdownSearch.find('.value-icon')).toHaveLength(1);
             });
 
             it('should show the dropdown value if the selected option has one', () => {
@@ -587,7 +586,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('.mod-menu').length).toBe(1);
+                expect(dropdownSearch.find('.mod-menu')).toHaveLength(1);
             });
 
             it('should show options with the highlight set on a span with the class bold when dropdown is opened', () => {
@@ -599,7 +598,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(3);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(3);
             });
 
             it('should show the highlight if the filterText is contained in the middle of a word', () => {
@@ -611,7 +610,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(3);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(3);
             });
 
             it('should not show the highlight if the number of result if greater than the highlightThreshold', () => {
@@ -622,7 +621,7 @@ describe('DropdownSearch', () => {
                     })
                 );
 
-                expect(dropdownSearch.find('span.bold').length).toBe(0);
+                expect(dropdownSearch.find('span.bold')).toHaveLength(0);
             });
 
             it('should disabled the dropdown', () => {
@@ -760,7 +759,7 @@ describe('DropdownSearch', () => {
                     })),
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(options.length);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(options.length);
             });
 
             it('should not render each option wrapped by a tooltip if they are disabled and disabledTooltip is undefined', () => {
@@ -770,7 +769,7 @@ describe('DropdownSearch', () => {
                     options: options.map((opt: IDropdownOption) => ({...opt, disabled: true})),
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(0);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(0);
             });
 
             it('should not render each option wrapped by a tooltip if they are not disabled', () => {
@@ -779,7 +778,7 @@ describe('DropdownSearch', () => {
                     isOpened: true,
                 });
 
-                expect(dropdownSearch.find(Tooltip).length).toBe(0);
+                expect(dropdownSearch.find(Tooltip)).toHaveLength(0);
             });
         });
     });

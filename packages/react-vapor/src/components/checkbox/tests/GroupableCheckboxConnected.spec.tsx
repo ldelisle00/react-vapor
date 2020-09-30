@@ -3,6 +3,7 @@ import * as React from 'react';
 import {Provider} from 'react-redux';
 import {Store} from 'redux';
 import * as _ from 'underscore';
+
 import {IReactVaporState} from '../../../ReactVapor';
 import {clearState} from '../../../utils/ReduxUtils';
 import {TestUtils} from '../../../utils/tests/TestUtils';
@@ -10,7 +11,7 @@ import {Checkbox} from '../Checkbox';
 import {ICheckboxState} from '../CheckboxReducers';
 import {GroupableCheckboxConnected, IGroupableCheckboxOwnProps} from '../GroupableCheckboxConnected';
 import {IGroupableCheckboxesState} from '../GroupableCheckboxConstants';
-import {divTemplateClasses, divTemplateForMultipleCheckbox} from './GroupableCheckboxTestUtils';
+import {divTemplateForMultipleCheckbox} from './GroupableCheckboxTestUtils';
 
 describe('GroupableCheckbox', () => {
     describe('<GroupableCheckboxConnected />', () => {
@@ -20,32 +21,23 @@ describe('GroupableCheckbox', () => {
         let groupableChekboxesState: IGroupableCheckboxesState[];
         let groupableCheckboxState: IGroupableCheckboxesState;
         const parentId = 'checkboxParent1';
-        const defaultElementApp = 'App';
 
-        const renderChildCheckbox = (
-            props: IGroupableCheckboxOwnProps = {},
-            attachToElementName: string = defaultElementApp
-        ) => {
+        const renderChildCheckbox = (props: IGroupableCheckboxOwnProps = {}) => {
             wrapper = mount(
                 <Provider store={store}>
                     <GroupableCheckboxConnected id={parentId + '1'} parentId={parentId} isParent={false} {...props} />
-                </Provider>,
-                {attachTo: document.getElementById(attachToElementName)}
+                </Provider>
             );
             groupableCheckbox = wrapper.find(Checkbox).first();
 
             return wrapper;
         };
 
-        const renderParentCheckbox = (
-            props: IGroupableCheckboxOwnProps = {},
-            attachToElementName: string = defaultElementApp
-        ) => {
+        const renderParentCheckbox = (props: IGroupableCheckboxOwnProps = {}) => {
             wrapper = mount(
                 <Provider store={store}>
                     <GroupableCheckboxConnected id={parentId} isParent={true} {...props} />
-                </Provider>,
-                {attachTo: document.getElementById(attachToElementName)}
+                </Provider>
             );
             groupableCheckbox = wrapper.find(Checkbox).first();
 
@@ -68,7 +60,9 @@ describe('GroupableCheckbox', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         describe('Child checkbox', () => {
@@ -92,7 +86,7 @@ describe('GroupableCheckbox', () => {
                 renderChildCheckbox();
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
+                expect(groupableChekboxesState).toHaveLength(1);
                 expect(groupableChekboxesState[0].total).toBe(1);
             });
 
@@ -102,7 +96,7 @@ describe('GroupableCheckbox', () => {
                 });
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
+                expect(groupableChekboxesState).toHaveLength(1);
                 expect(groupableChekboxesState[0].nbChecked).toBe(1);
             });
 
@@ -111,8 +105,8 @@ describe('GroupableCheckbox', () => {
                 groupableCheckbox.props().onDestroy();
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
-                expect(groupableChekboxesState[0].checkboxes.length).toBe(0);
+                expect(groupableChekboxesState).toHaveLength(1);
+                expect(groupableChekboxesState[0].checkboxes).toHaveLength(0);
             });
 
             it('should toggle the child checkbox on click witch checked true', () => {
@@ -122,7 +116,7 @@ describe('GroupableCheckbox', () => {
                 groupableCheckbox.props().onClick({} as any);
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
+                expect(groupableChekboxesState).toHaveLength(1);
                 expect(groupableChekboxesState[0].checkboxes[0].checked).toBe(true);
             });
 
@@ -133,7 +127,7 @@ describe('GroupableCheckbox', () => {
                 groupableCheckbox.props().onClick({} as any);
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
+                expect(groupableChekboxesState).toHaveLength(1);
                 expect(groupableChekboxesState[0].checkboxes[0].checked).toBe(false);
             });
         });
@@ -159,7 +153,7 @@ describe('GroupableCheckbox', () => {
                 renderParentCheckbox();
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(1);
+                expect(groupableChekboxesState).toHaveLength(1);
                 expect(groupableChekboxesState[0].parent).toBeDefined();
             });
 
@@ -168,7 +162,7 @@ describe('GroupableCheckbox', () => {
                 groupableCheckbox.props().onDestroy();
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
 
-                expect(groupableChekboxesState.length).toBe(0);
+                expect(groupableChekboxesState).toHaveLength(0);
             });
         });
 
@@ -179,9 +173,9 @@ describe('GroupableCheckbox', () => {
                 document.body.innerHTML += divTemplateForMultipleCheckbox;
 
                 wrappers = [];
-                wrappers.push(renderChildCheckbox({}, divTemplateClasses.checkbox1));
-                wrappers.push(renderChildCheckbox({id: parentId + '2'}, divTemplateClasses.checkbox2));
-                wrappers.push(renderParentCheckbox({}, divTemplateClasses.checkbox3));
+                wrappers.push(renderChildCheckbox({}));
+                wrappers.push(renderChildCheckbox({id: parentId + '2'}));
+                wrappers.push(renderParentCheckbox({}));
             });
 
             afterEach(() => {
@@ -194,8 +188,8 @@ describe('GroupableCheckbox', () => {
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
                 groupableCheckboxState = groupableChekboxesState[0];
 
-                expect(groupableChekboxesState.length).toBe(1);
-                expect(groupableCheckboxState.checkboxes.length).toBe(2);
+                expect(groupableChekboxesState).toHaveLength(1);
+                expect(groupableCheckboxState.checkboxes).toHaveLength(2);
 
                 expect(groupableCheckboxState.parent).toBeDefined();
             });
@@ -205,16 +199,14 @@ describe('GroupableCheckbox', () => {
 
                 expect(groupableCheckboxState.total).toBe(2);
 
-                wrappers.push(renderChildCheckbox({id: parentId + '4'}, divTemplateClasses.checkbox4));
+                wrappers.push(renderChildCheckbox({id: parentId + '4'}));
                 groupableCheckboxState = getFirstGroupableCheckbox(store);
 
                 expect(groupableCheckboxState.total).toBe(3);
             });
 
             it('should have nbChecked equal to the number of child checkboxes checked added', () => {
-                wrappers.push(
-                    renderChildCheckbox({id: parentId + '4', defaultChecked: true}, divTemplateClasses.checkbox4)
-                );
+                wrappers.push(renderChildCheckbox({id: parentId + '4', defaultChecked: true}));
                 groupableChekboxesState = getCurrentGroupableCheckboxes(store);
                 groupableCheckboxState = groupableChekboxesState[0];
 

@@ -2,6 +2,7 @@ import {shallow, ShallowWrapper} from 'enzyme';
 import {shallowWithState} from 'enzyme-redux';
 import * as React from 'react';
 import * as _ from 'underscore';
+
 import {BreadcrumbLink, IBreadcrumbLinkProps} from '../BreadcrumbLink';
 
 describe('<BreadcrumbLink/>', () => {
@@ -32,13 +33,13 @@ describe('<BreadcrumbLink/>', () => {
         it('should return a <a/> tag if the link is defined', () => {
             renderBreadcrumbLink({name: 'a', link: 'zelda'});
 
-            expect(breadcrumbLinkComponent.find('a').length).toBe(1);
+            expect(breadcrumbLinkComponent.find('a')).toHaveLength(1);
         });
 
         it('should return a <span/> tag if the link is not defined', () => {
             renderBreadcrumbLink({name: 'a', link: undefined});
 
-            expect(breadcrumbLinkComponent.find('span').length).toBe(1);
+            expect(breadcrumbLinkComponent.find('span')).toHaveLength(1);
         });
 
         it('should render a link undefined for the BreadcrumbLink if not defined', () => {
@@ -50,7 +51,7 @@ describe('<BreadcrumbLink/>', () => {
         it('should render the default link', () => {
             renderBreadcrumbLink();
 
-            expect(breadcrumbLinkComponent.find(`.link[href="${defaultProps.link}"]`).length).toEqual(1);
+            expect(breadcrumbLinkComponent.find(`.link[href="${defaultProps.link}"]`)).toHaveLength(1);
         });
 
         it('should trigger the onClick', () => {
@@ -72,7 +73,7 @@ describe('<BreadcrumbLink/>', () => {
         });
 
         it('should return true if the onClick props return true', () => {
-            const stopPropagationSpy: jest.Mock<any, any> = jest.fn()();
+            const stopPropagationSpy: jest.Mock<any, any> = jest.fn();
             const spy: jest.SpyInstance = jest.spyOn<any, string>(BreadcrumbLink.prototype, 'handleOnClick');
             renderBreadcrumbLink({...defaultProps, onClick: () => true});
             breadcrumbLinkComponent.find('a.link').simulate('click', {
@@ -83,7 +84,7 @@ describe('<BreadcrumbLink/>', () => {
             expect(stopPropagationSpy).not.toHaveBeenCalled();
         });
 
-        it('should call each event stop propagation on onClick if it returns false ', () => {
+        it('should call each event stop propagation on onClick if it returns false', () => {
             const stopPropagationSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();
             const stopImmediatePropagationSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();
             const preventDefaultSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();

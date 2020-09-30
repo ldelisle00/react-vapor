@@ -136,7 +136,7 @@ describe('TableWithNewPagination tests', () => {
                 const store = getStoreMock();
                 shallowTableWithNewPaginationWithStore(store, {perPageNumbers: []}, {id: 'test'}).dive();
 
-                expect(store.getActions()).toContain(TableWithPaginationActions.add('test'));
+                expect(store.getActions()).toContainEqual(TableWithPaginationActions.add('test'));
             });
 
             it('should remove the table pagination in the store on unmount', () => {
@@ -148,7 +148,7 @@ describe('TableWithNewPagination tests', () => {
                 ).dive();
                 wrapper.unmount();
 
-                expect(store.getActions()).toContain(TableWithPaginationActions.remove('test'));
+                expect(store.getActions()).toContainEqual(TableWithPaginationActions.remove('test'));
             });
         });
     });

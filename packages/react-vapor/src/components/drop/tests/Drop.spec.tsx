@@ -81,13 +81,13 @@ describe('Drop', () => {
 
                 wrapper.unmount();
 
-                expect(store.getActions()).toContain(DropActions.toggle(id, DefaultGroupIds.default, false));
+                expect(store.getActions()).toContainEqual(DropActions.toggle(id, DefaultGroupIds.default, false));
             });
 
             it('should render a <DropPod>', () => {
                 wrapper = mountDropWithStore();
 
-                expect(wrapper.find(DropPod).length).toBe(1);
+                expect(wrapper.find(DropPod)).toHaveLength(1);
             });
 
             it('should not dispatch an action to toggle the drop if the element is not in the document.body', () => {
@@ -107,7 +107,7 @@ describe('Drop', () => {
 
                 RTestUtils.clickOnElement();
 
-                expect(store.getActions()).toContain(DropActions.toggle(id, DefaultGroupIds.default, false));
+                expect(store.getActions()).toContainEqual(DropActions.toggle(id, DefaultGroupIds.default, false));
             });
 
             it('should not dispatch an action to toggle drop isOpen if the element target is in the body but not inside the button if closeOnClickOutside is false', () => {
@@ -132,7 +132,7 @@ describe('Drop', () => {
 
                 RTestUtils.clickOnElement(document.getElementById('Drop'));
 
-                expect(store.getActions()).toContain(DropActions.toggle(id, DefaultGroupIds.default, false));
+                expect(store.getActions()).toContainEqual(DropActions.toggle(id, DefaultGroupIds.default, false));
             });
 
             it('should not dispatch an action to toggle drop isOpen if drop is close', () => {
@@ -174,7 +174,7 @@ describe('Drop', () => {
                     <div id={'Drop'} className={'drop'}></div>
                 );
 
-                expect(store.getActions()).toContain(DropActions.toggle(id, DefaultGroupIds.default, true));
+                expect(store.getActions()).toContainEqual(DropActions.toggle(id, DefaultGroupIds.default, true));
             });
 
             it('should not add data-open attribute to open if the drop is closed', () => {

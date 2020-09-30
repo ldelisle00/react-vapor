@@ -10,8 +10,8 @@ import {TestUtils} from '../../../utils/tests/TestUtils';
 import {ITabProps, Tab} from '../Tab';
 import {addTab, selectTab} from '../TabActions';
 import {TabConnected} from '../TabConnected';
-import {ITabGroupState, ITabState} from '../TabReducers';
 import {TabConstants} from '../TabConstants';
+import {ITabGroupState, ITabState} from '../TabReducers';
 
 describe('Tab', () => {
     describe('<TabConnected />', () => {
@@ -38,7 +38,9 @@ describe('Tab', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {
@@ -86,7 +88,7 @@ describe('Tab', () => {
                 (currentTabGroup: ITabGroupState) => currentTabGroup.id === TabConstants.DefaultGroupId
             );
 
-            expect(tabGroup.tabs.filter((currentTab: ITabState) => currentTab.id === id).length).toBe(1);
+            expect(tabGroup.tabs.filter((currentTab: ITabState) => currentTab.id === id)).toHaveLength(1);
         });
 
         it('should select the tab in the store when dispatching a "selectTab" action', () => {
@@ -97,9 +99,9 @@ describe('Tab', () => {
                 (currentTabGroup: ITabGroupState) => currentTabGroup.id === TabConstants.DefaultGroupId
             );
 
-            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id).length).toBe(1);
+            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id)).toHaveLength(1);
             expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id)[0].isSelected).toBe(true);
-            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id).length).toBe(1);
+            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id)).toHaveLength(1);
             expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id)[0].isSelected).toBe(false);
 
             store.dispatch(selectTab(tab2Id));
@@ -120,9 +122,9 @@ describe('Tab', () => {
                 (currentTabGroup: ITabGroupState) => currentTabGroup.id === TabConstants.DefaultGroupId
             );
 
-            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id).length).toBe(1);
+            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id)).toHaveLength(1);
             expect(tabGroup.tabs.filter((currentTab) => currentTab.id === id)[0].isSelected).toBe(true);
-            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id).length).toBe(1);
+            expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id)).toHaveLength(1);
             expect(tabGroup.tabs.filter((currentTab) => currentTab.id === tab2Id)[0].isSelected).toBe(false);
 
             store.dispatch(selectTab(tab2Id));
@@ -141,8 +143,7 @@ describe('Tab', () => {
 
             expect(
                 store.getState().tabs.filter((currentTabGroup) => currentTabGroup.id === TabConstants.DefaultGroupId)
-                    .length
-            ).toBe(0);
+            ).toHaveLength(0);
         });
     });
 });

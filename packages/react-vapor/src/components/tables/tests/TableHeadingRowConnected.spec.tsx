@@ -47,7 +47,9 @@ describe('Tables', () => {
 
         afterEach(() => {
             store.dispatch(clearState());
-            wrapper.unmount(); // <-- new
+            if (wrapper?.exists()) {
+                wrapper.unmount(); // <-- new
+            }
         });
 
         it('should get its id as a prop', () => {
@@ -83,13 +85,13 @@ describe('Tables', () => {
         });
 
         it('should add the row in the store on render', () => {
-            expect(store.getState().rows.filter((row) => row.id === basicTableHeadingRowProps.id).length).toBe(1);
+            expect(store.getState().rows.filter((row) => row.id === basicTableHeadingRowProps.id)).toHaveLength(1);
         });
 
         it('should remove the row in the store on destroy', () => {
             wrapper.unmount();
 
-            expect(store.getState().rows.filter((row) => row.id === basicTableHeadingRowProps.id).length).toBe(0);
+            expect(store.getState().rows.filter((row) => row.id === basicTableHeadingRowProps.id)).toHaveLength(0);
         });
 
         it('should set the open property to true on click', () => {

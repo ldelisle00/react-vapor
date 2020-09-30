@@ -40,7 +40,9 @@ describe('Toasts', () => {
         });
 
         afterEach(() => {
-            component.unmount(); // <-- new
+            if (component?.exists()) {
+                component.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {
@@ -76,7 +78,7 @@ describe('Toasts', () => {
             component.setProps(newToastAttributes);
 
             expect(() => component.mount()).not.toThrow();
-            expect(component.find(Toast).length).toBe(1);
+            expect(component.find(Toast)).toHaveLength(1);
         });
 
         it('should be call prop onCloseToast when a toast is closed', () => {

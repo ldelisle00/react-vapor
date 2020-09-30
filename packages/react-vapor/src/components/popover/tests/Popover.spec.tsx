@@ -31,6 +31,10 @@ describe('<Popover>', () => {
         toggleOpenedSpy = jest.spyOn(Popover.prototype, 'toggleOpened');
     });
 
+    afterEach(() => {
+        toggleOpenedSpy.mockRestore();
+    });
+
     it('should render without error', () => {
         expect(() =>
             shallow(
@@ -59,7 +63,6 @@ describe('<Popover>', () => {
         }).not.toThrow();
 
         expect(() => {
-            popoverWrapper.unmount();
             popoverWrapper.unmount(); // <-- new
         }).not.toThrow();
     });
@@ -124,7 +127,7 @@ describe('<Popover>', () => {
                 it('should call the onToggle prop with true when calling toggleOpened with isOpen: true', () => {
                     (popoverWrapper.instance() as Popover).toggleOpened(true);
 
-                    expect(onToggleSpy.mock.calls.length).toBe(1);
+                    expect(onToggleSpy.mock.calls).toHaveLength(1);
 
                     expect(onToggleSpy).toHaveBeenCalledWith(true);
                 });
@@ -132,7 +135,7 @@ describe('<Popover>', () => {
                 it('should call the onToggle prop with false when calling toggleOpened with isOpen: false', () => {
                     (popoverWrapper.instance() as Popover).toggleOpened(false);
 
-                    expect(onToggleSpy.mock.calls.length).toBe(1);
+                    expect(onToggleSpy.mock.calls).toHaveLength(1);
 
                     expect(onToggleSpy).toHaveBeenCalledWith(false);
                 });
@@ -147,7 +150,7 @@ describe('<Popover>', () => {
             it('should open the popover on click toggle if popover was closed', () => {
                 popoverWrapper.find(popoverToggleSelector).simulate('click');
 
-                expect(toggleOpenedSpy.mock.calls.length).toBe(1);
+                expect(toggleOpenedSpy.mock.calls[0]).toHaveLength(1);
 
                 expect(toggleOpenedSpy).toHaveBeenCalledWith(true);
             });
@@ -158,7 +161,7 @@ describe('<Popover>', () => {
 
                 popoverWrapper.find(popoverToggleSelector).simulate('click');
 
-                expect(toggleOpenedSpy.mock.calls.length).toBe(2);
+                expect(toggleOpenedSpy.mock.calls).toHaveLength(2);
 
                 expect(toggleOpenedSpy).toHaveBeenCalledWith(false);
             });
@@ -177,13 +180,13 @@ describe('<Popover>', () => {
                 // Using getElementById here since the Tether element is being rendered outside the popoverWrapper.
                 document.getElementById(popoverElementId).click();
 
-                expect(toggleOpenedSpy.mock.calls.length).toBe(0);
+                expect(toggleOpenedSpy.mock.calls).toHaveLength(0);
             });
 
             it('should close the popover when clicking outside Popover', () => {
                 document.getElementById('App').click();
 
-                expect(toggleOpenedSpy.mock.calls.length).toBe(1);
+                expect(toggleOpenedSpy.mock.calls).toHaveLength(1);
 
                 expect(toggleOpenedSpy).toHaveBeenCalledWith(false);
             });

@@ -27,23 +27,25 @@ describe('Date picker', () => {
         });
 
         afterEach(() => {
-            datesSelection.unmount(); // <-- new
+            if (datesSelection.exists()) {
+                datesSelection.unmount(); // <-- new
+            }
         });
 
         it('should display one <DatePicker /> by default and two if isRange prop is set to true', () => {
-            expect(datesSelection.find('DatePicker').length).toBe(1);
+            expect(datesSelection.find('DatePicker')).toHaveLength(1);
 
             datesSelection.setProps({isRange: true});
 
-            expect(datesSelection.find('DatePicker').length).toBe(2);
+            expect(datesSelection.find('DatePicker')).toHaveLength(2);
         });
 
         it('should display a separator between the two date pickers if isRange prop is set to true', () => {
-            expect(datesSelection.find('.date-separator').length).toBe(0);
+            expect(datesSelection.find('.date-separator')).toHaveLength(0);
 
             datesSelection.setProps({isRange: true});
 
-            expect(datesSelection.find('.date-separator').length).toBe(1);
+            expect(datesSelection.find('.date-separator')).toHaveLength(1);
         });
 
         it('should not add the class "mod-vertical" on the separator if the pickers are small', () => {
@@ -65,29 +67,29 @@ describe('Date picker', () => {
         it('should have the classes "mod-inline" and "flex" if the pickers are small', () => {
             datesSelection.setProps({isRange: true, withTime: false, hasSetToNowButton: false});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(1);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(1);
         });
 
         it('should not have the classes "mod-inline" and "flex" if the pickers are large', () => {
             datesSelection.setProps({isRange: false, withTime: false, hasSetToNowButton: false});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(0);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(0);
 
             datesSelection.setProps({isRange: true, withTime: false, hasSetToNowButton: true});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(0);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(0);
 
             datesSelection.setProps({isRange: false, withTime: true, hasSetToNowButton: false});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(0);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(0);
 
             datesSelection.setProps({isRange: false, withTime: true, hasSetToNowButton: true});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(0);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(0);
 
             datesSelection.setProps({isRange: false, withTime: false, hasSetToNowButton: true});
 
-            expect(datesSelection.find('.mod-inline.flex').length).toBe(0);
+            expect(datesSelection.find('.mod-inline.flex')).toHaveLength(0);
         });
 
         it(
@@ -118,7 +120,7 @@ describe('Date picker', () => {
         );
 
         it('should call onBlur prop if defined when calling onDateChange', () => {
-            const onBlurSpy: jest.Mock<any, any> = jest.fn()();
+            const onBlurSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 datesSelectionInstance['onDateChange'].call(datesSelectionInstance, new Date(), false);
@@ -131,7 +133,7 @@ describe('Date picker', () => {
         });
 
         it('should not throw on date click if the onClick prop is not defined', () => {
-            const onClickSpy: jest.Mock<any, any> = jest.fn()();
+            const onClickSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 datesSelectionInstance['onDateClick'].call(datesSelectionInstance, false);
@@ -144,7 +146,7 @@ describe('Date picker', () => {
         });
 
         it('should call onRender prop if set when mounting', () => {
-            const onRenderSpy: jest.Mock<any, any> = jest.fn()();
+            const onRenderSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => datesSelectionInstance.componentWillMount()).not.toThrow();
 
@@ -156,7 +158,7 @@ describe('Date picker', () => {
         });
 
         it('should call onDestroy prop if set when will unmount', () => {
-            const onDestroySpy: jest.Mock<any, any> = jest.fn()();
+            const onDestroySpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => datesSelectionInstance.componentWillUnmount()).not.toThrow();
 
@@ -216,7 +218,7 @@ describe('Date picker', () => {
         });
 
         it('should call onBlur prop on blur of the date picker if the date is in the input is valid', () => {
-            const onBlurSpy: jest.Mock<any, any> = jest.fn()();
+            const onBlurSpy: jest.Mock<any, any> = jest.fn();
 
             expect(() => {
                 datesSelection.find(DatePicker).props().onBlur(new Date(), false);

@@ -123,7 +123,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should not render a <TableCollapsibleRowWrapper /> if the prop collapsibleFormatter is not defined', () => {
-            expect(mountComponentWithProps().find(TableCollapsibleRowWrapper).length).toBe(0);
+            expect(mountComponentWithProps().find(TableCollapsibleRowWrapper)).toHaveLength(0);
         });
 
         it('should render a <TableCollapsibleRowWrapper /> if the prop collapsibleFormatter is defined', () => {
@@ -132,16 +132,16 @@ describe('<TableChildBody />', () => {
                     _.extend({}, tableChildBodyProps, {
                         collapsibleFormatter: () => <div></div>,
                     })
-                ).find(TableCollapsibleRowWrapper).length
-            ).toBe(1);
+                ).find(TableCollapsibleRowWrapper)
+            ).toHaveLength(1);
         });
 
         it('should render a <TableHeadingRow />', () => {
-            expect(mountComponentWithProps().find(TableHeadingRow).length).toBe(1);
+            expect(mountComponentWithProps().find(TableHeadingRow)).toHaveLength(1);
         });
 
         it('should not render a <TableCollapsibleRow /> if there is not a defined collapsibleFormatter ouput', () => {
-            expect(mountComponentWithProps().find(TableCollapsibleRow).length).toBe(0);
+            expect(mountComponentWithProps().find(TableCollapsibleRow)).toHaveLength(0);
         });
 
         it('should render a <TableCollapsibleRow /> if there is a defined collapsibleFormatter ouput', () => {
@@ -149,11 +149,11 @@ describe('<TableChildBody />', () => {
                 collapsibleFormatter: (rowData: IData) => rowData.url,
             });
 
-            expect(mountComponentWithProps(newProps).find(TableCollapsibleRow).length).toBe(1);
+            expect(mountComponentWithProps(newProps).find(TableCollapsibleRow)).toHaveLength(1);
         });
 
         it('should render a wrapper', () => {
-            expect(mountComponentWithProps().find('.wrapper').length).toBe(1);
+            expect(mountComponentWithProps().find('.wrapper')).toHaveLength(1);
         });
 
         it('should call onRowClick with getActions result if it is defined on click of a heading row', () => {
@@ -177,7 +177,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should call getActions results with option callOnDoubleClick true on row double click', () => {
-            const actionSpy: jest.Mock<any, any> = jest.fn()();
+            const actionSpy: jest.Mock<any, any> = jest.fn();
             const twoActions: IActionOptions[] = [
                 {
                     name: 'action that should not be called',
@@ -203,7 +203,7 @@ describe('<TableChildBody />', () => {
         });
 
         it('should send not send disabled as a class to the <TableHeadingRow /> if there is no enabled or disabled property on the row data', () => {
-            expect(mountComponentWithProps().find('.disabled').length).toBe(0);
+            expect(mountComponentWithProps().find('.disabled')).toHaveLength(0);
         });
 
         it('should send not send disabled as a class to the <TableHeadingRow /> if the enabled property is set to true on the row data', () => {
@@ -211,7 +211,7 @@ describe('<TableChildBody />', () => {
                 rowData: _.extend({}, tableChildBodyProps.rowData, {enabled: true}),
             });
 
-            expect(mountComponentWithProps(newProps).find('.disabled').length).toBe(0);
+            expect(mountComponentWithProps(newProps).find('.disabled')).toHaveLength(0);
         });
 
         it('should send disabled as a class to the <TableHeadingRow /> if the enabled property is set to false on the row data', () => {

@@ -7,7 +7,7 @@ import * as _ from 'underscore';
 
 import {IReactVaporState} from '../../../ReactVapor';
 import {clearState} from '../../../utils/ReduxUtils';
-import {createTestAppContainer, getStoreMock, removeTestAppContainer, TestUtils} from '../../../utils/tests/TestUtils';
+import {createTestAppContainer, getStoreMock, TestUtils} from '../../../utils/tests/TestUtils';
 import {Button} from '../../button/Button';
 import {DEFAULT_YEARS, MONTH_PICKER_ID, YEAR_PICKER_ID} from '../../calendar/Calendar';
 import {DefaultGroupIds, DropActions} from '../../drop/redux/DropActions';
@@ -54,7 +54,7 @@ describe('Date picker', () => {
                 const wrapperFooter = shallow(wrapper.find(DatePickerBox).props().footer);
                 wrapperFooter.find(Button).last().props().onClick();
 
-                expect(store.getActions()).toContain(
+                expect(store.getActions()).toContainEqual(
                     DropActions.toggle(DATE_PICKER_DROPDOWN_BASIC_PROPS.id, DefaultGroupIds.default, false)
                 );
             });
@@ -66,7 +66,7 @@ describe('Date picker', () => {
                 const wrapperFooter = shallow(wrapper.find(DatePickerBox).props().footer);
                 wrapperFooter.find(Button).first().props().onClick();
 
-                expect(store.getActions()).toContain(
+                expect(store.getActions()).toContainEqual(
                     DropActions.toggle(DATE_PICKER_DROPDOWN_BASIC_PROPS.id, DefaultGroupIds.default, false)
                 );
             });
@@ -81,8 +81,7 @@ describe('Date picker', () => {
                 wrapper = mount(
                     <Provider store={store}>
                         <DatePickerDropdownConnected {...props} />
-                    </Provider>,
-                    {attachTo: document.getElementById('App')}
+                    </Provider>
                 );
                 datePickerDropdown = wrapper.find(DatePickerDropdown).first();
             };
@@ -95,8 +94,10 @@ describe('Date picker', () => {
             });
 
             afterEach(() => {
-                removeTestAppContainer();
                 store.dispatch(clearState());
+                if (wrapper.exists()) {
+                    wrapper.unmount();
+                }
             });
 
             it('should get an id as a prop', () => {
@@ -195,17 +196,17 @@ describe('Date picker', () => {
                 wrapper.unmount();
                 store.dispatch(clearState());
 
-                expect(store.getState().dropdowns.length).toBe(0);
+                expect(store.getState().dropdowns).toHaveLength(0);
 
                 wrapper.mount();
 
-                expect(store.getState().dropdowns.length).toBe(1);
+                expect(store.getState().dropdowns).toHaveLength(1);
             });
 
             it('should call onDestroy prop when will unmount', () => {
                 wrapper.unmount();
 
-                expect(store.getState().dropdowns.length).toBe(0);
+                expect(store.getState().dropdowns).toHaveLength(0);
             });
 
             it('should clear the selected limits of the dropdown when calling onClear prop', () => {
@@ -362,6 +363,7 @@ describe('Date picker', () => {
                 const propsIsOpen: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                     isOpened: true,
                 });
+
                 mountWithProps(propsIsOpen);
 
                 const pickerId: string = DATE_PICKER_DROPDOWN_BASIC_PROPS.id + '6868';
@@ -423,6 +425,7 @@ describe('Date picker', () => {
                 const propsIsOpen: IDatePickerDropdownProps = _.extend({}, DATE_PICKER_DROPDOWN_BASIC_PROPS, {
                     isOpened: true,
                 });
+
                 mountWithProps(propsIsOpen);
 
                 expect(datePickerDropdown.find(DatePickerBox).props().withReduxState).toBe(true);

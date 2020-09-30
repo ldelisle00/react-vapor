@@ -40,7 +40,9 @@ describe('Svg', () => {
         };
 
         afterEach(() => {
-            svg.unmount(); // <-- new
+            if (svg.exists()) {
+                svg.unmount(); // <-- new
+            }
         });
 
         it('should mount and unmount/detach without error', () => {
@@ -49,7 +51,6 @@ describe('Svg', () => {
             }).not.toThrow();
 
             expect(() => {
-                svg.unmount();
                 svg.unmount(); // <-- new
             }).not.toThrow();
         });
