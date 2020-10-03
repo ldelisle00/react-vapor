@@ -32,7 +32,9 @@ describe('Modal', () => {
 
     afterEach(() => {
         store.dispatch(clearState());
-        wrapper.unmount(); // <-- new
+        if (wrapper?.exists()) {
+            wrapper.unmount(); // <-- new
+        }
     });
 
     it('should get its id as a prop', () => {
@@ -64,7 +66,7 @@ describe('Modal', () => {
     it('should add the modal not opened by default in the store on render', () => {
         const modalInState = store.getState().modals.filter((currentModal) => currentModal.id === id);
 
-        expect(modalInState.length).toBe(1);
+        expect(modalInState).toHaveLength(1);
         expect(modalInState[0].isOpened).toBe(false);
     });
 
@@ -79,12 +81,12 @@ describe('Modal', () => {
 
         const modalInState = store.getState().modals.filter((currentModal) => currentModal.id === id);
 
-        expect(modalInState.length).toBe(1);
+        expect(modalInState).toHaveLength(1);
         expect(modalInState[0].isOpened).toBe(true);
     });
 
     it('should open the modal in the store when dispatching a "openModal" action', () => {
-        expect(store.getState().modals.filter((currentModal) => currentModal.id === id).length).toBe(1);
+        expect(store.getState().modals.filter((currentModal) => currentModal.id === id)).toHaveLength(1);
         expect(store.getState().modals.filter((currentModal) => currentModal.id === id)[0].isOpened).toBe(false);
 
         store.dispatch(openModal(id));
@@ -106,6 +108,6 @@ describe('Modal', () => {
     it('should remove the modal in the store on destroy', () => {
         wrapper.unmount();
 
-        expect(store.getState().modals.filter((currentModal) => currentModal.id === id).length).toBe(0);
+        expect(store.getState().modals.filter((currentModal) => currentModal.id === id)).toHaveLength(0);
     });
 });

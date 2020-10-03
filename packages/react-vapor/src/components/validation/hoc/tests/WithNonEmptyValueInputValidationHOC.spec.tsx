@@ -1,7 +1,7 @@
 import {ShallowWrapper} from 'enzyme';
 import {shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
-import * as _ from 'underscore';
+
 import {getStoreMock} from '../../../../utils/tests/TestUtils';
 import {IInputOwnProps} from '../../../input/Input';
 import {InputConnected} from '../../../input/InputConnected';
@@ -57,7 +57,7 @@ describe('WithNonEmptyValueInputValidationHOC', () => {
             it('should dispatch a set error action when the validation fails', () => {
                 inputWrapper.prop('validate')('');
 
-                expect(store.getActions()).toContain(
+                expect(store.getActions()).toContainEqual(
                     ValidationActions.setError(INPUT_PROPS.id, INPUT_PROPS.validationMessage, ValidationTypes.nonEmpty)
                 );
             });
@@ -65,7 +65,7 @@ describe('WithNonEmptyValueInputValidationHOC', () => {
             it('should not dispatch a set error action when the validation succeeds', () => {
                 inputWrapper.prop('validate')('some correct value');
 
-                expect(store.getActions()).not.toContain(
+                expect(store.getActions()).not.toContainEqual(
                     ValidationActions.setError(INPUT_PROPS.id, INPUT_PROPS.validationMessage, ValidationTypes.nonEmpty)
                 );
             });

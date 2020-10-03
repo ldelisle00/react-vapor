@@ -30,7 +30,7 @@ describe('Options cycle', () => {
             const renderSpy = jest.fn();
             mountComponent({onRender: renderSpy});
 
-            expect(renderSpy.mock.calls.length).toBe(1);
+            expect(renderSpy.mock.calls).toHaveLength(1);
         });
 
         it('should call prop onDestroy on unmounting if set', () => {
@@ -39,17 +39,17 @@ describe('Options cycle', () => {
 
             optionsCycleWrapper.unmount();
 
-            expect(destroySpy.mock.calls.length).toBe(1);
+            expect(destroySpy.mock.calls).toHaveLength(1);
         });
 
         it('should display the selected option', () => {
             mountComponent();
 
-            expect(optionsCycleWrapper.find('div.option1').length).toBe(1, 'option 1');
+            expect(optionsCycleWrapper.find('div.option1')).toHaveLength(1);
 
             optionsCycleWrapper.setProps({options: OPTIONS, currentOption: 1});
 
-            expect(optionsCycleWrapper.find('div.option2').length).toBe(1, 'option 2');
+            expect(optionsCycleWrapper.find('div.option2')).toHaveLength(1);
         });
 
         it('should display the selected option even if it is not a string', () => {
@@ -84,7 +84,7 @@ describe('Options cycle', () => {
 
             optionsCycleWrapper.find('.previous-option').simulate('click');
 
-            expect(spyOnChange.mock.calls.length).toBe(1);
+            expect(spyOnChange.mock.calls).toHaveLength(1);
         });
 
         it('should call onChange when clicking the next arrow', () => {
@@ -94,7 +94,7 @@ describe('Options cycle', () => {
 
             optionsCycleWrapper.find('.next-option').simulate('click');
 
-            expect(spyOnChange.mock.calls.length).toBe(1);
+            expect(spyOnChange.mock.calls).toHaveLength(1);
         });
 
         it('should call onChangeOption when clicking the previous arrow', () => {
@@ -104,7 +104,7 @@ describe('Options cycle', () => {
 
             optionsCycleWrapper.find('.previous-option').simulate('click');
 
-            expect(spyOnChangeOption.mock.calls.length).toBe(1);
+            expect(spyOnChangeOption.mock.calls).toHaveLength(1);
         });
 
         it('should call onChangeOption when clicking the next arrow', () => {
@@ -114,7 +114,7 @@ describe('Options cycle', () => {
 
             optionsCycleWrapper.find('.next-option').simulate('click');
 
-            expect(spyOnChangeOption.mock.calls.length).toBe(1);
+            expect(spyOnChangeOption.mock.calls).toHaveLength(1);
         });
 
         it('should call onChange with the last option when clicking on the previous arrow if the current option is the first one', () => {
@@ -156,7 +156,7 @@ describe('Options cycle', () => {
         it('should have the class "mod-inline" if isInline prop is set to true', () => {
             mountComponent({isInline: true});
 
-            expect(optionsCycleWrapper.find('.mod-inline').length).toBe(1);
+            expect(optionsCycleWrapper.find('.mod-inline')).toHaveLength(1);
         });
     });
 });

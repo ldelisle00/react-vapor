@@ -60,7 +60,9 @@ describe('<ChosenSelect>', () => {
         });
 
         afterEach(() => {
-            chosenSelectWrapper.unmount(); // <-- new
+            if (chosenSelectWrapper?.exists()) {
+                chosenSelectWrapper.unmount(); // <-- new
+            }
         });
 
         it('should call the onChosenChange prop on change', () => {

@@ -4,7 +4,7 @@ import TestBackend from 'react-dnd-test-backend';
 import * as Redux from 'redux';
 import createMockStore, {MockStoreEnhanced} from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import _ from 'underscore';
+import * as _ from 'underscore';
 
 import {ISvgProps} from '../../components/svg/Svg';
 import {ITooltipProps} from '../../components/tooltip/Tooltip';

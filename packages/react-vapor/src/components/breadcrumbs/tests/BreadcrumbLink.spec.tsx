@@ -85,9 +85,9 @@ describe('<BreadcrumbLink/>', () => {
         });
 
         it('should call each event stop propagation on onClick if it returns false', () => {
-            const stopPropagationSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();
-            const stopImmediatePropagationSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();
-            const preventDefaultSpy: jest.Mock<any, any> = jest.fn()().and.callThrough();
+            const stopPropagationSpy: jest.Mock<any, any> = jest.fn();
+            const stopImmediatePropagationSpy: jest.Mock<any, any> = jest.fn();
+            const preventDefaultSpy: jest.Mock<any, any> = jest.fn();
 
             const handleOnClickSpy: jest.SpyInstance = jest.spyOn<any, string>(
                 BreadcrumbLink.prototype,

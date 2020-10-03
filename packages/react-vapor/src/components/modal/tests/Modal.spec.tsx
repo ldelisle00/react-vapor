@@ -23,7 +23,9 @@ describe('Modal', () => {
         });
 
         afterEach(() => {
-            modal.unmount(); // <-- new
+            if (modal?.exists()) {
+                modal.unmount(); // <-- new
+            }
         });
 
         it('should call prop onRender on mounting if set', () => {

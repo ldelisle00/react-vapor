@@ -1,7 +1,7 @@
 import {ShallowWrapper} from 'enzyme';
 import {shallowWithStore} from 'enzyme-redux';
 import * as React from 'react';
-import * as _ from 'underscore';
+
 import {getStoreMock} from '../../../../utils/tests/TestUtils';
 import {IInputOwnProps} from '../../../input/Input';
 import {InputConnected} from '../../../input/InputConnected';
@@ -57,7 +57,7 @@ describe('WithDirtyInputHOC', () => {
             it('should dispatch a set dirty action with true when the value is different from the initial value', () => {
                 inputWrapper.prop('validate')('🍕');
 
-                expect(store.getActions()).toContain(
+                expect(store.getActions()).toContainEqual(
                     ValidationActions.setDirty(INPUT_PROPS.id, true, ValidationTypes.wrongInitialValue)
                 );
             });
@@ -65,7 +65,7 @@ describe('WithDirtyInputHOC', () => {
             it('should dispatch a set dirty action with false when the value is the same as the initial value', () => {
                 inputWrapper.prop('validate')(INPUT_PROPS.defaultValue);
 
-                expect(store.getActions()).toContain(
+                expect(store.getActions()).toContainEqual(
                     ValidationActions.setDirty(INPUT_PROPS.id, false, ValidationTypes.wrongInitialValue)
                 );
             });

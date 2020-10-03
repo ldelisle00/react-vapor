@@ -30,7 +30,9 @@ describe('NavigationPerPage', () => {
         });
 
         afterEach(() => {
-            navigationPerPage.unmount(); // <-- new
+            if (navigationPerPage?.exists()) {
+                navigationPerPage.unmount(); // <-- new
+            }
         });
 
         it('should get the number of entries as a prop', () => {
@@ -42,43 +44,43 @@ describe('NavigationPerPage', () => {
 
         it('should render zero <NavigationPerPageSelect /> if the total entries are equal to zero', () => {
             // [10, 20, 30]
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(3);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(3);
 
             navigationPerPage = mount(<NavigationPerPage totalEntries={0} />, {
                 attachTo: document.getElementById('App'),
             });
 
             // []
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(0);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(0);
         });
 
         it('should render one <NavigationPerPageSelect /> if the total entries are of at least one over zero', () => {
             // [10, 20, 30]
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(3);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(3);
 
             navigationPerPage = mount(<NavigationPerPage totalEntries={1} />, {
                 attachTo: document.getElementById('App'),
             });
 
             // [10]
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(1);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(1);
         });
 
         it('should render all <NavigationPerPageSelect />s where there are at least 1 element more than the previous <NavigationPerPageSelect />', () => {
             // [10, 20, 30]
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(3);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(3);
 
             navigationPerPage = mount(<NavigationPerPage totalEntries={11} />, {
                 attachTo: document.getElementById('App'),
             });
 
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(2);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(2);
 
             navigationPerPage = mount(<NavigationPerPage totalEntries={21} />, {
                 attachTo: document.getElementById('App'),
             });
 
-            expect(navigationPerPage.find(NavigationPerPageSelect).length).toBe(3);
+            expect(navigationPerPage.find(NavigationPerPageSelect)).toHaveLength(3);
         });
 
         it('should call onRender if prop is set on mount', () => {
@@ -130,11 +132,11 @@ describe('NavigationPerPage', () => {
                 perPageNumbers: expectedPerPageNumbers,
             });
 
-            expect(navigationPerPage.find('NavigationPerPageSelect').length).toBe(PER_PAGE_NUMBERS.length);
+            expect(navigationPerPage.find('NavigationPerPageSelect')).toHaveLength(PER_PAGE_NUMBERS.length);
 
             navigationPerPage.setProps(newNavigationPerPageProps);
 
-            expect(navigationPerPage.find('NavigationPerPageSelect').length).toBe(expectedPerPageNumbers.length);
+            expect(navigationPerPage.find('NavigationPerPageSelect')).toHaveLength(expectedPerPageNumbers.length);
         });
 
         it('should call onPerPageClick prop if it is set when calling handleClick and perPage is different than currentPerPage', () => {
